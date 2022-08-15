@@ -1,28 +1,35 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <v-app>
+        <!--头部-->
+        <v-app-bar app primary>
+            <v-app-bar-title>首页</v-app-bar-title>
+        </v-app-bar>
+
+        <!--侧边导航-->
+        <v-navigation-drawer app>
+            <v-list dense nav>
+                <v-list-item>
+                    <v-list-item-icon>
+                        <v-icon>mdi-home</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>首页</v-list-item-content>
+                </v-list-item>
+            </v-list>
+        </v-navigation-drawer>
+
+        <Header></Header>
+        <!--主体-->
+        <v-main>
+            <router-view></router-view>
+        </v-main>
+    </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import Header from "@/components/Layout/Header";
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+    components:{
+        Header
+    }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
