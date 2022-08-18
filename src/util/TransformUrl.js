@@ -36,7 +36,7 @@ function TransformUrl(info) {
             // 使用# 进行分割
             cate = ['默认'];
             if (cate.length > 0) {
-                cate.forEach((name, index) => {
+                cate.forEach((name) => {
                     let item = {};
                     item.name = name;
                     item.list = splitList(vod_play_url);

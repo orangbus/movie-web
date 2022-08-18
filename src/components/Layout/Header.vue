@@ -1,30 +1,45 @@
 <template>
     <div>
         <!--头部-->
-        <v-app-bar app color="primary">
+        <v-app-bar app color="primary" elevate-on-scroll>
             <v-app-bar-nav-icon @click="showMenu">
                 <v-icon color="white">mdi-menu</v-icon>
             </v-app-bar-nav-icon>
-            <v-app-bar-title><span style="color: white">{{ website.name }}{{ title }}</span></v-app-bar-title>
+            <v-app-bar-title>
+                <span class="text-pointer" style="color: white" @click="toHome">{{ website.name }}{{ title }}</span>
+            </v-app-bar-title>
             <v-spacer></v-spacer>
 
-            <v-tooltip
-                v-for="(item,index) in headerMenu"
-                :key="index"
-                bottom>
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                        color="primary"
-                        dark
-                        v-bind="attrs"
-                        v-on="on"
-                        icon
-                    >
-                        <v-icon color="white">{{ item.icon }}</v-icon>
-                    </v-btn>
-                </template>
-                <span>{{ item.name }}</span>
-            </v-tooltip>
+            <!--快捷导航-->
+            <div v-for="(item,index) in movieCateList"
+            :key="index">
+                <v-menu
+                    open-on-hover
+                    offset-y
+                >
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                            text
+                            color="white"
+                            dark
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            {{  item.name  }}
+                            <v-icon>mdi-chevron-down</v-icon>
+                        </v-btn>
+                    </template>
+                    <v-list>
+                        <v-list-item
+                            v-for="(cate, index) in item.list"
+                            :key="index"
+                            @click="chanMovieCate(cate)"
+                        >
+                            <v-list-item-title>{{ cate.type_name }}</v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
+            </div>
         </v-app-bar>
 
         <!--侧边导航-->
@@ -56,7 +71,7 @@
                     <v-list-item
                         v-for="(item, i) in menus"
                         :key="i"
-                        @click="chanNav(item)"
+                        @click="chanMenu(item)"
                     >
                         <v-list-item-icon>
                             <v-icon v-text="item.icon"></v-icon>
@@ -82,23 +97,20 @@ export default {
             selectedItem: 0,
             title: "首页",
             drawer: false,
-            headerMenu: [
-                {type: 1, name: "搜索", icon: "mdi-magnify", path: "/search"},
-                {type: 2, name: "刷新缓存", icon: "mdi-refresh", path: "#"},
-                {type: 3, name: "历史记录", icon: "mdi-history", path: "/history"},
-                {type: 4, name: "个人中心", icon: "mdi-account", path: "/user"},
-            ],
         }
+    },
+    created() {
+        // 获取电影分类
+      this.$store.dispatch("getMovieCate");
     },
     methods: {
         // 显示左侧菜单
         showMenu() {
             this.drawer = !this.drawer;
         },
-        // 切换大分类
-        chanNav(item) {
+        // 切换顶部导航
+        chanMenu(item){
             this.title = item.name;
-            console.log(this.$route.path)
             if (this.$route.path !== "/") {
                 this.$router.push({
                     path: "/"
@@ -106,11 +118,34 @@ export default {
             }
             this.drawer = false;
         },
+        // 选择电影小分类
+        chanMovieCate(item){
+            this.$store.commit("setMovieCate",item)
+        },
+        chanNav(item) {
+           switch (item.type){
+               case 2:
+                   this.$store.dispatch("refreshCache")
+                   break;
+               default:
+                   this.$router.push({
+                       path: "/"
+                   })
+                   break;
+           }
+        },
+        // 返回首页
+        toHome(){
+            this.$router.push({
+                path: "/"
+            })
+        }
     },
     computed: {
         ...mapState({
+            movieCateList:state => state.movieCateList,
             menus: state => state.menus,
-            website:state => state.website
+            website:state => state.website,
         })
     }
 }

@@ -12,16 +12,29 @@ let state = {
     },
     // 轮播图
     banner: [],
+    movieCate:{},
+    movieCateList:[
+        {type: 1, name: '电影',list:[], icon: 'mdi-movie-filter-outline'},
+        {type: 2, name: '电视剧',list:[], icon: 'mdi-movie-roll'},
+        {type: 2, name: '综艺',list:[], icon: 'mdi-star'},
+        {type: 4, name: '动漫',list:[], icon: 'mdi-check-circle'},
+    ],
+    typeList: [
+        {name: "最新", selected: true},
+        {name: "今日", selected: false},
+        {name: "本周", selected: false},
+        {name: "本月", selected: false},
+        {name: "累计", selected: false},
+    ],
     // 电影搜索记录
     movieHistory: [],
 
     // 左侧菜单
     menus: [
-        {type: 1, name: '电影', icon: 'mdi-movie-filter-outline'},
-        {type: 2, name: '电视剧', icon: 'mdi-movie-roll'},
-        {type: 2, name: '综艺', icon: 'mdi-star'},
-        {type: 3, name: '电视剧', icon: 'mdi-motion-play-outline'},
-        {type: 4, name: '动漫', icon: 'mdi-check-circle'},
+        {type: 1, name: "搜索", icon: "mdi-magnify", path: "/search"},
+        {type: 2, name: "刷新缓存", icon: "mdi-refresh", path: "#"},
+        {type: 3, name: "历史记录", icon: "mdi-history", path: "/history"},
+        {type: 4, name: "个人中心", icon: "mdi-account", path: "/user"},
         {type: 5, name: '今日更新', icon: 'mdi-upload'},
         {type: 6, name: '我的追番', icon: 'mdi-cloud-upload'},
     ],

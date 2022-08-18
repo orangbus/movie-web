@@ -1,14 +1,7 @@
 import LocalStorage from "@/util/LocalStorage";
-import {website} from "../api/index";
+import {movieCate, website} from "../api/index";
 
 let actions = {
-	// 获取用户信息
-	// getUserInfo({commit}) {
-	// 	userInfo().then(res => {
-	// 		LocalStorage.set("user", res.data);
-	// 		commit("setUser", res.data)
-	// 	});
-	// },
 	// 获取网站配置
 	getWebSite({commit}) {
 		website().then(res => {
@@ -17,6 +10,13 @@ let actions = {
 				commit("setWebsite", res.data)
 			}
 		});
+	},
+
+	// 获取分类
+	getMovieCate({commit}){
+		movieCate().then(res=>{
+			commit("setMovieCateList",res.data);
+		})
 	},
 
 

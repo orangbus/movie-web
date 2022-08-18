@@ -20,6 +20,24 @@ let mutations = {
     },
 
     /**
+     * 电影分类
+     *  需要对电影进行处理
+     */
+    setMovieCateList(state,data){
+        state.movieCateList[0].list = data.movie;
+        state.movieCateList[1].list = data.tv_play;
+        state.movieCateList[2].list = data.variety;
+        state.movieCateList[3].list = data.cartoon;
+    },
+
+    /**
+     * 切换电影小分类
+     */
+    setMovieCate(state,data){
+      state.movieCate = data;
+    },
+
+    /**
      * 缓存网站
      * @param state
      * @param data
@@ -34,8 +52,8 @@ let mutations = {
      * @param data
      */
     setMovieHistory(state, data) {
-        LocalStorage.set("movieHistory", data)
         state.movieHistory = data;
+        LocalStorage.set("movieHistory",data)
     },
 
     /**

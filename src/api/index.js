@@ -1,7 +1,7 @@
 import axios from "axios";
 
 function baseUrl(url) {
-	return "/api/" + url;
+	return "/api/" + url; // 打包需要删除 api
 }
 
 /**
@@ -10,7 +10,7 @@ function baseUrl(url) {
  * @returns {Promise<AxiosResponse<any>>}
  */
 export function movieCate(params = {}) {
-	return axios.get(baseUrl("movie/cate"), {params});
+	return axios.get(baseUrl("cate"), {params});
 }
 
 /**

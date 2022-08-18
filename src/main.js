@@ -72,6 +72,18 @@ axios.interceptors.response.use(function (response) {
 
 Vue.use(Vuex, VuexAxios, axios)
 
+// mdui
+import "mdui/dist/css/mdui.min.css"
+
+// 图片放大
+import "viewerjs/dist/viewer.css"
+import VueViewer from 'v-viewer'
+
+Vue.use(VueViewer);
+
+// 自定义样式
+import "./assets/css/orangbus.css"
+
 
 new Vue({
 	vuetify,
