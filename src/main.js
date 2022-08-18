@@ -16,6 +16,7 @@ import Vuex from "vuex";
 import VuexAxios from "vue-axios"
 import axios from "axios"
 import router from "./router/index";
+import store from "./vuex/index"
 
 
 // 请求拦截
@@ -75,5 +76,6 @@ Vue.use(Vuex, VuexAxios, axios)
 new Vue({
 	vuetify,
 	router,
+	store,
 	render: h => h(App),
 }).$mount('#app')
