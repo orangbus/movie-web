@@ -98,8 +98,6 @@
     </v-app>
 </template>
 <script>
-import axios from "axios";
-
 export default {
     data() {
         return {
@@ -124,9 +122,7 @@ export default {
         }
     },
     created() {
-        axios.get("api/movie/list").then(res => {
-            console.log(res)
-        });
+
     },
     methods: {
         // 显示左侧菜单

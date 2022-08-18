@@ -12,10 +12,10 @@ Vue.config.productionTip = false;
 Vue.use(infiniteScroll)
 
 // 路由
-import router from "./router/index";
 import Vuex from "vuex";
 import VuexAxios from "vue-axios"
 import axios from "axios"
+import router from "./router/index";
 
 
 // 请求拦截

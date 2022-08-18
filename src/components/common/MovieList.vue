@@ -14,14 +14,18 @@
                             <div @click="toDetail(item)">
                                 <v-img
                                     :lazy-src="item.vod_pic"
-                                    max-height="200"
+                                    max-height="350"
                                     max-width="100%"
                                     :src="item.vod_pic"
-                                ></v-img>
-                                <v-card-subtitle class="text-truncate">{{ item.vod_title }}</v-card-subtitle>
+                                >
+                                    <div class="d-flex justify-end white--text">
+                                        <v-card-title>{{ item.type_name}}</v-card-title>
+                                    </div>
+                                </v-img>
+                                <v-card-subtitle class="text-truncate">{{ item.vod_name }}</v-card-subtitle>
                                 <v-card-text>
-                                    <div>{{ item.vod_type }}</div>
-                                    <div>{{ item.created_at }}</div>
+                                    <div>{{ item.vod_remarks }}</div>
+                                    <div>{{ item.updated_at }}</div>
                                 </v-card-text>
                             </div>
                         </v-card>
@@ -52,7 +56,6 @@ export default {
         },
     },
     methods: {
-
         toDetail(item) {
             this.$router.push({
                 path: "/detail/" + item.vod_id

@@ -18,13 +18,13 @@
 
                 <!--加载中 -->
                 <v-row>
-                    <v-col v-if="busy || is_end">
+                    <v-col v-if="busy && !is_end" >
                         <v-progress-linear
                             indeterminate
                             color="cyan darken-2"
                         ></v-progress-linear>
                     </v-col>
-                    <v-col v-if="is_end">
+                    <v-col v-if="!busy && list.length === 0">
                         到底啦。。。
                     </v-col>
                 </v-row>
@@ -36,7 +36,7 @@
 
 <script>
 import MovieList from "@/components/common/MovieList";
-// import {movieList} from "@/api";
+import {movieList} from "@/api";
 
 export default {
     name: "Index",
@@ -55,6 +55,9 @@ export default {
 
             keywords: "",
             placeholder: "",
+            hits:0,
+            cate_id: 0, //数据源id
+            movie_type: 1, // 电影类型
             page: 1,
             limit: 20,
             total: 0,
@@ -65,24 +68,32 @@ export default {
         }
     },
     created() {
-        // this.getData();
+        this.getData();
     },
     methods: {
         getData() {
-            // movieList().then(res => {
-            //     console.log(res)
-            // });
-            for (let i = 0; i < 10; i++) {
-                let temp = {};
-                temp.vod_id = i + 1;
-                temp.vod_pic = "https://picsum.photos/id/11/10/6";
-                temp.vod_title = "斗罗大陆" + i;
-                temp.vod_tag = "宫漫";
-                temp.vod_type = "更新至200集";
-                temp.updated_at = "2022-01-20 10:01:01";
-                this.list.push(temp);
-            }
-            this.busy = false;
+            let _this = this;
+            movieList({
+                page:this.page,
+                limit:this.limit,
+                keyword: this.keywords,
+                hits: this.hits,
+                vod_name: this.keywords,
+                type_id: this.cate_id,
+                type: this.movie_type
+            }).then(res => {
+                let {data,total} = res;
+                if (res.code === 200 && res.data !=null){
+                    this.list.push(...data);
+                    this.total = total;
+                    setTimeout(function () {
+                        _this.busy = false;
+                        if (data.length === 0) {
+                            _this.is_end = true;
+                        }
+                    }, 300);
+                }
+            });
         },
         // 切换小分类
         changeType(item) {
@@ -100,18 +111,22 @@ export default {
         },
         // 加载更多
         loadMore() {
+            if (this.busy) {
+                return;
+            }
+
+            if (this.is_end) {
+                return;
+            }
             this.busy = true;
             this.page += 1;
-            let that = this;
-            setTimeout(function () {
-                that.getData();
-            }, 500)
+            this.getData();
         },
         // 搜索
         search() {
             this.list = [];
             this.page = 1;
-            this.busy = false;
+            this.busy = true;
             this.getData();
         },
         // 详情
