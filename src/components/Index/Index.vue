@@ -179,6 +179,10 @@ export default {
 
         // 加载更多
         loadMore() {
+            console.log(this.$route.path)
+            if (this.$route.path !== "/"){
+                return;
+            }
             if (this.busy) {
                 return;
             }

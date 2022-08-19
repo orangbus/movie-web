@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 
 import vuetify from '@/plugins/vuetify'
+const app_key = process.env.VUE_APP_KEY;
 
 // 滚动加载
 import infiniteScroll from "vue-infinite-scroll"
@@ -29,6 +30,8 @@ window.axios.defaults.withCredentials = true;
 axios.interceptors.request.use(function (config) {
 	// 更新token值
 	config.headers.common['Authorization'] = 'Bearer ' + LocalStorage.get("access_token");
+	// 加密字符串
+	config.headers.common['App_key'] = app_key;
 	// 在发送请求之前做些什么
 	return config;
 }, function (error) {
