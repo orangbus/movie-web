@@ -6,13 +6,13 @@
                 <v-icon color="white">mdi-menu</v-icon>
             </v-app-bar-nav-icon>
             <v-app-bar-title>
-                <span class="text-pointer" style="color: white" @click="toHome">{{ website.name }}{{ title }}</span>
+                <span class="text-pointer" style="color: white" @click="toHome">{{ website.name }}</span>
             </v-app-bar-title>
             <v-spacer></v-spacer>
 
             <!--快捷导航-->
             <div v-for="(item,index) in movieCateList"
-            :key="index">
+            :key="index" class="hidden-xs-only">
                 <v-menu
                     open-on-hover
                     offset-y
@@ -54,7 +54,7 @@
                     rounded>
                     <v-list-item-content>
                         <v-list-item-title class="text-center font-weight-bold">
-                            聚合影视
+                            {{  website.name }}
                         </v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
@@ -69,7 +69,7 @@
                     color="primary"
                 >
                     <v-list-item
-                        v-for="(item, i) in menus"
+                        v-for="(item, i) in movieCateList"
                         :key="i"
                         @click="chanMenu(item)"
                     >
@@ -108,12 +108,22 @@ export default {
         showMenu() {
             this.drawer = !this.drawer;
         },
-        // 切换顶部导航
+
+        /**
+         * 切换顶部导航
+         * 1、跳转首页
+         * 3、记录分类id
+         * @param item
+         */
         chanMenu(item){
+            this.$store.commit("setMovieType",item)
             this.title = item.name;
             if (this.$route.path !== "/") {
                 this.$router.push({
-                    path: "/"
+                    path: "/",
+                    query:{
+                        type:item.type
+                    }
                 })
             }
             this.drawer = false;
@@ -121,18 +131,14 @@ export default {
         // 选择电影小分类
         chanMovieCate(item){
             this.$store.commit("setMovieCate",item)
-        },
-        chanNav(item) {
-           switch (item.type){
-               case 2:
-                   this.$store.dispatch("refreshCache")
-                   break;
-               default:
-                   this.$router.push({
-                       path: "/"
-                   })
-                   break;
-           }
+            if (this.$route.path != "/"){
+                this.$router.push({
+                    path:"/",
+                    query: {
+                        type_id:item.type_id
+                    }
+                });
+            }
         },
         // 返回首页
         toHome(){

@@ -26,6 +26,11 @@
                 <v-icon>mdi-map-marker</v-icon>
             </v-btn>
         </v-bottom-navigation>
+    <!--    -->
+        <!--到顶部-->
+        <button class="mdui-fab mdui-fab-fixed mdui-ripple mdui-color-pink" @click="toTop">
+            <i class="mdui-icon material-icons">vertical_align_top</i>
+        </button>
     </v-app>
 </template>
 <script>
@@ -51,5 +56,10 @@ export default {
             this.$store.commit("setMovieHistory", movieHistory);
         }
     },
+    methods:{
+        toTop() {
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
+        },
+    }
 }
 </script>

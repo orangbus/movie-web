@@ -9,22 +9,46 @@
                         clearable
                         :autofocus="true"
                         v-model="keywords"
-                        label="本站支持全文搜索（标题，演员，类型）"
+                        :label="`当前分类${movieCate.type_name || '推荐'}`"
+                        hint="本站支持全文搜索（标题，演员，类型）"
                         @keyup.enter="search"
+                        @click:clear="clearKeyword"
                     >
                     </v-text-field>
                     <v-btn depressed tile class="pa-3 ml-3" color="primary" @click="search">搜索</v-btn>
+                    <v-btn depressed tile class="pa-3 ml-3"  @click="refresh">刷新</v-btn>
+                </v-col>
+                <v-col cols="12">
+                    <v-btn-toggle
+                        v-model="hits"
+                        tile
+                        color="deep-purple accent-3"
+                        group
+                    >
+                        <v-btn
+                            v-for="(item,index) in hitsList"
+                            :key="index"
+                            @click="sortHit(index)"
+                            :value="index">
+                            {{ item.name }}
+                        </v-btn>
+                    </v-btn-toggle>
                 </v-col>
                 <!--推荐标签，历史记录-->
-                <v-col cols="12" class="text-center" v-if="movieHistory.length > 0">
-                    <v-chip
-                        class="ma-1"
-                        v-for="(item,index) in movieHistory"
-                        :key="index"
-                        @click="changeTag(item)"
-                    >
-                        {{ item }}
-                    </v-chip>
+                <v-col cols="12" class="text-center d-flex justify-space-between ">
+                    <div v-if="movieHistory.length > 0">
+                        <v-chip
+                            class="mr-1 mb-1 hidden-xs-only"
+                            v-for="(item,index) in movieHistory"
+                            :key="index"
+                            @click="changeTag(item)"
+                        >
+                            {{ item }}
+                        </v-chip>
+                    </div>
+                    <div class="hidden-xs-only">
+                        第{{page}}页/{{ total}} 条数据
+                    </div>
                 </v-col>
             </v-row>
         </v-container>
@@ -80,6 +104,7 @@ export default {
             cate: [], //分类列表
             cate_id: 0, //数据源id
             movie_type: 1, // 电影类型
+            type_id:0,
             page: 1,
             limit: 20,
             total: 0,
@@ -90,30 +115,47 @@ export default {
         }
     },
     created() {
+        this.type_id = this.$route.query.type_id;
         this.getData();
     },
     watch:{
         // 切换电影分类
         movieCate(cate){
             console.log("电影分类切换",cate)
-            this.search();
+            if (this.$route.path === "/"){
+                this.hits = 0;
+                this.search();
+            }
         },
-        // 切换电影排名
 
-        // 电影推荐
-
+        //切换电影大分类
+        movieType(item){
+            this.movie_type = item.type;
+            if (this.$route.path === "/"){
+                this.hits = 0;
+                this.search();
+            }
+        },
     },
     methods: {
         getData() {
-            let _this = this;
-            movieList({
+            let params = {
                 page: this.page,
                 limit: this.limit,
-                keywords: this.keywords,
-                type_id: this.movieCate.type_id,
                 hits: this.hits, // 排名
-                type: this.movie_type // 大份额里
-            }).then(res => {
+                type: this.movie_type // 大分类
+            }
+            // 设置分类
+            let type_id = this.type_id ? this.type_id : this.movieCate.type_id;
+            // 当搜索的时候忽略分类
+            if (this.keywords != ""){
+                params.keywords = this.keywords;
+            }else{
+                params.type_id = type_id; // 小分类
+            }
+
+            let _this = this;
+            movieList(params).then(res => {
                 let {data, total} = res;
                 if (res.code === 200 && res.data != null) {
                     this.list.push(...data);
@@ -157,11 +199,31 @@ export default {
             this.getData();
 
             // 加入历史记录
-            if (!this.movieHistory.includes(this.keywords)) {
+            if (this.keywords != "" && !this.movieHistory.includes(this.keywords)) {
                 let data = cloneDeep(this.movieHistory)
                 data.unshift(this.keywords)
+                if (data.length > 10){
+                    data.splice(10,1)
+                }
                 this.$store.commit("setMovieHistory", data);
             }
+        },
+        // 请求搜索
+        clearKeyword(){
+            this.list = [];
+            this.keywords = "";
+            this.page = 1;
+            this.busy = true;
+            this.getData();
+        },
+
+        sortHit(index){
+            this.hits = index;
+            this.list = [];
+            this.page = 1;
+            this.is_end = false;
+            this.busy = true;
+            this.getData();
         },
 
         // 详情
@@ -169,12 +231,21 @@ export default {
             this.$router.push({
                 path: "/detail/" + item.id
             })
+        },
+
+        // 刷新缓存
+        refresh(){
+            this.$store.dispatch("refreshCache");
+            mdui.snackbar("缓存已清理");
         }
     },
     computed:{
         ...mapState({
             movieCate: state => state.movieCate,
-            movieHistory: state => state.movieHistory
+            movieCateList: state => state.movieCateList,
+            movieHistory: state => state.movieHistory,
+            movieType:state => state.movieType,
+            hitsList:state => state.hitsList
         })
     }
 

@@ -42,9 +42,6 @@ let actions = {
 
 		// 网站公告
 		LocalStorage.remove("know");
-
-		// 清除友情链接
-		LocalStorage.remove("frendlink")
 	},
 }
 

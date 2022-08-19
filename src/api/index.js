@@ -1,7 +1,13 @@
 import axios from "axios";
 
+const app_debug = process.env.VUE_APP_DEBUG;
+
 function baseUrl(url) {
-	return "/api/" + url; // 打包需要删除 api
+	if (app_debug){
+		return "/merchant/" + url;
+	}else{
+		return "/" + url;
+	}
 }
 
 /**
@@ -10,6 +16,7 @@ function baseUrl(url) {
  * @returns {Promise<AxiosResponse<any>>}
  */
 export function movieCate(params = {}) {
+	console.log("app",app_debug)
 	return axios.get(baseUrl("cate"), {params});
 }
 
@@ -19,7 +26,7 @@ export function movieCate(params = {}) {
  * @returns {Promise<AxiosResponse<any>>}
  */
 export function movieList(params = {}) {
-	return axios.get(baseUrl("movie/list"), {params});
+	return axios.get(baseUrl("movie"), {params});
 }
 
 /**
@@ -28,7 +35,7 @@ export function movieList(params = {}) {
  * @returns {Promise<AxiosResponse<any>>}
  */
 export function movieDetail(id) {
-	return axios.get(baseUrl("movie/detail/"+id));
+	return axios.get(baseUrl("detail/"+id));
 }
 
 /**

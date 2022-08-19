@@ -12,20 +12,22 @@ let state = {
     },
     // 轮播图
     banner: [],
-    movieCate:{},
+    movieCate:{}, // 电影小分类
     movieCateList:[
         {type: 1, name: '电影',list:[], icon: 'mdi-movie-filter-outline'},
         {type: 2, name: '电视剧',list:[], icon: 'mdi-movie-roll'},
         {type: 2, name: '综艺',list:[], icon: 'mdi-star'},
         {type: 4, name: '动漫',list:[], icon: 'mdi-check-circle'},
     ],
-    typeList: [
+    movieType:{}, // 电影大分类
+
+    hitsList: [
         {name: "最新", selected: true},
         {name: "今日", selected: false},
         {name: "本周", selected: false},
         {name: "本月", selected: false},
         {name: "累计", selected: false},
-    ],
+    ], // false
     // 电影搜索记录
     movieHistory: [],
 

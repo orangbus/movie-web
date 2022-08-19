@@ -38,6 +38,13 @@ let mutations = {
     },
 
     /**
+     * 设置电影大分类
+     */
+    setMovieType(state,data){
+        state.movieType = data;
+    },
+
+    /**
      * 缓存网站
      * @param state
      * @param data

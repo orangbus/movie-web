@@ -25,10 +25,9 @@
                                             <v-btn class="ma-2" @click="nextPlayer(true)">下一集</v-btn>
                                         </div>
                                         <div>
-                                            <v-btn class="ma-2 copy" color="success" :data-clipboard-text="url" @click="copyUrl">
+                                            <v-btn class="ma-2 copy" color="primary" :data-clipboard-text="url" @click="copyUrl">
                                                 复制地址
                                             </v-btn>
-                                            <v-btn class="ma-2" color="success" v-if="movie.share == null" @click="share">分享</v-btn>
                                         </div>
                                     </div>
                                 </div>
@@ -142,6 +141,7 @@ export default {
                 sm: 6,
                 xs: 6
             },
+            name: "",
             movie: {},
             url: "", // 播放地址
             poster: "", // 封面图
@@ -164,6 +164,7 @@ export default {
                     let {info, list, api} = res.data;
                     this.movie = info;
                     this.list = list;
+                    this.api = api;
 
                     this.poster = info.vod_pic;
                     // 播放地址转化
@@ -173,32 +174,20 @@ export default {
                         let index = this.index; // 默认集数
                         // 判断播放地址，如果不是 m3u8就直接播放
                         let url = this.cateList[typeIndex].list[index].url;
-
-                        if (!url.includes("m3u8")) {
-                            this.player_type = 0;
-                        }
-                        // 判断是否要使用接口解析
-                        if (api.is_open && api.parse_url != null) {
-                            this.player_type = 0;
-                            this.url = api.parse_url + url;
-                        } else {
-                            this.url = url;
-                        }
+                        this.resetPlayer(url,api);
 
                         // 默认播放最新的视频
                         this.name = this.cateList[typeIndex].list[index].name;
                         this.cateList[typeIndex].list[index].selected = true;
                         this.playerList = this.cateList[this.typeIndex].list;
-
-                        console.log(this.cateList)
-                        console.log(this.playerList)
-                        console.log(this.url)
                     }
                 } else {
                     mdui.snackbar(res.msg)
                 }
             });
         },
+
+        // 点击播放集数
         playMovie(url, index) {
             this.url = "";
             this.playerList.forEach(item => {
@@ -209,25 +198,51 @@ export default {
                 this.player.destroy(false);
             }
             // 判断是否要使用接口解析
-            if (this.api.is_open && this.api.parse_url != null && this.player_type === 0) {
-                this.player_type = 0;
-                this.url = this.api.parse_url + url;
-            } else {
-                this.url = url;
-            }
+            this.resetPlayer(url,this.api);
+
             this.name = this.playerList[index].name;
             this.playerList[index].selected = true;
         },
-        // 切换播放器
+
+        /**
+         * 切换视频播放类型
+         * @param index
+         */
         changeType(index) {
+            this.url = "";
+            let url = this.cateList[index].list[0].url; // 原播放地址
+            this.resetPlayer(url,this.api);
             this.typeIndex = index;
             this.cateList[index].list[0].selected = true;
             this.playerList = this.cateList[index].list;
         },
 
+        // 重置播放
+        resetPlayer(url,api){
+            if (this.player != null) {
+                this.player.destroy(false);
+            }
+
+            if (!url.includes("m3u8")) {
+                this.player_type = 0;
+            }
+            // 判断是否要使用接口解析
+            if (api.is_open && api.parse_url != null) {
+                // 判断是否需要用解析
+                if (this.player_type === 0 && url.includes("m3u8")) {
+                    this.url = api.parse_url + url;
+                }else{
+                    this.url = url;
+                }
+            } else {
+                this.url = url;
+            }
+        },
+
         // 当页切换数据
         getResult(movie_id) {
             this.url = "";
+            this.player_type = 0;
             this.id = movie_id;
             if (this.player != null) {
                 this.player.destroy(false);
@@ -274,21 +289,9 @@ export default {
                 clipboard.destroy()
             })
         },
-        // 分享
-        share() {
-            // movieShare({
-            //     id: this.movie.id,
-            //     vip: this.api.is_vip
-            // }).then(res => {
-            //     if (res.code === 200) {
-            //         mdui.snackbar(res.msg);
-            //         this.movie.share = true;
-            //     } else {
-            //         mdui.alert(res.msg);
-            //     }
-            // });
-        },
-    }
+
+    },
+
 }
 </script>
 
