@@ -13,7 +13,7 @@
                             :elevation="hover ? 12 : 2"
                             :class="{ 'on-hover': hover }"
                         >
-                    <span @click="toDetail(item)">
+                    <span @click="toDetailPage(item)">
                         <v-img
                             :lazy-src="item.vod_pic"
                             max-height="350"
@@ -35,16 +35,56 @@
                 </v-col>
             </v-row>
         </v-container>
+
+        <v-row>
+            <v-dialog
+                v-model="dialog"
+                fullscreen
+                hide-overlay
+                transition="dialog-bottom-transition"
+            >
+                <v-card>
+                    <!--标题-->
+                    <v-toolbar
+                        dark
+                        color="primary"
+                    >
+                        <v-toolbar-title>{{ movie.vod_name }}</v-toolbar-title>
+                        <v-spacer></v-spacer>
+                        <v-toolbar-items>
+                            <v-btn
+                                icon
+                                dark
+                                @click="dialog = false"
+                            >
+                                <v-icon>mdi-close</v-icon>
+                            </v-btn>
+                        </v-toolbar-items>
+                    </v-toolbar>
+
+                    <!--内容-->
+                    <MovieDetail :item="movie" v-if="dialog"></MovieDetail>
+                </v-card>
+            </v-dialog>
+        </v-row>
     </div>
 </template>
 
 <script>
+import MovieDetail from "@/components/common/MovieDetail";
 export default {
     name: "MovieList",
+    components:{
+        MovieDetail
+    },
     props: {
         list: {
             type: Array,
             default: () => []
+        },
+        toDetail:{
+          type:Boolean,
+          default:()=>false
         },
         grid: {
             type: Object,
@@ -57,12 +97,26 @@ export default {
             }
         },
     },
-    methods: {
-        toDetail(item) {
-            this.$router.push({
-                path: "/detail/" + item.id
-            })
+    data(){
+        return{
+            movie:{},
+            dialog:false,
         }
+    },
+    methods: {
+        toDetailPage(item) {
+            if (this.toDetail){
+                this.$router.push({
+                    path: "/detail/" + item.id
+                })
+            }else{
+                this.showPlayer(item)
+            }
+        },
+        showPlayer(item){
+            this.movie = item;
+            this.dialog = true;
+        },
     }
 }
 </script>

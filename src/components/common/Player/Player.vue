@@ -3,7 +3,9 @@
         <div v-if="url !== ''">
             <!--html直接播放-->
             <div v-if="player_type === 0" class="mdui-video-container">
-                <iframe height="498" width="100%" :src="url" frameborder="0"
+                <iframe  width="100%"
+                        style="border-radius: 6px; max-height:750px;min-height: 750px;"
+                        :src="url" frameborder="0"
                         allowfullscreen></iframe>
             </div>
             <Nplayer

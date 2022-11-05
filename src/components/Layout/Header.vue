@@ -11,34 +11,94 @@
             <v-spacer></v-spacer>
 
             <!--快捷导航-->
-            <div v-for="(item,index) in movieCateList"
-            :key="index" class="hidden-xs-only">
-                <v-menu
-                    open-on-hover
-                    offset-y
+            <v-menu
+                open-on-hover
+                offset-y
+            >
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                    text
+                    color="white"
+                    dark
+                    v-bind="attrs"
+                    v-on="on"
                 >
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            text
-                            color="white"
-                            dark
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            {{  item.name  }}
-                            <v-icon>mdi-chevron-down</v-icon>
-                        </v-btn>
-                    </template>
-                    <v-list>
-                        <v-list-item
-                            v-for="(cate, index) in item.list"
-                            :key="index"
-                            @click="chanMovieCate(cate)"
-                        >
-                            <v-list-item-title>{{ cate.type_name }}</v-list-item-title>
-                        </v-list-item>
-                    </v-list>
-                </v-menu>
+                    <v-icon @click="toUser">mdi-account-circle</v-icon>
+                    <v-dialog
+                        v-model="dialog"
+                        scrollable
+                        max-width="300px"
+                    >
+                        <v-card>
+                            <v-card-title>Select Country</v-card-title>
+                            <v-divider></v-divider>
+                            <v-card-text style="height: 300px;">
+                                <v-radio-group
+                                    v-model="dialogm1"
+                                    column
+                                >
+                                    <v-radio
+                                        v-for="(item,index) in 20"
+                                        :key="index"
+                                        label="Bahamas, The"
+                                        value="bahamas"
+                                    ></v-radio>
+                                </v-radio-group>
+                            </v-card-text>
+                            <v-divider></v-divider>
+                            <v-card-actions>
+                                <v-btn
+                                    color="blue darken-1"
+                                    text
+                                    @click="dialog = false"
+                                >
+                                    Close
+                                </v-btn>
+                                <v-btn
+                                    color="blue darken-1"
+                                    text
+                                    @click="dialog = false"
+                                >
+                                    Save
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                </v-btn>
+            </template>
+            </v-menu>
+
+            <div  v-if="false">
+                <div
+                    v-for="(item,index) in movieCateList"
+                    :key="index" class="hidden-xs-only">
+                    <v-menu
+                        open-on-hover
+                        offset-y
+                    >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                text
+                                color="white"
+                                dark
+                                v-bind="attrs"
+                                v-on="on"
+                            >
+                                {{  item.name  }}
+                                <v-icon>mdi-chevron-down</v-icon>
+                            </v-btn>
+                        </template>
+                        <v-list>
+                            <v-list-item
+                                v-for="(cate, index) in item.list"
+                                :key="index"
+                                @click="chanMovieCate(cate)"
+                            >
+                                <v-list-item-title>{{ cate.type_name }}</v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
+                </div>
             </div>
         </v-app-bar>
 
@@ -97,6 +157,7 @@ export default {
             selectedItem: 0,
             title: "首页",
             drawer: false,
+            dialog: false,
         }
     },
     created() {
@@ -144,6 +205,12 @@ export default {
         toHome(){
             this.$router.push({
                 path: "/"
+            })
+        },
+        // 个人中心
+        toUser(){
+            this.$router.push({
+                path: "/user"
             })
         }
     },

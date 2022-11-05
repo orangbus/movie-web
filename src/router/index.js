@@ -7,6 +7,7 @@ import Login from "../components/Login/Index";
 
 import store from "../vuex/index";
 import LocalStorage from "@/util/LocalStorage";
+import HelloWorld from "@/components/HelloWorld";
 
 
 const routes = [
@@ -44,6 +45,16 @@ const routes = [
 		path: "/login",
 		name: "Login",
 		component: Login,
+		meta: {
+			keepAlive: false,
+			required: false,
+			title: '登录'
+		}
+	},
+	{
+		path: "/test",
+		name: "Templet",
+		component: HelloWorld,
 		meta: {
 			keepAlive: false,
 			required: false,
