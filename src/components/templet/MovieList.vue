@@ -1,10 +1,9 @@
 <template>
     <div>
-
         <v-container>
             <v-row >
                 <v-col
-                    class="col-6"
+                    class="col-12"
                     v-bind="grid"
                     v-for="(item,index) in list"
                     :key="index"
@@ -17,8 +16,9 @@
                             <span @click="toDetailPage(item)">
                         <v-img
                             :lazy-src="item.vod_pic"
-                            max-height="350"
+                            max-height="320"
                             max-width="100%"
+                            style="border-radius: 5px 5px 0px 0px"
                             :src="item.vod_pic"
                         >
                             <div class="d-flex justify-end white--text">
@@ -29,6 +29,10 @@
                         <v-card-text>
                             <div>{{ item.vod_remarks }}</div>
                             <div>{{ item.updated_at }}</div>
+                            <div class="d-flex justify-lg-space-between">
+                                 <div><v-icon>mdi-heart-outline</v-icon></div>
+                            <div><v-icon>mdi-playlist-plus</v-icon></div>
+                            </div>
                         </v-card-text>
                     </span>
                         </v-card>
@@ -72,7 +76,7 @@
 </template>
 
 <script>
-import MovieDetail from "@/components/common/MovieDetail";
+import MovieDetail from "./MovieDetail";
 export default {
     name: "MovieList",
     components:{

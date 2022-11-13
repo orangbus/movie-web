@@ -19,7 +19,11 @@ let state = {
         {type: 2, name: '综艺',list:[], icon: 'mdi-star'},
         {type: 4, name: '动漫',list:[], icon: 'mdi-check-circle'},
     ],
-    movieType:{}, // 电影大分类
+    // 电影分类
+    movieType:{
+      type:0,
+      name: "聚合影视"
+    },
 
     hitsList: [
         {name: "最新", selected: true},
@@ -40,6 +44,8 @@ let state = {
         {type: 5, name: '今日更新', icon: 'mdi-upload'},
         {type: 6, name: '我的追番', icon: 'mdi-cloud-upload'},
     ],
+    // 小分类
+    tabs:[],
 
 }
 

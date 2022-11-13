@@ -60,6 +60,16 @@ const routes = [
 			required: false,
 			title: '登录'
 		}
+	},
+	{
+		path: "/templet",
+		name: "Templet2",
+		component: require('../components/templet/index.vue').default,
+		meta: {
+			keepAlive: false,
+			required: false,
+			title: '模板'
+		}
 	}
 ];
 Vue.use(VueRouter);

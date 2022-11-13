@@ -16,7 +16,6 @@ function baseUrl(url) {
  * @returns {Promise<AxiosResponse<any>>}
  */
 export function movieCate(params = {}) {
-	console.log("app",app_debug)
 	return axios.get(baseUrl("cate"), {params});
 }
 

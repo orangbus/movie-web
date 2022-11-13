@@ -58,6 +58,7 @@ axios.interceptors.response.use(function (response) {
 	}
 	return response;
 }, function (error) {
+	console.log(error)
 	// Message.closeAll();
 	const code = error.response.status;
 	// 对响应错误做点什么

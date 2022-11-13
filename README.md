@@ -18,14 +18,14 @@ cp env.example .env
 
 将 `VUE_APP_SERVER_URL"`的值改为 `http://162.14.72.65`
 
-```
+```bash
 yarn serve
 ```
 
 ### 3、打包
 打开 `.env` 文件，修改`VUE_APP_DEBUG=false`
 
-```
+```bash
 yarn build
 ```
 

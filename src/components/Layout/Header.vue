@@ -1,13 +1,14 @@
 <template>
     <div>
         <!--头部-->
-        <v-app-bar app color="primary" elevate-on-scroll>
+        <v-app-bar app color="primary"  elevate-on-scroll>
             <v-app-bar-nav-icon @click="showMenu">
                 <v-icon color="white">mdi-menu</v-icon>
             </v-app-bar-nav-icon>
             <v-app-bar-title>
                 <span class="text-pointer" style="color: white" @click="toHome">{{ website.name }}</span>
             </v-app-bar-title>
+
             <v-spacer></v-spacer>
 
             <!--快捷导航-->
@@ -32,20 +33,7 @@
                         <v-card>
                             <v-card-title>Select Country</v-card-title>
                             <v-divider></v-divider>
-                            <v-card-text style="height: 300px;">
-                                <v-radio-group
-                                    v-model="dialogm1"
-                                    column
-                                >
-                                    <v-radio
-                                        v-for="(item,index) in 20"
-                                        :key="index"
-                                        label="Bahamas, The"
-                                        value="bahamas"
-                                    ></v-radio>
-                                </v-radio-group>
-                            </v-card-text>
-                            <v-divider></v-divider>
+
                             <v-card-actions>
                                 <v-btn
                                     color="blue darken-1"
@@ -67,6 +55,9 @@
                 </v-btn>
             </template>
             </v-menu>
+            <v-btn icon>
+                <v-icon>mdi-dots-vertical</v-icon>
+            </v-btn>
 
             <div  v-if="false">
                 <div
@@ -100,8 +91,10 @@
                     </v-menu>
                 </div>
             </div>
-        </v-app-bar>
 
+
+
+        </v-app-bar>
         <!--侧边导航-->
         <v-navigation-drawer app
                              v-model="drawer"
@@ -158,6 +151,10 @@ export default {
             title: "首页",
             drawer: false,
             dialog: false,
+
+            select:"",
+            loading:true,
+            items:["斗罗大陆","斗破苍穹"]
         }
     },
     created() {
@@ -165,6 +162,10 @@ export default {
       this.$store.dispatch("getMovieCate");
     },
     methods: {
+        // 搜索
+        search(){
+          console.log(this.select)
+        },
         // 显示左侧菜单
         showMenu() {
             this.drawer = !this.drawer;
