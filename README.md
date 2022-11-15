@@ -46,3 +46,12 @@ location /merchant {
 }
 ```
 
+备注
+
+弹窗插件
+
+https://vue-toastification.maronato.dev/
+
+https://github.com/Maronato/vue-toastification/tree/main#usage
+
+
