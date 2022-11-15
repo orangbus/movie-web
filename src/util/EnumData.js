@@ -11,7 +11,7 @@ export default {
 
 	defaultSetting:{
 		showPage: false,
-		limit:20,
+		limit:20, // 视频条数
 		page:true,
 	},
 	defaultTabs: [

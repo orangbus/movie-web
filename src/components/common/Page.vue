@@ -1,7 +1,7 @@
 <template>
     <div>
         <!--分页-->
-        <div class="text-center mt-4 pb-10" >
+        <div class="text-center mt-4 pb-10" v-if="total > 0">
             <v-pagination
                 v-model="page"
                 :length="Math.trunc(total/limit)"

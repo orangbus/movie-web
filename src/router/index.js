@@ -80,6 +80,16 @@ const routes = [
 			title: '图片'
 		}
 	},
+	{
+		path: "/video",
+		name: "video",
+		component: require('../components/video/index').default,
+		meta: {
+			keepAlive: false,
+			required: false,
+			title: '视频'
+		}
+	},
 
 	{
 		path: "/templet",
