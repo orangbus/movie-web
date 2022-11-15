@@ -16,7 +16,7 @@ function baseUrl(url) {
  * @returns {Promise<AxiosResponse<any>>}
  */
 export function wallpaperList(params = {}) {
-	return axios.post(baseUrl("list"), {params});
+	return axios.get(baseUrl("list"), {params});
 }
 
 

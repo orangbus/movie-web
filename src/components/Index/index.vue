@@ -70,38 +70,33 @@
         </v-app-bar>
 
         <!-- class="overflow-y-auto"-->
-        <v-sheet
-            id="movie-content"
-            max-height="1000"
-        >
-            <v-container style="height: 1000px;margin-top: 100px" >
-                <!--电影分类-->
-                <div class="text-center" v-if="cateList.length > 0">
-                    <v-chip
-                        class="ma-2"
-                        :color="item.type_id === cate_id ? 'primary':''"
-                        v-for="(item,index) in cateList"
-                        :key="index"
-                        @click="changeCate(item)"
-                    >
-                        {{ item.type_name }}
-                    </v-chip>
-                </div>
+        <v-container style="height: 1000px;margin-top: 100px" >
+            <!--电影分类-->
+            <div class="text-center" v-if="cateList.length > 0">
+                <v-chip
+                    class="ma-2"
+                    :color="item.type_id === cate_id ? 'primary':''"
+                    v-for="(item,index) in cateList"
+                    :key="index"
+                    @click="changeCate(item)"
+                >
+                    {{ item.type_name }}
+                </v-chip>
+            </div>
 
-                <MovieList :list="list" :to-detail="false"></MovieList>
+            <MovieList :list="list" :to-detail="false"></MovieList>
 
-                <!--分页-->
-                <!--v-if="setting.showPage && total > 1"-->
-                <div class="text-center mt-10 pb-16" >
-                    <v-pagination
-                        v-model="page"
-                        :length="Math.trunc(total/setting.limit)"
-                        :total-visible="10"
-                        @input="loadMore"
-                    ></v-pagination>
-                </div>
-            </v-container>
-        </v-sheet>
+            <!--分页-->
+            <!--v-if="setting.showPage && total > 1"-->
+            <div class="text-center mt-10 pb-16" >
+                <v-pagination
+                    v-model="page"
+                    :length="Math.trunc(total/setting.limit)"
+                    :total-visible="10"
+                    @input="loadMore"
+                ></v-pagination>
+            </div>
+        </v-container>
 
         <!--侧边栏-->
         <v-navigation-drawer
@@ -133,7 +128,7 @@ import MovieList from "./MovieList";
 import LocalStorage from "@/util/LocalStorage";
 import EnumData from "@/util/EnumData";
 import {mapMutations, mapState} from "vuex";
-import {movieList} from "@/api";
+import {movieList} from "@/api/movie";
 import Setting from "@/components/common/Setting";
 
 export default {

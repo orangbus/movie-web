@@ -25,6 +25,8 @@
 
             <!--用户省份-->
             <Coupon></Coupon>
+            <!--推广码-->
+            <ShareQr></ShareQr>
             <!--个人资料-->
             <Profile></Profile>
             <!--退出登录-->
@@ -45,6 +47,7 @@
             <My v-if="tab === 0"></My>
             <Collect v-if="tab === 1"></Collect>
             <History v-if="tab === 2"></History>
+            <Wait v-if="tab === 3"></Wait>
         </v-container>
     </div>
 </template>
@@ -55,13 +58,16 @@ import Profile from "@/components/User/Profile";
 import My from "./My";
 import History from "./History";
 import Collect from "./Collect";
+import Wait from "./Wait";
 import Logout from "@/components/common/Logout";
 import Coupon from "@/components/common/Coupon";
+import ShareQr from "@/components/common/ShareQr";
+
 
 export default {
     name: "Index",
     components:{
-        Profile,My,History,Collect,Logout,Coupon
+        Profile,My,History,Collect,Logout,Coupon,ShareQr,Wait
     },
     created() {
         let type = this.$route.query.type;
@@ -71,6 +77,7 @@ export default {
     },
     data(){
         return{
+
             title: "个人中心",
             tab: 0,
             tabs: [

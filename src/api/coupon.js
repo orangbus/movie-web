@@ -2,7 +2,7 @@ import axios from "axios";
 
 const app_debug = process.env.VUE_APP_DEBUG;
 
-function baseUrl(url) {
+function baseUrl(url="") {
 	if (app_debug){
 		return "/api/coupon/" + url;
 	}else{
@@ -16,7 +16,7 @@ function baseUrl(url) {
  * @returns {Promise<AxiosResponse<any>>}
  */
 export function couponStore(params = {}) {
-	return axios.post(baseUrl(), {params});
+	return axios.post(baseUrl(), params);
 }
 
 /**

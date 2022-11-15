@@ -2,9 +2,9 @@ import axios from "axios";
 
 const app_debug = process.env.VUE_APP_DEBUG;
 
-function baseUrl(url) {
+function baseUrl(url="") {
 	if (app_debug){
-		return "/api/user" + url;
+		return "/api/user/" + url;
 	}else{
 		return "/" + url;
 	}
@@ -15,8 +15,8 @@ function baseUrl(url) {
  * @param params
  * @returns {Promise<AxiosResponse<any>>}
  */
-export function user(params = {}) {
-	return axios.get(baseUrl("user"), {params});
+export function userInfo() {
+	return axios.get(baseUrl());
 }
 
 /**
@@ -25,7 +25,7 @@ export function user(params = {}) {
  * @returns {Promise<AxiosResponse<any>>}
  */
 export function userStore(params = {}) {
-	return axios.post(baseUrl("user/store"), {params});
+	return axios.post(baseUrl("store"), params);
 }
 
 

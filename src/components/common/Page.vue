@@ -31,6 +31,7 @@ export default {
     },
     methods:{
         loadMore(page){
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
             this.$emit("changePage",page);
         }
     }

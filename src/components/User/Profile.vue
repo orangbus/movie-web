@@ -60,7 +60,7 @@
                     <v-btn
                         color="blue darken-1"
                         text
-                        @click="dialog = false"
+                        @click="confirm"
                     >
                         保存
                     </v-btn>
@@ -71,8 +71,9 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapState,mapActions} from "vuex";
 import {cloneDeep} from "lodash";
+import {userStore} from "@/api/user";
 
 export default {
     name: "Profile",
@@ -88,6 +89,21 @@ export default {
     },
     mounted() {
       this.form = cloneDeep(this.user);
+    },
+    methods:{
+        ...mapActions(["getUserInfo"]),
+        confirm(){
+            userStore(this.form).then(res=>{
+                if (res.code === 200){
+                    this.dialog = false;
+                    this.getUserInfo();
+                    this.$toast.success(res.msg);
+                }else{
+                    this.dialog = true;
+                    this.$toast.error(res.msg);
+                }
+            });
+        }
     },
     computed:{
         ...mapState(["user"])

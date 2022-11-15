@@ -1,6 +1,7 @@
 import LocalStorage from "@/util/LocalStorage";
 import {movieApiList, movieCate, website} from "../api/index";
 import EnumData from "@/util/EnumData";
+import {userInfo} from "@/api/user";
 
 let actions = {
 	// 获取网站配置
@@ -25,6 +26,14 @@ let actions = {
 		movieCate().then(res=>{
 			commit("setMovieCateList",res.data);
 		})
+	},
+	// 获取用户信息
+	getUserInfo({commit}){
+		userInfo().then(res=>{
+			if (res.code === 200){
+				commit("setUser",res.data);
+			}
+		});
 	},
 
 
