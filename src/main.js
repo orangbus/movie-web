@@ -5,12 +5,9 @@ import vuetify from '@/plugins/vuetify'
 const app_key = process.env.VUE_APP_KEY;
 
 // 滚动加载
-import infiniteScroll from "vue-infinite-scroll"
 import LocalStorage from "@/util/LocalStorage";
 
 Vue.config.productionTip = false;
-
-Vue.use(infiniteScroll)
 
 // 路由
 import Vuex from "vuex";
@@ -18,6 +15,24 @@ import VuexAxios from "vue-axios"
 import axios from "axios"
 import router from "./router/index";
 import store from "./vuex/index"
+
+// 消息提示
+import Toast from "vue-toastification"
+import "vue-toastification/dist/index.css"
+Vue.use(Toast,{
+	position: "bottom-center",
+	timeout: 3000,
+	closeOnClick: true,
+	pauseOnFocusLoss: true,
+	pauseOnHover: true,
+	draggable: true,
+	draggablePercent: 0.6,
+	showCloseButtonOnHover: false,
+	hideProgressBar: true,
+	closeButton: "button",
+	icon: true,
+	rtl: false,
+});
 
 
 // 请求拦截
@@ -29,9 +44,9 @@ window.axios.defaults.withCredentials = true;
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
 	// 更新token值
-	config.headers.common['Authorization'] = 'Bearer ' + LocalStorage.get("access_token");
+	config.headers.common['Authorization'] = 'Bearer ' + LocalStorage.get(EnumData.token);
 	// 加密字符串
-	config.headers.common['App_key'] = app_key;
+	config.headers.common['AppKey'] = app_key;
 	// 在发送请求之前做些什么
 	return config;
 }, function (error) {
@@ -61,9 +76,7 @@ axios.interceptors.response.use(function (response) {
 	console.log(error)
 	// Message.closeAll();
 	const code = error.response.status;
-	// 对响应错误做点什么
-	console.log("请求出错了")
-	console.log(error.response)
+	// // 对响应错误做点什么
 	switch (code) {
 		case 419:
 			router.push({path: "/"})
@@ -76,9 +89,6 @@ axios.interceptors.response.use(function (response) {
 
 Vue.use(Vuex, VuexAxios, axios)
 
-// mdui
-import "mdui/dist/css/mdui.min.css"
-
 // 图片放大
 import "viewerjs/dist/viewer.css"
 import VueViewer from 'v-viewer'
@@ -87,6 +97,7 @@ Vue.use(VueViewer);
 
 // 自定义样式
 import "./assets/css/orangbus.css"
+import EnumData from "@/util/EnumData";
 
 
 new Vue({

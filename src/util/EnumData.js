@@ -1,7 +1,18 @@
 export default {
 	setting: "setting",
-	defaultSetting:{
+	movieHistoryCate:"movieHistoryCate",
+	movieApi: "movieApi",
+	movieApiList:"movieApiList",
+	movieHistory:"movieHistory",
+	website:"website",
+	token: "access_token",
+	authorization:"authorization",
+	user:"user",
 
+	defaultSetting:{
+		showPage: false,
+		limit:20,
+		page:true,
 	},
 	defaultTabs: [
 		{id: 1, name: '推荐'},

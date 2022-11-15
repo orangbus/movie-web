@@ -20,9 +20,9 @@
     "v-viewer": "^1.6.4",
     "vue": "^2.6.11",
     "vue-axios": "^3.4.1",
-    "vue-infinite-scroll": "^2.0.2",
     "vue-qr": "^4.0.9",
     "vue-router": "^3.2.0",
+    "vue-toastification": "^1.7.14",
     "vuetify": "^2.6.9",
     "vuex": "^3.6.2"
   },

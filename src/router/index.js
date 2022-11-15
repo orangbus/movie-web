@@ -1,13 +1,12 @@
 import Vue from 'vue';
 import VueRouter from "vue-router";
 
-import Index from "../components/Index/Index";
+import Index from "../components/Index/index";
 import Login from "../components/Login/Index";
 
 
 import store from "../vuex/index";
 import LocalStorage from "@/util/LocalStorage";
-import HelloWorld from "@/components/HelloWorld";
 
 
 const routes = [
@@ -52,15 +51,36 @@ const routes = [
 		}
 	},
 	{
-		path: "/test",
-		name: "Templet",
-		component: HelloWorld,
+		path: "/search",
+		name: "Search",
+		component: require('../components/Index/search').default,
 		meta: {
 			keepAlive: false,
 			required: false,
-			title: '登录'
+			title: '聚合搜索'
 		}
 	},
+	{
+		path: "/article",
+		name: "Article",
+		component: require('../components/article/index').default,
+		meta: {
+			keepAlive: false,
+			required: false,
+			title: '文章'
+		}
+	},
+	{
+		path: "/photo",
+		name: "photo",
+		component: require('../components/photo/index').default,
+		meta: {
+			keepAlive: false,
+			required: false,
+			title: '图片'
+		}
+	},
+
 	{
 		path: "/templet",
 		name: "Templet2",
