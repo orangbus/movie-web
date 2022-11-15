@@ -80,6 +80,16 @@ const routes = [
 			title: '图片'
 		}
 	},
+	{
+		path: "/todayHistory",
+		name: "todayHistory",
+		component: require('../components/todayHistory/index').default,
+		meta: {
+			keepAlive: false,
+			required: false,
+			title: '历史上的今天'
+		}
+	},
 
 	{
 		path: "/templet",

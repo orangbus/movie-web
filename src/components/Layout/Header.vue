@@ -92,9 +92,8 @@
                 </div>
             </div>
 
-
-
         </v-app-bar>
+
         <!--侧边导航-->
         <v-navigation-drawer app
                              v-model="drawer"
@@ -112,7 +111,9 @@
                     </v-list-item-content>
                 </v-list-item>
             </v-list>
+
             <v-divider></v-divider>
+
             <v-list
                 nav
                 dense
@@ -121,6 +122,63 @@
                     v-model="selectedItem"
                     color="primary"
                 >
+                    <!--公共导航-->
+                    <v-list-item>
+                        <v-list-item-icon>
+                            <v-icon>mdi-list-box-outline</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <v-list-item-title >文章</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+
+                    <v-list-item>
+                        <v-list-item-icon>
+                            <v-icon>mdi-image-outline</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <v-list-item-title >图片</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+
+                    <v-list-item>
+                        <v-list-item-icon>
+                            <v-icon>mdi-chart-timeline-variant-shimmer</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <v-list-item-title >历史上的今天</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+
+                    <!--首页-->
+                    <div>
+                        <v-divider class="my-1" />
+                        <v-list-item
+                            v-for="(item, i) in movieApiList"
+                            :key="i"
+                            @click="chanMenu(item)"
+                        >
+                            <v-list-item-icon>
+                                <v-icon v-text="item.icon"></v-icon>
+                            </v-list-item-icon>
+
+                            <v-list-item-content>
+                                <v-list-item-title v-text="item.name"></v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </div>
+
+                    <!--个人中心-->
+
+
+                    <!--文章-->
+
+
+                    <!--聚合搜索-->
+
+
+                    <!--自定义导航-->
+                    <v-divider class="my-1" />
                     <v-list-item
                         v-for="(item, i) in movieCateList"
                         :key="i"
@@ -149,7 +207,8 @@ export default {
         return {
             selectedItem: 0,
             title: "首页",
-            drawer: false,
+            drawer: true,
+
             dialog: false,
 
             select:"",
@@ -216,11 +275,13 @@ export default {
         }
     },
     computed: {
-        ...mapState({
-            movieCateList:state => state.movieCateList,
-            menus: state => state.menus,
-            website:state => state.website,
-        })
+        // ...mapState({
+        //     movieCateList:state => state.movieCateList,
+        //     menus: state => state.menus,
+        //     website:state => state.website,
+        //     api
+        // })
+        ...mapState(["movieCateList","menus","website","movieApiList"])
     }
 }
 </script>
