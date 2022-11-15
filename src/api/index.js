@@ -38,11 +38,29 @@ export function movieDetail(id) {
 }
 
 /**
+ * 电影接口
+ * @returns {Promise<AxiosResponse<any>>}
+ */
+export function movieApiList() {
+	return axios.get(baseUrl("apiList"));
+}
+
+/**
  * 网站配置
  * @returns {Promise<AxiosResponse<any>>}
  */
 export function website() {
 	return axios.get(baseUrl("website"));
+}
+
+/**
+ * 登录注册
+ */
+export function login(data={}) {
+	return axios.post(baseUrl("login"),data);
+}
+export function register(data={}) {
+	return axios.post(baseUrl("register"),data);
 }
 
 

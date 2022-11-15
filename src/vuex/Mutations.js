@@ -1,9 +1,13 @@
 import LocalStorage from "@/util/LocalStorage";
+import EnumData from "@/util/EnumData";
 
 let mutations = {
     setUser(state, user) {
         state.user = user;
         state.authorization = true;
+
+        LocalStorage.set(EnumData.user,user);
+        LocalStorage.set(EnumData.authorization,true);
     },
 
     /**
@@ -13,10 +17,14 @@ let mutations = {
     logout(state) {
         state.user = {};
         state.authorization = false;
-        LocalStorage.remove('user');
-        LocalStorage.remove("access_token");
-        LocalStorage.remove("refresh_token");
-        LocalStorage.remove("movieApiList");
+
+        LocalStorage.remove(EnumData.user);
+        LocalStorage.remove(EnumData.token);
+
+        LocalStorage.remove(EnumData.movieApiList);
+        LocalStorage.remove(EnumData.movieApi);
+        LocalStorage.remove(EnumData.movieHistory);
+        LocalStorage.remove(EnumData.movieHistoryCate);
     },
 
     /**
@@ -45,6 +53,36 @@ let mutations = {
     },
 
     /**
+     * 设置接口数据源
+     */
+    setMovieApi(state,data){
+        LocalStorage.set(EnumData.movieApi,data);
+        state.movieApi = data;
+    },
+
+    /**
+     * 设置接口数据源列表
+     */
+    setMovieApiList(state,data){
+        LocalStorage.set(EnumData.movieApiList,data);
+        state.movieApiList = data;
+    },
+
+    /**
+     * 设置历史点击分类
+     */
+    setHistoryCate(state,data){
+        let cate = state.historyCateList;
+        // 删除一个分类
+        if (cate.length >= 8){
+            cate.splice(cate.length-1,1);
+        }
+        cate.push(data);
+        state.historyCateList = cate;
+        LocalStorage.set(EnumData.movieHistoryCate);
+    },
+
+    /**
      * 缓存网站
      * @param state
      * @param data
@@ -60,7 +98,7 @@ let mutations = {
      */
     setMovieHistory(state, data) {
         state.movieHistory = data;
-        LocalStorage.set("movieHistory",data)
+        LocalStorage.set(EnumData.movieHistory,data)
     },
 
     /**
@@ -71,5 +109,11 @@ let mutations = {
     setSubtitle(state, title) {
         state.subtitle = title;
     },
+
+    setSetting(state, data) {
+        state.setting = data;
+        LocalStorage.set(EnumData.setting,data);
+    },
+
 }
 export default mutations;

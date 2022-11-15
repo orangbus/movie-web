@@ -1,14 +1,22 @@
 import LocalStorage from "@/util/LocalStorage";
-import {movieCate, website} from "../api/index";
+import {movieApiList, movieCate, website} from "../api/index";
+import EnumData from "@/util/EnumData";
 
 let actions = {
 	// 获取网站配置
 	getWebSite({commit}) {
 		website().then(res => {
 			if (res.data != null) {
-				LocalStorage.set("website", res.data);
+				LocalStorage.set(EnumData.website, res.data);
 				commit("setWebsite", res.data)
 			}
+		});
+	},
+
+	// 获取接口列表
+	getMovieApiList({commit}){
+		movieApiList().then(res=>{
+			commit("setMovieApiList",res.data);
 		});
 	},
 
