@@ -27,7 +27,6 @@
                             <v-card-actions>
                                 <v-btn
                                     class="ml-2"
-                                    outlined
                                     small
                                     color="primary"
                                 >
@@ -37,7 +36,7 @@
                                     class="ml-2"
                                     outlined
                                     small
-                                    color="success"
+                                    color="error"
                                 >
                                     取消收藏
                                 </v-btn>

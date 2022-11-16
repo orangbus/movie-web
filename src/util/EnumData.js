@@ -11,7 +11,7 @@ export default {
 
 	defaultSetting:{
 		showPage: false,
-		limit:20,
+		limit:20, // 视频条数
 		page:true,
 	},
 	defaultTabs: [
@@ -29,5 +29,9 @@ export default {
 		{type: 2, name: '综艺',list:[], icon: 'mdi-star'},
 		{type: 4, name: '动漫',list:[], icon: 'mdi-check-circle'},
 	],
+
+	playerByLocal: 0, // 本地直接播放
+	playerByParseUrl: 1, // 解析播放
+
 
 }

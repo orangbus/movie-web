@@ -70,7 +70,7 @@
                     </v-toolbar>
 
                     <!--内容-->
-                    <MovieDetail :item="movie" v-if="dialog"></MovieDetail>
+                    <MoviePlayer :movie="movie" v-if="dialog"></MoviePlayer>
                 </v-card>
             </v-dialog>
         </v-row>
@@ -78,13 +78,12 @@
 </template>
 
 <script>
-import MovieDetail from "./MovieDetail";
 import {mapState} from "vuex";
-
+import MoviePlayer from "@/components/common/MoviePlayer";
 export default {
     name: "MovieList",
     components:{
-        MovieDetail
+        MoviePlayer
     },
     props: {
         list: {
@@ -132,6 +131,7 @@ export default {
                 this.showPlayer(item)
             }
         },
+        // 弹窗播放
         showPlayer(item){
             this.movie = item;
             this.dialog = true;

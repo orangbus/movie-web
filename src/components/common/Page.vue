@@ -1,7 +1,7 @@
 <template>
     <div>
         <!--分页-->
-        <div class="text-center mt-4 pb-10" >
+        <div class="text-center mt-4 pb-10" v-if="total > 0">
             <v-pagination
                 v-model="page"
                 :length="Math.trunc(total/limit)"
@@ -31,6 +31,7 @@ export default {
     },
     methods:{
         loadMore(page){
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
             this.$emit("changePage",page);
         }
     }

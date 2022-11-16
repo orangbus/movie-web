@@ -61,6 +61,11 @@ export default {
             this.$store.commit("setHistoryCate", movieHistoryCate);
         }
 
+        let setting = LocalStorage.get(EnumData.setting)
+        if (setting != null) {
+            this.$store.commit("setSetting", setting);
+        }
+
 
         // 记载电影搜索记录
         let movieHistory = LocalStorage.get("movieHistory")

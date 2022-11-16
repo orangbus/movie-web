@@ -4,7 +4,7 @@ const app_debug = process.env.VUE_APP_DEBUG;
 
 function baseUrl(url) {
 	if (app_debug){
-		return "/merchant/" + url;
+		return "/api/" + url;
 	}else{
 		return "/" + url;
 	}

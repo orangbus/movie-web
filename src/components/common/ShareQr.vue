@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-btn icon @click="dialog = true">
-            {{ user.vip ? '会员':'普通用户' }}
+            <v-icon>mdi-qrcode-plus</v-icon>
         </v-btn>
 
         <v-dialog
@@ -10,35 +10,31 @@
         >
             <v-card>
                 <v-card-title class="text-h5">
-                    {{user.vip ? '扫码加入群':'解锁会员'}}
+                    我的推广二维码
                 </v-card-title>
 
                 <div>
                     <div class="pt-3 px-3 pb-1">
+                        <div class="my-2 ">
+                            <v-alert
+                                border="left"
+                                colored-border
+                                color="deep-purple accent-4"
+                                elevation="2"
+                            >
+                                <p>规则说明：</p>
+                                <p>邀请一个好友即可获得7天会员奖励，可累加</p>
+                            </v-alert>
+                        </div>
                         <v-img src="https://picsum.photos/1920/1080?random" class="border-radius" ></v-img>
-                        <div v-if="!user.vip" class="my-2 text-center">
-                            扫描上方二维码获取【激活码】
-                        </div>
-                        <div  v-else class="my-2 ">
-                            <p>尊敬的会员，你已经是本站的会员</p>
-                            <p>到期时间：{{ user.vip_etime === 0 ? "不限":Tool.transformTimestamp(user.vip_etime)}}
-                            </p>
-                        </div>
-                        <div  v-if="!user.vip">
-                            <v-text-field v-model="code" outlined placeholder="已有激活码，请输入你的激活码"></v-text-field>
+                        <div  class="my-2 text-center">
+                            推荐码：{{ user.code }}
                         </div>
 
                     </div>
                 </div>
 
                 <v-card-actions>
-                    <v-btn
-                        color="green darken-1"
-                        text
-                        @click="joinGroup"
-                    >
-                        加入群
-                    </v-btn>
                     <v-spacer></v-spacer>
                     <v-btn
                         color="green darken-1"

@@ -9,12 +9,9 @@
             </v-col>
         </v-row>
 
-        <MovieICardList></MovieICardList>
-        <v-row>
-            <v-col>
-                <Page :total="100" @changePage="getData"></Page>
-            </v-col>
-        </v-row>
+        <MovieICardList :list="list"></MovieICardList>
+
+        <Page :total="100" @changePage="getData"></Page>
     </div>
 </template>
 
@@ -31,9 +28,20 @@ export default {
             list:[]
         }
     },
+    mounted() {
+        this.getData();
+    },
     methods:{
-        getData(page){
-            console.log(page)
+        changePage(page){
+            this.page = page;
+            this.getData();
+        },
+        getData(){
+            for (let i = 0; i < 30; i++) {
+                this.list.push(i)
+            }
+            this.total = 1000;
+            console.log(this.list)
         }
     }
 }
