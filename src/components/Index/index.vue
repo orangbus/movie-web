@@ -42,6 +42,8 @@
             <v-btn icon to="/search">
                 <v-icon>mdi-magnify</v-icon>
             </v-btn>
+            <!--接口选择-->
+            <MovieApi></MovieApi>
 
             <!--历史记录-->
             <v-btn icon to="/user?type=2">
@@ -55,7 +57,6 @@
 
             <!--    设置-->
             <Setting></Setting>
-
 
             <!--导航标签-->
             <template v-slot:extension>
@@ -87,13 +88,12 @@
             <MovieList :list="list" :to-detail="false"></MovieList>
 
             <!--分页-->
-            <!--v-if="setting.showPage && total > 1"-->
-            <div class="text-center mt-10 pb-16" >
+            <div class="text-center mt-10 pb-16" v-if="setting.showPage && total > 1">
                 <v-pagination
                     v-model="page"
                     :length="Math.trunc(total/setting.limit)"
                     :total-visible="10"
-                    @input="loadMore"
+                    @input="changePage"
                 ></v-pagination>
             </div>
         </v-container>
@@ -109,14 +109,46 @@
                 nav
                 dense
             >
+                <div class="text-center py-2 text-h5">
+                    {{ website.name }}
+
+                </div>
+
                 <v-list-item-group
                     v-model="movieApi.id"
                     color="primary"
                     active-class="deep-purple--text text--accent-4"
                 >
-                    <v-list-item v-for="(item,index) in menus" :key="index" @click="changeApi(item)">
-                        <v-list-item-title>{{ item.name }}({{ item.is_vip ? '会员':'免费' }})</v-list-item-title>
+                    <!--公共导航-->
+                    <v-list-item link to="/article">
+                        <v-list-item-icon>
+                            <v-icon>mdi-list-box-outline</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <v-list-item-title >文章</v-list-item-title>
+                        </v-list-item-content>
                     </v-list-item>
+
+                    <v-list-item link to="/photo">
+                        <v-list-item-icon>
+                            <v-icon>mdi-image-outline</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <v-list-item-title >图片</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+
+                    <v-list-item link to="/todayhistory">
+                        <v-list-item-icon>
+                            <v-icon>mdi-chart-timeline-variant-shimmer</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <v-list-item-title >历史上的今天</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+
+                    <!--分割线-->
+                    <v-divider class="my-1" />
 
                 </v-list-item-group>
             </v-list>
@@ -127,13 +159,14 @@
 import MovieList from "./MovieList";
 import LocalStorage from "@/util/LocalStorage";
 import EnumData from "@/util/EnumData";
-import {mapMutations, mapState} from "vuex";
+import {mapActions, mapMutations, mapState} from "vuex";
 import {movieList} from "@/api/movie";
 import Setting from "@/components/common/Setting";
+import MovieApi from "@/components/common/MovieApi";
 
 export default {
     components: {
-        MovieList,Setting
+        MovieList,Setting,MovieApi
     },
     data: () => ({
         drawer: false,
@@ -159,7 +192,6 @@ export default {
 
         // 左侧菜单
         menus: [],
-
     }),
 
     created() {
@@ -183,16 +215,19 @@ export default {
     },
     methods: {
         ...mapMutations(["setMovieType", "setMovieCate","setMovieApi","setHistoryCate","setSetting"]),
-
-        loadMore(page){
-            this.page = page;
-            this.list = [];
-            this.getData();
-        },
+        ...mapActions(["getMovieApiList"]),
 
         // 获取接口列表
         getMenus(){
-            this.menus = LocalStorage.get(EnumData.movieApiList);
+            if (this.authorization){
+                let movieApiList = LocalStorage.get(EnumData.movieApiList);
+                if (movieApiList === null){
+                    this.getMovieApiList();
+                }else{
+                    this.menus = movieApiList;
+                }
+                console.log(this.menus)
+            }
         },
         // 切换数据源
         changeApi(item){
@@ -619,6 +654,11 @@ export default {
                 let {data,total} = res;
                 this.list= data;
                 this.total= total;
+
+                // 简单提示
+                if (this.page === 1 && this.keyword === "" && res.data.length === 0){
+                    this.$toast.info("暂无数据，请尝试点击右上角切换一个数据源！");
+                }
             });
         },
 
@@ -640,7 +680,7 @@ export default {
                     this.cateList = this.cateData.cartoon;
                     break;
                 default:
-                    this.cateList = this.historyCateList;
+                    this.cateList = this.historyCateList || [];
                     break;
             }
             this.search();
@@ -670,31 +710,17 @@ export default {
                 path: this.authorization ? "user":"login"
             })
         },
+        // 切换页码
+        changePage(page){
+            this.page = page;
+            this.list = [];
+            this.getData();
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
+        },
 
     },
     computed: {
-        ...mapState(["movieType","user","authorization","movieApi","historyCateList"]),
-        // cateList(){
-        //     return [];
-        //     switch (this.tab) {
-        //         case 1: // 电影
-        //             return this.cateData.movie;
-        //             break;
-        //         case 2: //电视剧
-        //             return this.cateData.tv_play;
-        //             break;
-        //         case 3: // 综艺
-        //             return this.cateData.variety;
-        //             break;
-        //         case 4: // 动漫
-        //             return this.cateData.cartoon;
-        //             break;
-        //         default:
-        //             return [];
-        //             break;
-        //
-        //     }
-        // }
+        ...mapState(["movieType","user","authorization","movieApi","historyCateList","website"]),
     }
 }
 </script>

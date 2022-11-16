@@ -117,13 +117,14 @@
             <v-list
                 nav
                 dense
+                rounded
             >
                 <v-list-item-group
                     v-model="selectedItem"
                     color="primary"
                 >
                     <!--公共导航-->
-                    <v-list-item>
+                    <v-list-item @click="toPage('article')">
                         <v-list-item-icon>
                             <v-icon>mdi-list-box-outline</v-icon>
                         </v-list-item-icon>
@@ -132,7 +133,7 @@
                         </v-list-item-content>
                     </v-list-item>
 
-                    <v-list-item>
+                    <v-list-item to="/photo">
                         <v-list-item-icon>
                             <v-icon>mdi-image-outline</v-icon>
                         </v-list-item-icon>
@@ -141,7 +142,7 @@
                         </v-list-item-content>
                     </v-list-item>
 
-                    <v-list-item>
+                    <v-list-item to="/todayhistory">
                         <v-list-item-icon>
                             <v-icon>mdi-chart-timeline-variant-shimmer</v-icon>
                         </v-list-item-icon>
@@ -180,7 +181,7 @@
                     <!--自定义导航-->
                     <v-divider class="my-1" />
                     <v-list-item
-                        v-for="(item, i) in movieCateList"
+                        v-for="(item, i) in movieApiList"
                         :key="i"
                         @click="chanMenu(item)"
                     >
@@ -272,14 +273,19 @@ export default {
             this.$router.push({
                 path: "/user"
             })
-        }
+        },
+
+        toPage(path){
+            this.$router.push({
+                path
+            })
+        },
     },
     computed: {
         // ...mapState({
         //     movieCateList:state => state.movieCateList,
         //     menus: state => state.menus,
         //     website:state => state.website,
-        //     api
         // })
         ...mapState(["movieCateList","menus","website","movieApiList"])
     }

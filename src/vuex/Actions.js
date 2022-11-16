@@ -1,7 +1,8 @@
 import LocalStorage from "@/util/LocalStorage";
-import {movieApiList, movieCate, website} from "../api/index";
+import {website} from "../api/index";
 import EnumData from "@/util/EnumData";
 import {userInfo} from "@/api/user";
+import {apiList, movieCate} from "@/api/movie"
 
 let actions = {
 	// 获取网站配置
@@ -16,7 +17,7 @@ let actions = {
 
 	// 获取接口列表
 	getMovieApiList({commit}){
-		movieApiList().then(res=>{
+		apiList().then(res=>{
 			commit("setMovieApiList",res.data);
 		});
 	},

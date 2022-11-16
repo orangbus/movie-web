@@ -30,4 +30,8 @@ export default {
 		{type: 4, name: '动漫',list:[], icon: 'mdi-check-circle'},
 	],
 
+	playerByLocal: 0, // 本地直接播放
+	playerByParseUrl: 1, // 解析播放
+
+
 }
