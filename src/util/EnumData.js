@@ -9,10 +9,19 @@ export default {
 	authorization:"authorization",
 	user:"user",
 
+	// 加载中的样式
+	loadingCircle:0,
+	loadingLine:1,
+	loadingStyleList:[
+		{type:0,name:"圆形"},
+		{type:1,name:"进度条"},
+	],
+	// 默认设置
 	defaultSetting:{
-		showPage: false,
-		limit:20, // 视频条数
-		page:true,
+		showPage: true, // 是否显示分页，false:滚动加载
+		limit:24, // 视频条数
+		page:true, // 开启本地分页,缓存记录起始加载页
+		loadingStyle: 0, // 加载样式
 	},
 	defaultTabs: [
 		{id: 1, name: '推荐'},

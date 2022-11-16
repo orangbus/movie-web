@@ -1,130 +1,101 @@
 <template>
     <div>
-        <!--头部-->
-        <v-app-bar app color="primary"  elevate-on-scroll>
-            <v-app-bar-nav-icon @click="showMenu">
-                <v-icon color="white">mdi-menu</v-icon>
-            </v-app-bar-nav-icon>
-            <v-app-bar-title>
-                <span class="text-pointer" style="color: white" @click="toHome">{{ website.name }}</span>
-            </v-app-bar-title>
+        <v-app-bar
+            absolute
+            color="#2196F3"
+            dark
+        >
+            <!--背景渐变-->
+            <template v-slot:img="{ props }">
+                <v-img
+                    v-bind="props"
+                    gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"
+                ></v-img>
+            </template>
+
+            <!--首页图标-->
+            <v-app-bar-nav-icon @click="openMenu"></v-app-bar-nav-icon>
+            <!--标题-->
+            <v-app-bar-title>{{ movieType.name }}</v-app-bar-title>
+
+            <!--搜索-->
+            <v-text-field
+                class=" mt-10 ml-15"
+                flat
+                clearable
+                label="支持全文搜索，电影，演员，类型"
+                prepend-inner-icon="mdi-magnify"
+                solo-inverted
+                v-model="keywords"
+                @keyup.enter="search"
+                @click:clear="clear"
+            ></v-text-field>
+
 
             <v-spacer></v-spacer>
+            <!--首页-->
+            <!--右侧按钮-->
+            <v-btn icon to="/search">
+                <v-icon>mdi-magnify</v-icon>
+            </v-btn>
+            <!--接口选择-->
+            <MovieApi @getResult="search"></MovieApi>
 
-            <!--快捷导航-->
-            <v-menu
-                open-on-hover
-                offset-y
-            >
-            <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                    text
-                    color="white"
-                    dark
-                    v-bind="attrs"
-                    v-on="on"
-                >
-                    <v-icon @click="toUser">mdi-account-circle</v-icon>
-                    <v-dialog
-                        v-model="dialog"
-                        scrollable
-                        max-width="300px"
-                    >
-                        <v-card>
-                            <v-card-title>Select Country</v-card-title>
-                            <v-divider></v-divider>
-
-                            <v-card-actions>
-                                <v-btn
-                                    color="blue darken-1"
-                                    text
-                                    @click="dialog = false"
-                                >
-                                    Close
-                                </v-btn>
-                                <v-btn
-                                    color="blue darken-1"
-                                    text
-                                    @click="dialog = false"
-                                >
-                                    Save
-                                </v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
-                </v-btn>
-            </template>
-            </v-menu>
-            <v-btn icon>
-                <v-icon>mdi-dots-vertical</v-icon>
+            <!--历史记录-->
+            <v-btn icon to="/user?type=2">
+                <v-icon>mdi-history</v-icon>
             </v-btn>
 
-            <div  v-if="false">
-                <div
-                    v-for="(item,index) in movieCateList"
-                    :key="index" class="hidden-xs-only">
-                    <v-menu
-                        open-on-hover
-                        offset-y
-                    >
-                        <template v-slot:activator="{ on, attrs }">
-                            <v-btn
-                                text
-                                color="white"
-                                dark
-                                v-bind="attrs"
-                                v-on="on"
-                            >
-                                {{  item.name  }}
-                                <v-icon>mdi-chevron-down</v-icon>
-                            </v-btn>
-                        </template>
-                        <v-list>
-                            <v-list-item
-                                v-for="(cate, index) in item.list"
-                                :key="index"
-                                @click="chanMovieCate(cate)"
-                            >
-                                <v-list-item-title>{{ cate.type_name }}</v-list-item-title>
-                            </v-list-item>
-                        </v-list>
-                    </v-menu>
-                </div>
-            </div>
+            <!--个人中心-->
+            <v-btn icon @click="toUser">
+                <v-icon>mdi-account-circle</v-icon>
+            </v-btn>
 
+            <!--    设置-->
+            <Setting @getResult="search"></Setting>
+
+            <!--导航标签-->
+            <template v-slot:extension>
+                <!--centered-->
+                <v-tabs align-with-title >
+                    <v-tab
+                        v-for="(item,index) in tabs" :key="index"
+                        @click="changeTab(item)"
+                    >{{ item.name }}</v-tab>
+                </v-tabs>
+            </template>
         </v-app-bar>
-
-        <!--侧边导航-->
-        <v-navigation-drawer app
-                             v-model="drawer"
-                             bottom
-                             temporary
+        <!--侧边栏-->
+        <v-navigation-drawer
+            v-model="drawer"
+            absolute
+            bottom
+            temporary
         >
-            <v-list shaped>
-                <v-list-item
-                    dense
-                    rounded>
-                    <v-list-item-content>
-                        <v-list-item-title class="text-center font-weight-bold">
-                            {{  website.name }}
-                        </v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-            </v-list>
-
-            <v-divider></v-divider>
-
             <v-list
                 nav
                 dense
-                rounded
             >
+                <div class="text-center py-2 text-h5">
+                    {{ website.name }}
+                </div>
+
                 <v-list-item-group
-                    v-model="selectedItem"
+                    v-model="movieApi.id"
                     color="primary"
+                    active-class="deep-purple--text text--accent-4"
                 >
                     <!--公共导航-->
-                    <v-list-item @click="toPage('article')">
+                    <v-list-item link to="/video" v-if="user.vip">
+                        <v-list-item-icon>
+                            <v-icon>mdi-video-image</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <v-list-item-title >视频</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+
+                    <v-list-item link to="/article">
                         <v-list-item-icon>
                             <v-icon>mdi-list-box-outline</v-icon>
                         </v-list-item-icon>
@@ -133,7 +104,7 @@
                         </v-list-item-content>
                     </v-list-item>
 
-                    <v-list-item to="/photo">
+                    <v-list-item link to="/photo">
                         <v-list-item-icon>
                             <v-icon>mdi-image-outline</v-icon>
                         </v-list-item-icon>
@@ -142,7 +113,8 @@
                         </v-list-item-content>
                     </v-list-item>
 
-                    <v-list-item to="/todayhistory">
+
+                    <v-list-item link to="/todayhistory">
                         <v-list-item-icon>
                             <v-icon>mdi-chart-timeline-variant-shimmer</v-icon>
                         </v-list-item-icon>
@@ -151,48 +123,9 @@
                         </v-list-item-content>
                     </v-list-item>
 
-                    <!--首页-->
-                    <div>
-                        <v-divider class="my-1" />
-                        <v-list-item
-                            v-for="(item, i) in movieApiList"
-                            :key="i"
-                            @click="chanMenu(item)"
-                        >
-                            <v-list-item-icon>
-                                <v-icon v-text="item.icon"></v-icon>
-                            </v-list-item-icon>
-
-                            <v-list-item-content>
-                                <v-list-item-title v-text="item.name"></v-list-item-title>
-                            </v-list-item-content>
-                        </v-list-item>
-                    </div>
-
-                    <!--个人中心-->
-
-
-                    <!--文章-->
-
-
-                    <!--聚合搜索-->
-
-
-                    <!--自定义导航-->
+                    <!--分割线-->
                     <v-divider class="my-1" />
-                    <v-list-item
-                        v-for="(item, i) in movieApiList"
-                        :key="i"
-                        @click="chanMenu(item)"
-                    >
-                        <v-list-item-icon>
-                            <v-icon v-text="item.icon"></v-icon>
-                        </v-list-item-icon>
 
-                        <v-list-item-content>
-                            <v-list-item-title v-text="item.name"></v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
                 </v-list-item-group>
             </v-list>
         </v-navigation-drawer>
@@ -200,21 +133,29 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapActions, mapMutations, mapState} from "vuex";
+import MovieApi from "@/components/common/MovieApi";
+import Setting from "@/components/common/Setting";
 
 export default {
     name: "Header",
+    components:{
+        Setting,MovieApi
+    },
     data() {
         return {
-            selectedItem: 0,
-            title: "首页",
-            drawer: true,
+            drawer: false,
+            setting:{},
+            tab: 0,
+            tabs: [
+                {type: 0, name: '推荐'},
+                {type: 1, name: '电影'},
+                {type: 2, name: '电视剧'},
+                {type: 3, name: '综艺'},
+                {type: 4, name: '动漫'},
+            ],
+            keywords: "",
 
-            dialog: false,
-
-            select:"",
-            loading:true,
-            items:["斗罗大陆","斗破苍穹"]
         }
     },
     created() {
@@ -222,56 +163,66 @@ export default {
       this.$store.dispatch("getMovieCate");
     },
     methods: {
-        // 搜索
-        search(){
-          console.log(this.select)
-        },
-        // 显示左侧菜单
-        showMenu() {
-            this.drawer = !this.drawer;
-        },
-
-        /**
-         * 切换顶部导航
-         * 1、跳转首页
-         * 3、记录分类id
-         * @param item
-         */
-        chanMenu(item){
-            this.$store.commit("setMovieType",item)
-            this.title = item.name;
-            if (this.$route.path !== "/") {
+        ...mapMutations(["setMovieType", "setMovieCate","setMovieApi","setHistoryCate","setSetting"]),
+        ...mapActions(["getMovieApiList"]),
+        // 打开菜单
+        openMenu(){
+            if (this.authorization){
+                this.drawer = !this.drawer;
+            }else{
                 this.$router.push({
-                    path: "/",
-                    query:{
-                        type:item.type
-                    }
+                    path: "login"
                 })
             }
-            this.drawer = false;
         },
-        // 选择电影小分类
-        chanMovieCate(item){
-            this.$store.commit("setMovieCate",item)
-            if (this.$route.path != "/"){
-                this.$router.push({
-                    path:"/",
-                    query: {
-                        type_id:item.type_id
-                    }
-                });
+        // 切换分类
+        changeTab(item) {
+            this.cate_id = 0; // 重置分类id
+            this.tab = item.type;
+            switch (item.type) {
+                case 1: // 电影
+                    this.cateList = this.cateData.movie;
+                    break;
+                case 2: //电视剧
+                    this.cateList = this.cateData.tv_play;
+                    break;
+                case 3: // 综艺
+                    this.cateList = this.cateData.variety;
+                    break;
+                case 4: // 动漫
+                    this.cateList = this.cateData.cartoon;
+                    break;
+                default:
+                    this.cateList = this.historyCateList || [];
+                    break;
             }
+            this.$emit("search");
         },
-        // 返回首页
-        toHome(){
-            this.$router.push({
-                path: "/"
-            })
+        // 搜索
+        search() {
+            this.page = 1;
+            this.list = [];
+            this.total = 0;
+            this.getData();
+        },
+        clear(){
+            this.page = 1;
+            this.list = [];
+            this.keywords = "";
+            this.getData();
         },
         // 个人中心
         toUser(){
             this.$router.push({
-                path: "/user"
+                path: this.authorization ? "user":"login"
+            })
+        },
+
+
+        // 返回首页
+        toHome(){
+            this.$router.push({
+                path: "/"
             })
         },
 
@@ -282,12 +233,7 @@ export default {
         },
     },
     computed: {
-        // ...mapState({
-        //     movieCateList:state => state.movieCateList,
-        //     menus: state => state.menus,
-        //     website:state => state.website,
-        // })
-        ...mapState(["movieCateList","menus","website","movieApiList"])
+        ...mapState(["movieType","user","authorization","movieApi","historyCateList","website"]),
     }
 }
 </script>

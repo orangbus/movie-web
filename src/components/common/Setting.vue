@@ -25,26 +25,26 @@
                 <v-card-text>
                     <v-container>
                         <v-row>
-                            <!--<v-col-->
-                            <!--    cols="12"-->
-                            <!--&gt;-->
-                            <!--    <v-radio-group-->
-                            <!--        v-model="setting.showPage"-->
-                            <!--        label="开启分页"-->
-                            <!--        row-->
-                            <!--    >-->
-                            <!--        <v-radio-->
-                            <!--            label="滚动加载"-->
-                            <!--            :value="false"-->
-                            <!--        ></v-radio>-->
-                            <!--        <v-radio-->
-                            <!--            label="分页加载"-->
-                            <!--            :value="true"-->
-                            <!--        ></v-radio>-->
-                            <!--    </v-radio-group>-->
-                            <!--</v-col>-->
                             <v-col
-                                cols="12"
+                                cols="6"
+                            >
+                                <v-radio-group
+                                    v-model="setting.showPage"
+                                    label="开启分页"
+                                    row
+                                >
+                                    <v-radio
+                                        label="滚动加载"
+                                        :value="false"
+                                    ></v-radio>
+                                    <v-radio
+                                        label="分页加载"
+                                        :value="true"
+                                    ></v-radio>
+                                </v-radio-group>
+                            </v-col>
+                            <v-col
+                                cols="6"
                             >
                                 <v-radio-group
                                     v-model="setting.page"
@@ -62,10 +62,27 @@
                                 </v-radio-group>
                             </v-col>
                             <v-col
+                                cols="6"
+                            >
+                                <v-radio-group
+                                    v-model="setting.loadingStyle"
+                                    label="加载跟多样式"
+                                    row
+                                >
+                                    <v-radio
+                                        v-for="(item,index) in EnumData.loadingStyleList"
+                                        :key="index"
+                                        :label="item.name"
+                                        :value="item.type"
+                                    ></v-radio>
+
+                                </v-radio-group>
+                            </v-col>
+                            <v-col
                                 cols="12"
                             >
                                 <v-select
-                                    :items="[20,24, 30, 36, 42,58]"
+                                    :items="[24, 30, 36, 42]"
                                     v-model="setting.limit"
                                     label="每页显示"
                                     required
@@ -84,7 +101,14 @@
                         text
                         @click="resetSetting"
                     >
-                        重置
+                        重置配置
+                    </v-btn>
+                    <v-btn
+                        color="primary"
+                        text
+                        @click="clearCacheAll"
+                    >
+                        清理缓存
                     </v-btn>
                     <v-spacer></v-spacer>
                     <v-btn
@@ -103,39 +127,56 @@
 <script>
 import LocalStorage from "@/util/LocalStorage";
 import EnumData from "@/util/EnumData";
-import {mapMutations} from "vuex";
+import { mapMutations} from "vuex";
 
 export default {
     name: "Setting",
     data() {
        return{
+           EnumData,
            // 配置
            settingDialog: false,
-           setting: {
-               showPage: true, // 是否分页显示
-               limit: 20, // 每页显示条数
-               page:true,
-           },
+           setting: {},
        }
     },
+    mounted() {
+        // 加载配置
+        let setting = LocalStorage.get(EnumData.setting);
+        if (setting === null){
+            this.setting = EnumData.defaultSetting;
+        }else{
+            this.setting = setting;
+        }
+    },
     methods:{
-        ...mapMutations(["setSetting"]),
+        ...mapMutations(["setSetting","clearCache"]),
         // 保存设置
         saveSetting() {
             this.setSetting(this.setting);
-            this.settingDialog = false;
-            this.$toast.success("保存成功！")
+            this.$toast.success("保存成功！");
+            this.submit();
         },
         // 重置设置
         resetSetting() {
             LocalStorage.remove(EnumData.setting);
-            this.settingDialog = false;
-            this.$toast.info("重置成功！")
+            this.$toast.info("重置成功！");
+            this.submit();
         },
         // 打开设置
         openSetting() {
             this.settingDialog = true;
         },
+        // 清理缓存
+        clearCacheAll(){
+            this.clearCache();
+            this.$toast.success("清理成功");
+            this.submit();
+        },
+        // 提交事件
+        submit(data={}){
+            this.settingDialog = false;
+            this.$emit("getResult",data)
+        }
     }
 }
 </script>

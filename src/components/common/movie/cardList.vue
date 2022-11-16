@@ -9,19 +9,19 @@
                     <div class="d-flex justify-start">
                         <v-avatar
                             class="ma-0"
-                            size="140"
+                            size="155"
                             tile
                             rounded
                         >
-                            <v-img src="https://picsum.photos/1920/1080?random"></v-img>
+                            <v-img class="border-radius" :src="item.vod_pic"></v-img>
                         </v-avatar>
 
                         <div class="w-full">
-                            <v-card-title>斗罗大陆</v-card-title>
+                            <v-card-title class="pt-0"><span class="text-two-line">{{ item.vod_name }}</span></v-card-title>
 
                             <v-card-subtitle class="py-0">
-                                <p class="my-0 py-0">国产动漫 | 唐家三少</p>
-                                <p class="my-0 py-0"> 动漫 | 2022-10-11 10:12:00</p>
+                                <p class="my-0 py-0">{{ item.type_name }}</p>
+                                <p class="my-0 py-0">{{ item.updated_at }}</p>
                             </v-card-subtitle>
 
                             <v-card-actions>
@@ -29,6 +29,7 @@
                                     class="ml-2"
                                     small
                                     color="primary"
+                                    @click="playerMovie(item)"
                                 >
                                     立即观看
                                 </v-btn>
@@ -65,6 +66,11 @@ export default {
                 sm: 6,
                 xs: 12
             },
+        }
+    },
+    methods:{
+        playerMovie(item){
+            console.log(item)
         }
     }
 }

@@ -77,9 +77,8 @@ export default {
     },
     data(){
         return{
-
             title: "个人中心",
-            tab: 0,
+            tab: 2,
             tabs: [
                 {type: 0, name: '我的'},
                 {type: 1, name: '收藏'},

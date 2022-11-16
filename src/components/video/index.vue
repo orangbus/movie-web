@@ -72,7 +72,7 @@
             <!--视频列表-->
             <VideoList  :list="list"></VideoList>
             <!--分页-->
-            <Page :total="total" @changePage="changePage"></Page>
+            <Page :loading="loading" :total="total" @changePage="changePage"></Page>
         </v-container>
     </div>
 </template>
@@ -102,6 +102,7 @@ export default {
         keyword: "",
         page:1,
         total: 0,
+        loading:true,
         list:[],
     }
     },
@@ -125,6 +126,7 @@ export default {
 
         search(){
             this.page = 1;
+            this.total = 0;
             this.getData();
         },
         clear(){
@@ -134,16 +136,19 @@ export default {
 
         changePage(page){
             this.page = page;
+            this.list = [];
             this.getData();
         },
         getData(){
+            this.loading = true;
             videoList({
                 page:this.page,
                 limit:this.setting.limit,
                 keyword: this.keyword,
                 api_id:this.tab,
-                cate_id: this.cate ? this.cate.cid : 0
+                cid: this.cate ? this.cate.cid : 0
             }).then(res=>{
+                this.loading = false;
                 let {total,data} = res;
                 this.total = total;
                 this.list = data;

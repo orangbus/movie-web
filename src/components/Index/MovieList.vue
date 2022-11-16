@@ -94,18 +94,6 @@ export default {
           type:Boolean,
           default:()=>false
         },
-        // grid: {
-        //     type: Object,
-        //     default: ()=> {
-        //         return {
-        //             xl: 2, // 4K 和超宽屏幕
-        //             lg: 2, // 桌面端
-        //             md: 2, // 大型号平板到手提电脑
-        //             sm: 2, // 小型号到中型号的平板
-        //             xs: 2 // 小型号到大型号的手机
-        //         }
-        //     }
-        // },
     },
     data(){
         return{

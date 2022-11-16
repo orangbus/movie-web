@@ -10,8 +10,10 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
 import Page from "@/components/common/Page";
 import MovieICardList from "@/components/common/movie/cardList";
+import {movieHistory} from "@/api/movie";
 
 export default {
     components:{
@@ -41,12 +43,18 @@ export default {
             this.getData();
         },
         getData(){
-            for (let i = 0; i < 30; i++) {
-                this.list.push(i)
-            }
-            this.total = 1000;
-            console.log(this.list)
+            movieHistory({
+                page:this.page,
+                limit: this.setting.limit
+            }).then(res=>{
+                let {data,total} = res;
+                this.list = data;
+                this.total = total;
+            })
         }
+    },
+    computed:{
+        ...mapState(["setting"])
     }
 }
 </script>

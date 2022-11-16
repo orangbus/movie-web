@@ -26,6 +26,21 @@ let mutations = {
         LocalStorage.remove(EnumData.movieHistory);
         LocalStorage.remove(EnumData.movieHistoryCate);
     },
+    /**
+     * 清理缓存
+     */
+    clearCache(state){
+        state.setting = {};
+        state.movieApi = {};
+        state.movieCateList = [];
+        state.movieHistory = [];
+        state.movieType = {};
+
+        LocalStorage.remove(EnumData.movieApiList);
+        LocalStorage.remove(EnumData.movieApi);
+        LocalStorage.remove(EnumData.movieHistory);
+        LocalStorage.remove(EnumData.movieHistoryCate);
+    },
 
     /**
      * 电影分类
@@ -71,15 +86,18 @@ let mutations = {
     /**
      * 设置历史点击分类
      */
-    setHistoryCate(state,data){
-        let cate = state.historyCateList;
+    setMovieHistoryCate(state,data){
+        let cate = state.movieHistoryCate;
+        if (cate.length === 0){
+            return;
+        }
         // 删除一个分类
         if (cate.length >= 8){
             cate.splice(cate.length-1,1);
         }
         cate.push(data);
-        state.historyCateList = cate;
-        LocalStorage.set(EnumData.movieHistoryCate);
+        state.movieHistoryCate = cate;
+        LocalStorage.set(EnumData.movieHistoryCate,cate);
     },
 
     /**

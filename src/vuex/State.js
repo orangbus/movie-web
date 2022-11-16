@@ -20,6 +20,7 @@ let state = {
         {type: 2, name: '综艺',list:[], icon: 'mdi-star'},
         {type: 4, name: '动漫',list:[], icon: 'mdi-check-circle'},
     ],
+
     movieApi:{
         id:0
     },
@@ -31,7 +32,8 @@ let state = {
       name: "聚合影视"
     },
     // 历史点击分类
-    historyCateList:[],
+    movieHistoryCate:[],
+    // historyCateList:[],
 
     hitsList: [
         {name: "最新", selected: true},
@@ -56,7 +58,6 @@ let state = {
     tabs:[],
     // 用户设置
     setting:{},
-
 }
 
 export default state;
