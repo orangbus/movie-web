@@ -2,6 +2,9 @@
     <div>
         <v-container>
             <v-row>
+                <v-col cols="12" md="12">
+                    <a @click="backPage">返回</a>
+                </v-col>
                 <v-col cols="12" md="9">
                     <v-row no-gutters>
                         <v-col cols="12">
@@ -157,6 +160,9 @@ export default {
         this.getData()
     },
     methods: {
+        backPage(){
+            window.history.go(-1)
+        },
         getData() {
             movieDetail(this.id).then(res => {
                 if (res.code == 200) {

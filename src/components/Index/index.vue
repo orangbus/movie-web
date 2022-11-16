@@ -88,18 +88,18 @@
                     </v-chip>
                 </div>
 
-                <MovieList :list="list" :to-detail="false"></MovieList>
+                <MovieList :list="list" :to-detail="true"></MovieList>
 
                 <!--分页-->
                 <!--v-if="setting.showPage && total > 1"-->
-                <div class="text-center mt-10 pb-16" >
-                    <v-pagination
-                        v-model="page"
-                        :length="Math.trunc(total/setting.limit)"
-                        :total-visible="10"
-                        @input="loadMore"
-                    ></v-pagination>
-                </div>
+<!--                <div class="text-center mt-10 pb-16" >-->
+<!--                    <v-pagination-->
+<!--                        v-model="page"-->
+<!--                        :length="Math.trunc(total/setting.limit)"-->
+<!--                        :total-visible="10"-->
+<!--                        @input="loadMore"-->
+<!--                    ></v-pagination>-->
+<!--                </div>-->
             </v-container>
         </v-sheet>
 
@@ -137,6 +137,7 @@ import {movieList} from "@/api";
 import Setting from "@/components/common/Setting";
 
 export default {
+    name:"Index",
     components: {
         MovieList,Setting
     },
@@ -179,6 +180,7 @@ export default {
         this.getMenus();
         this.getCate();
         this.getData();
+        window.addEventListener("scroll",this.scrollLoading)
     },
 
     watch: {
@@ -622,7 +624,7 @@ export default {
                 type_id:this.cate_id
             }).then(res=>{
                 let {data,total} = res;
-                this.list= data;
+                this.list.push(...data);
                 this.total= total;
             });
         },
@@ -675,6 +677,16 @@ export default {
                 path: this.authorization ? "user":"login"
             })
         },
+        // 滚动加载
+        scrollLoading(){
+            let scrollTop = window.document.documentElement.scrollTop
+            let clientHeight = window.document.documentElement.clientHeight
+            let pageHeight = window.document.documentElement.scrollHeight
+            if (scrollTop + clientHeight === pageHeight){
+                this.page++
+                this.getData()
+            }
+        }
 
     },
     computed: {

@@ -1,7 +1,9 @@
 <template>
     <div>
         <v-app>
-            <router-view ></router-view>
+            <keep-alive include="Index">
+                <router-view ></router-view>
+            </keep-alive>
             <!--头部-->
             <!--<Header></Header>-->
             <!--主体-->
