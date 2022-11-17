@@ -58,6 +58,9 @@ let state = {
     tabs:[],
     // 用户设置
     setting:{},
+
+    // 文章历史分类
+    articleHistoryCate:[],
 }
 
 export default state;

@@ -23,7 +23,7 @@
                 class=" mt-10 ml-15"
                 flat
                 clearable
-                label="支持全文搜索，电影，演员，类型"
+                label="支持全文搜索，标题，内容关键词"
                 prepend-inner-icon="mdi-magnify"
                 solo-inverted
                 v-model="keywords"
@@ -33,18 +33,12 @@
 
 
             <v-spacer></v-spacer>
-            <!--首页-->
             <!--右侧按钮-->
             <v-btn icon to="/search">
                 <v-icon>mdi-magnify</v-icon>
             </v-btn>
-            <!--接口选择-->
-            <MovieApi @getResult="search"></MovieApi>
 
-            <!--历史记录-->
-            <v-btn icon to="/user?type=2">
-                <v-icon>mdi-history</v-icon>
-            </v-btn>
+            <ArticleCateList :cate-list="cateList" @confirm="confirm"></ArticleCateList>
 
             <!--个人中心-->
             <v-btn icon @click="toUser">
@@ -59,7 +53,7 @@
                 <!--centered-->
                 <v-tabs align-with-title >
                     <v-tab
-                        v-for="(item,index) in tabs" :key="index"
+                        v-for="(item,index) in tabs.length > 0 ? tabs : cateData" :key="index"
                         @click="changeTab(item)"
                     >{{ item.name }}</v-tab>
                 </v-tabs>
@@ -133,33 +127,62 @@
 </template>
 
 <script>
-import {mapActions, mapMutations, mapState} from "vuex";
-import MovieApi from "@/components/common/MovieApi";
+import { mapMutations, mapState} from "vuex";
 import Setting from "@/components/common/Setting";
+import ArticleCateList from "@/components/common/ArticleCateList";
+import {articleCate} from "@/api/article";
+import LocalStorage from "@/util/LocalStorage";
+import EnumData from "@/util/EnumData";
 
 export default {
     name: "Header",
     components:{
-        Setting,MovieApi
+        Setting,ArticleCateList
     },
     data() {
         return {
             drawer: false,
             setting:{},
             tab: 0,
-            tabs: [
-                {type: 0, name: '推荐'},
-                {type: 1, name: '电影'},
-                {type: 2, name: '电视剧'},
-                {type: 3, name: '综艺'},
-                {type: 4, name: '动漫'},
-            ],
+            tabs: [],
             keywords: "",
+            // 分类
+            cateData:[], // 临时分类
+            cateList:[],
+            cate:{},
         }
     },
+    mounted() {
+        let cate = LocalStorage.get(EnumData.articleHistoryCate);
+        if (cate !== null){
+            this.tabs = cate;
+        }
+        this.getCate();
+    },
     methods: {
-        ...mapMutations(["setMovieType", "setMovieCate","setMovieApi","setSetting"]),
-        ...mapActions(["getMovieApiList"]),
+        ...mapMutations(["setSetting","setArticleHistoryCate"]),
+
+        getCate(){
+            articleCate().then(res=>{
+                let list = [];
+                res.data.forEach(item=>{
+                    item.selected = false;
+                    list.push(item);
+                })
+
+                this.cateList =list;
+                if (this.tabs.length === 0){
+                    this.cateData = this.cateList.splice(0,10);
+                }
+            });
+        },
+        // 选择分类
+        confirm(cate){
+            // 将当前标签追加到顶部菜单中
+            this.tabs.unshift(cate);
+            this.setArticleHistoryCate(this.tabs);
+            this.$emit("confirmCate",cate);
+        },
 
         // 打开菜单
         openMenu(){

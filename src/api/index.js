@@ -16,7 +16,7 @@ function baseUrl(url) {
  * @returns {Promise<AxiosResponse<any>>}
  */
 export function freeMovieList(params = {}) {
-	return axios.get(baseUrl("movie"), {params});
+	return axios.get(baseUrl("free/list"), {params});
 }
 
 /**
@@ -25,7 +25,7 @@ export function freeMovieList(params = {}) {
  * @returns {Promise<AxiosResponse<any>>}
  */
 export function freeMovieCate(params = {}) {
-	return axios.get(baseUrl("cate"), {params});
+	return axios.get(baseUrl("free/cate"), {params});
 }
 
 

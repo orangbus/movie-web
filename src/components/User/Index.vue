@@ -1,6 +1,8 @@
 <template>
     <div>
+        <UserHeader></UserHeader>
         <v-app-bar
+            v-if="false"
             absolute
             color="#2196F3"
             dark
@@ -62,12 +64,13 @@ import Wait from "./Wait";
 import Logout from "@/components/common/Logout";
 import Coupon from "@/components/common/Coupon";
 import ShareQr from "@/components/common/ShareQr";
+import UserHeader from "@/components/Layout/UserHeader";
 
 
 export default {
     name: "Index",
     components:{
-        Profile,My,History,Collect,Logout,Coupon,ShareQr,Wait
+        UserHeader,Profile,My,History,Collect,Logout,Coupon,ShareQr,Wait
     },
     created() {
         let type = this.$route.query.type;
@@ -78,7 +81,7 @@ export default {
     data(){
         return{
             title: "个人中心",
-            tab: 2,
+            tab: 0,
             tabs: [
                 {type: 0, name: '我的'},
                 {type: 1, name: '收藏'},

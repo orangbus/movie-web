@@ -1,113 +1,50 @@
 <template>
     <div>
-        <v-app-bar
-            absolute
-            color="#2196F3"
-            dark
-        >
-            <!--背景渐变-->
-            <template v-slot:img="{ props }">
-                <v-img
-                    v-bind="props"
-                    gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"
-                ></v-img>
-            </template>
+        <SearchHeader
+        @search="search"
+        @click="clear"
+        @changeTab="changeTab"
+        ></SearchHeader>
 
-            <!--首页图标-->
-            <v-app-bar-nav-icon @click="openMenu"></v-app-bar-nav-icon>
-            <!--标题-->
-            <v-app-bar-title>{{ title }}</v-app-bar-title>
+        <v-container style="margin-top: 100px" >
+            <!--手机端搜索-->
 
-            <!--搜索-->
-            <v-text-field
-                class=" mt-10 ml-15"
-                flat
-                clearable
-                label="支持全文搜索，电影，演员，类型"
-                prepend-inner-icon="mdi-magnify"
-                solo-inverted
-                v-model="keyword"
-                @keyup.enter="search"
-                @click:clear="clear"
-            ></v-text-field>
+            <!--内容-->
+            <MovieList :list="list"></MovieList>
 
-
-            <v-spacer></v-spacer>
-
-            <!--历史记录-->
-            <v-btn icon>
-                <v-icon>mdi-history</v-icon>
-            </v-btn>
-
-            <!--个人中心-->
-            <v-btn icon @click="toUser">
-                <v-icon>mdi-account-circle</v-icon>
-            </v-btn>
-
-            <!--导航标签-->
-            <template v-slot:extension>
-                <!--centered-->
-                <v-tabs align-with-title >
-                    <v-tab
-                        v-for="(item,index) in tabs" :key="index"
-                        @click="changeTab(item)"
-                    >{{ item.name }}</v-tab>
-                </v-tabs>
-            </template>
-        </v-app-bar>
-
-        <v-sheet
-            id="movie-content"
-            max-height="1000"
-        >
-            <v-container style="height: 1000px;margin-top: 100px" >
-                <!--搜索-->
-                <v-row>
-                    <v-col cols="12" class="d-flex align-baseline">
-                        <v-text-field
-                            clearable
-                            :autofocus="true"
-                            v-model="keyword"
-                            hint="本站支持全文搜索（标题，演员，类型）"
-                            @keyup.enter="search"
-                            @click:clear="clear"
-                        >
-                        </v-text-field>
-                        <v-btn depressed ripple  class="pa-3 ml-3" color="primary" @click="search">搜索</v-btn>
-                    </v-col>
-                </v-row>
-
-                <!--内容-->
-
-
-                <!--分页-->
-                <Page :total="total" @changePage="changePage"></Page>
-            </v-container>
-        </v-sheet>
+            <!--分页-->
+            <Page :loading="loading" :total="total" @changePage="changePage"></Page>
+        </v-container>
     </div>
 </template>
 
 <script>
+import SearchHeader from "@/components/Layout/SearchHeader";
 import Page from "@/components/common/Page";
+import MovieList from "./MovieList";
+import {movieSearch} from "@/api/movie";
+import {mapState} from "vuex";
 export default {
     name: "search",
     components:{
-        Page,
+        SearchHeader,Page,MovieList
     },
     data() {
     return{
         drawer:false,
         title: "聚合搜索",
 
+        tab:0,
         tabs:[
             {type:1,name:"免费"},
             {type:2,name:"会员"},
         ],
 
-
-        keyword: "",
+        loading: true,
+        keywords: "",
         page:1,
         total: 0,
+        list:[]
     }
     },
     created() {
@@ -119,13 +56,13 @@ export default {
         },
 
 
-
         search(){
           this.page = 1;
+          this.list = [];
           this.getData();
         },
         clear(){
-            this.keyword = "";
+            this.keywords = "";
             this.search();
         },
         changePage(page){
@@ -133,7 +70,17 @@ export default {
           this.getData();
         },
         getData(){
-
+            this.loading = true;
+            movieSearch({
+                type: this.tab,
+                page: this.page,
+                limit:this.setting.limit,
+                keywords:this.keywords
+            }).then(res=>{
+                let {data,total} = res;
+                this.list = data;
+                this.total = total;
+            });
         },
         // 打开菜单
         openMenu(){
@@ -151,6 +98,9 @@ export default {
                 path: this.authorization ? "user":"login"
             })
         },
+    },
+    computed:{
+        ...mapState(["setting"])
     }
 }
 </script>

@@ -1,18 +1,22 @@
 <template>
     <div>
+        <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn icon
+                       v-bind="attrs"
+                       v-on="on"
+                       @click="dialog = true">
+                    <v-icon>mdi-account-edit</v-icon>
+                </v-btn>
+            </template>
+            <span>用户编辑</span>
+        </v-tooltip>
+
         <v-dialog
             v-model="dialog"
             persistent
             max-width="600px"
         >
-            <template v-slot:activator="{ on, attrs }">
-                <v-btn icon
-                       v-bind="attrs"
-                       v-on="on"
-                >
-                    <v-icon>mdi-account-edit</v-icon>
-                </v-btn>
-            </template>
             <v-card>
                 <v-card-title>
                     <span class="text-h5">{{ user.name }}</span>

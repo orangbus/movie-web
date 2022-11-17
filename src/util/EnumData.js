@@ -9,6 +9,8 @@ export default {
 	authorization:"authorization",
 	user:"user",
 
+	articleHistoryCate: "articleHistoryCate",
+
 	// 加载中的样式
 	loadingCircle:0,
 	loadingLine:1,

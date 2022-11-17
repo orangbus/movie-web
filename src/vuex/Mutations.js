@@ -20,6 +20,8 @@ let mutations = {
 
         LocalStorage.remove(EnumData.user);
         LocalStorage.remove(EnumData.token);
+        LocalStorage.remove(EnumData.authorization);
+        LocalStorage.remove(EnumData.setting);
 
         LocalStorage.remove(EnumData.movieApiList);
         LocalStorage.remove(EnumData.movieApi);
@@ -98,6 +100,17 @@ let mutations = {
         cate.push(data);
         state.movieHistoryCate = cate;
         LocalStorage.set(EnumData.movieHistoryCate,cate);
+    },
+
+    // 缓存历史分类
+    setArticleHistoryCate(state,data){
+        let cate = state.articleHistoryCate;
+        // 删除一个分类
+        if (cate.length >= 10){
+            data.splice(0,10);
+        }
+        state.articleHistoryCate = data;
+        LocalStorage.set(EnumData.articleHistoryCate,data);
     },
 
     /**

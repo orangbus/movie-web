@@ -4,6 +4,8 @@
             absolute
             color="#2196F3"
             dark
+            fixed
+            src="https://picsum.photos/1920/1080?random"
         >
             <!--背景渐变-->
             <template v-slot:img="{ props }">
@@ -18,46 +20,24 @@
             <!--标题-->
             <v-app-bar-title>{{ movieType.name }}</v-app-bar-title>
 
-            <!--搜索-->
-            <v-text-field
-                class=" mt-10 ml-15"
-                flat
-                clearable
-                label="支持全文搜索，电影，演员，类型"
-                prepend-inner-icon="mdi-magnify"
-                solo-inverted
-                v-model="keywords"
-                @keyup.enter="search"
-                @click:clear="clear"
-            ></v-text-field>
-
-
             <v-spacer></v-spacer>
             <!--首页-->
-            <!--右侧按钮-->
-            <v-btn icon to="/search">
-                <v-icon>mdi-magnify</v-icon>
-            </v-btn>
-            <!--接口选择-->
-            <MovieApi @getResult="search"></MovieApi>
-
-            <!--历史记录-->
-            <v-btn icon to="/user?type=2">
-                <v-icon>mdi-history</v-icon>
+            <v-btn icon to="/">
+                <v-icon>mdi-home</v-icon>
             </v-btn>
 
-            <!--个人中心-->
-            <v-btn icon @click="toUser">
-                <v-icon>mdi-account-circle</v-icon>
-            </v-btn>
-
-            <!--    设置-->
-            <Setting @getResult="search"></Setting>
+            <!--用户激活码-->
+            <Coupon></Coupon>
+            <!--推广码-->
+            <ShareQr></ShareQr>
+            <!--个人资料-->
+            <Profile></Profile>
+            <!--退出登录-->
+            <Logout></Logout>
 
             <!--导航标签-->
             <template v-slot:extension>
-                <!--centered-->
-                <v-tabs align-with-title >
+                <v-tabs align-with-title v-model="tab">
                     <v-tab
                         v-for="(item,index) in tabs" :key="index"
                         @click="changeTab(item)"
@@ -86,42 +66,7 @@
                     active-class="deep-purple--text text--accent-4"
                 >
                     <!--公共导航-->
-                    <v-list-item link to="/video" v-if="user.vip">
-                        <v-list-item-icon>
-                            <v-icon>mdi-video-image</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                            <v-list-item-title >视频</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-
-                    <v-list-item link to="/article">
-                        <v-list-item-icon>
-                            <v-icon>mdi-list-box-outline</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                            <v-list-item-title >文章</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-
-                    <v-list-item link to="/photo">
-                        <v-list-item-icon>
-                            <v-icon>mdi-image-outline</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                            <v-list-item-title >图片</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-
-
-                    <v-list-item link to="/todayhistory">
-                        <v-list-item-icon>
-                            <v-icon>mdi-chart-timeline-variant-shimmer</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                            <v-list-item-title >历史上的今天</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
+                    <MenuCommon></MenuCommon>
 
                     <!--分割线-->
                     <v-divider class="my-1" />
@@ -134,27 +79,29 @@
 
 <script>
 import {mapActions, mapMutations, mapState} from "vuex";
-import MovieApi from "@/components/common/MovieApi";
-import Setting from "@/components/common/Setting";
+import MenuCommon from "@/components/Layout/MenuCommon";
+import Logout from "@/components/common/Logout";
+import Coupon from "@/components/common/Coupon";
+import ShareQr from "@/components/common/ShareQr";
+import Profile from "@/components/User/Profile";
 
 export default {
     name: "Header",
     components:{
-        Setting,MovieApi
+        MenuCommon,Logout,Coupon,ShareQr,Profile
     },
     data() {
         return {
             drawer: false,
             setting:{},
+            title: "个人中心",
             tab: 0,
             tabs: [
-                {type: 0, name: '推荐'},
-                {type: 1, name: '电影'},
-                {type: 2, name: '电视剧'},
-                {type: 3, name: '综艺'},
-                {type: 4, name: '动漫'},
+                {type: 0, name: '我的'},
+                {type: 1, name: '收藏'},
+                {type: 2, name: '历史记录'},
+                {type: 3, name: '稍后观看'},
             ],
-            keywords: "",
         }
     },
     methods: {

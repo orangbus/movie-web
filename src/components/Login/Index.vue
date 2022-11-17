@@ -30,7 +30,6 @@
                 </v-tabs>
             </template>
         </v-app-bar>
-
         <v-container style="margin-top: 100px" >
             <v-row class="mt-10">
                 <v-col v-bind="grid" offset-md="3" offset-lg="3" offset-sm="0" offset-xl="3">

@@ -1,6 +1,11 @@
 <template>
     <div>
-        <Header></Header>
+        <MovieHeader
+        @changeTab="changeTab"
+        @search="search"
+        @clear="clear"
+        @getData="getData"
+        ></MovieHeader>
 
         <v-container style="margin-top: 100px" >
             <!--电影分类-->
@@ -21,7 +26,6 @@
             <!--分页-->
             <Page :loading="loading" :total="total" @changePage="changePage"></Page>
         </v-container>
-
     </div>
 </template>
 <script>
@@ -31,12 +35,12 @@ import EnumData from "@/util/EnumData";
 import {mapActions, mapMutations, mapState} from "vuex";
 import {movieCate, movieList} from "@/api/movie";
 import Page from "@/components/common/Page";
-import Header from "@/components/Layout/Header";
+import MovieHeader from "@/components/Layout/MovieHeader";
 import {freeMovieCate, freeMovieList} from "@/api";
 
 export default {
     components: {
-        MovieList,Header,Page
+        MovieList,MovieHeader,Page
     },
     data: () => ({
         page: 1,
@@ -97,7 +101,8 @@ export default {
         },
 
         // 搜索
-        search() {
+        search(keywords) {
+            this.keywords = keywords;
             this.page = 1;
             this.list = [];
             this.total = 0;
@@ -158,7 +163,6 @@ export default {
                     }
                 });
             }
-
         },
 
         // 切换电影类型
@@ -169,10 +173,41 @@ export default {
             this.search();
         },
 
+        changeTab(item) {
+            this.cate_id = 0; // 重置分类id
 
+            if (this.tab === item.type){
+                return;
+            }
+
+            this.tab = item.type;
+            if (this.cateData.length === 0){
+                this.search();
+                return;
+            }
+
+            switch (item.type) {
+                case 1: // 电影
+                    this.cateList = this.cateData.movie;
+                    break;
+                case 2: //电视剧
+                    this.cateList = this.cateData.tv_play;
+                    break;
+                case 3: // 综艺
+                    this.cateList = this.cateData.variety;
+                    break;
+                case 4: // 动漫
+                    this.cateList = this.cateData.cartoon;
+                    break;
+                default:
+                    this.cateList = this.movieHistoryCate || [];
+                    break;
+            }
+            this.search();
+        },
     },
     computed: {
-        ...mapState(["movieType","user","authorization","movieApi","setting"]),
+        ...mapState(["movieType","user","authorization","movieApi","setting","movieHistoryCate"]),
     }
 }
 </script>

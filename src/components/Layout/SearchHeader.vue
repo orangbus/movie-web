@@ -23,7 +23,7 @@
                 class=" mt-10 ml-15"
                 flat
                 clearable
-                label="支持全文搜索，电影，演员，类型"
+                label="聚合搜索，支持全文搜索，电影，演员，类型"
                 prepend-inner-icon="mdi-magnify"
                 solo-inverted
                 v-model="keywords"
@@ -42,20 +42,20 @@
             <MovieApi @getResult="search"></MovieApi>
 
             <!--历史记录-->
-            <v-btn icon to="/user?type=2">
+            <v-btn icon to="/user?type=2" v-if="user.vip">
                 <v-icon>mdi-history</v-icon>
             </v-btn>
 
             <!--个人中心-->
-            <v-btn icon @click="toUser">
+            <v-btn icon @click="toUser" v-if="user.vip">
                 <v-icon>mdi-account-circle</v-icon>
             </v-btn>
 
             <!--    设置-->
-            <Setting @getResult="search"></Setting>
+            <Setting @getResult="search"  v-if="user.vip"></Setting>
 
             <!--导航标签-->
-            <template v-slot:extension>
+            <template v-slot:extension  v-if="user.vip">
                 <!--centered-->
                 <v-tabs align-with-title >
                     <v-tab
@@ -86,42 +86,7 @@
                     active-class="deep-purple--text text--accent-4"
                 >
                     <!--公共导航-->
-                    <v-list-item link to="/video" v-if="user.vip">
-                        <v-list-item-icon>
-                            <v-icon>mdi-video-image</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                            <v-list-item-title >视频</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-
-                    <v-list-item link to="/article">
-                        <v-list-item-icon>
-                            <v-icon>mdi-list-box-outline</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                            <v-list-item-title >文章</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-
-                    <v-list-item link to="/photo">
-                        <v-list-item-icon>
-                            <v-icon>mdi-image-outline</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                            <v-list-item-title >图片</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-
-
-                    <v-list-item link to="/todayhistory">
-                        <v-list-item-icon>
-                            <v-icon>mdi-chart-timeline-variant-shimmer</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                            <v-list-item-title >历史上的今天</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
+                    <MenuCommon></MenuCommon>
 
                     <!--分割线-->
                     <v-divider class="my-1" />
@@ -136,23 +101,21 @@
 import {mapActions, mapMutations, mapState} from "vuex";
 import MovieApi from "@/components/common/MovieApi";
 import Setting from "@/components/common/Setting";
+import MenuCommon from "@/components/Layout/MenuCommon";
 
 export default {
     name: "Header",
     components:{
-        Setting,MovieApi
+        Setting,MovieApi,MenuCommon
     },
     data() {
         return {
             drawer: false,
             setting:{},
             tab: 0,
-            tabs: [
-                {type: 0, name: '推荐'},
-                {type: 1, name: '电影'},
-                {type: 2, name: '电视剧'},
-                {type: 3, name: '综艺'},
-                {type: 4, name: '动漫'},
+            tabs:[
+                {type:1,name:"免费"},
+                {type:2,name:"会员"},
             ],
             keywords: "",
         }

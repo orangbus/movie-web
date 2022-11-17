@@ -1,8 +1,17 @@
 <template>
     <div>
-        <v-btn icon @click="dialog = true">
-            <v-icon>mdi-qrcode-plus</v-icon>
-        </v-btn>
+        <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn icon
+                       v-bind="attrs"
+                       v-on="on"
+                       @click="dialog = true">
+                    <v-icon>mdi-qrcode-plus</v-icon>
+                    <!--{{ // user.vip ? '会员':'普通用户' }}-->
+                </v-btn>
+            </template>
+            <span>推广码</span>
+        </v-tooltip>
 
         <v-dialog
             v-model="dialog"
