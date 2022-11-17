@@ -79,13 +79,47 @@
                                 </v-radio-group>
                             </v-col>
                             <v-col
-                                cols="12"
+                                cols="6"
                             >
                                 <v-select
                                     :items="[24, 30, 36, 42]"
                                     v-model="setting.limit"
                                     label="每页显示"
                                     required
+                                ></v-select>
+                            </v-col>
+                            <v-col
+                                cols="6"
+                                v-if="user.vip"
+                            >
+                                <v-select
+                                    :items="jiexi"
+                                    v-model="setting.jiexi_url"
+                                    :hint="`${setting.jiexi ? setting.jiexi.name : ''}`"
+                                    label="默认解析接口"
+                                    item-text="name"
+                                    item-value="id"
+                                    persistent-hint
+                                    return-object
+                                    single-line
+                                    @input="changeJiexi"
+                                ></v-select>
+                            </v-col>
+                            <v-col
+                                cols="6"
+                                v-if="user.vip"
+                            >
+                                <v-select
+                                    :items="parse"
+                                    :hint="`${setting.parse ? setting.parse.name : ''}`"
+                                    v-model="setting.parse"
+                                    label="默认播放加速地址"
+                                    item-text="name"
+                                    item-value="id"
+                                    persistent-hint
+                                    return-object
+                                    single-line
+                                    @input="changeParse"
                                 ></v-select>
                             </v-col>
                         </v-row>
@@ -127,7 +161,7 @@
 <script>
 import LocalStorage from "@/util/LocalStorage";
 import EnumData from "@/util/EnumData";
-import { mapMutations} from "vuex";
+import { mapMutations,mapState,mapActions} from "vuex";
 
 export default {
     name: "Setting",
@@ -150,6 +184,13 @@ export default {
     },
     methods:{
         ...mapMutations(["setSetting","clearCache"]),
+        ...mapActions(["getJiexiList","getM3u8List"]),
+        changeJiexi(item){
+            this.setting.jiexi = item;
+        },
+        changeParse(item){
+            this.setting.parse = item;
+        },
         // 保存设置
         saveSetting() {
             this.setSetting(this.setting);
@@ -164,6 +205,10 @@ export default {
         },
         // 打开设置
         openSetting() {
+            if (this.user.vip){
+                this.getJiexiList();
+                this.getM3u8List();
+            }
             this.settingDialog = true;
         },
         // 清理缓存
@@ -177,6 +222,9 @@ export default {
             this.settingDialog = false;
             this.$emit("getResult",data)
         }
+    },
+    computed:{
+        ...mapState(["jiexi","parse","user"])
     }
 }
 </script>

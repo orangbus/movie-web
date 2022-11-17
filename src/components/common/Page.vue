@@ -16,10 +16,10 @@
         ></v-progress-linear>
 
         <!--分页-->
-        <div class="text-center mt-4 pb-10" v-if="setting.showPage && total > 1">
+        <div class="text-center mt-4 pb-10" v-if="setting.showPage && total > (limit === 0 ? 20:setting.limit)">
             <v-pagination
                 v-model="page"
-                :length="Math.trunc(total/limit === 0 ? 20:setting.limit)"
+                :length="Math.trunc(total/(limit === 0 ? 20:setting.limit))"
                 :total-visible="10"
                 @input="loadMore"
             ></v-pagination>

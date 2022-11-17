@@ -36,6 +36,15 @@ export function movieDetail(id =0) {
 }
 
 /**
+ * 视频跟用户关系
+ * @param params
+ * @returns {Promise<AxiosResponse<any>>}
+ */
+export function movieStatus(id =0) {
+	return axios.get(baseUrl("status/"+id));
+}
+
+/**
  * 视频搜索
  * @param params
  * @returns {Promise<AxiosResponse<any>>}
@@ -58,18 +67,16 @@ export function movieCate(params = {}) {
  * @param params
  * @returns {Promise<AxiosResponse<any>>}
  */
-export function movieHistory(params = {}) {
+export function movieHistoryList(params = {}) {
 	return axios.get(baseUrl("history/list"), {params});
 }
-
-/**
- * 清空历史记录
- * @param params
- * @returns {Promise<AxiosResponse<any>>}
- */
-export function movieHistoryClear(params = {}) {
+export function movieHistoryDelete(params = {}) {
 	return axios.post(baseUrl("history/delete"), params);
 }
+export function movieHistoryClear(params = {}) {
+	return axios.post(baseUrl("history/clear"), params);
+}
+
 
 /**
  * [分类]收藏
@@ -100,7 +107,7 @@ export function movieTodayList(params = {}) {
 /**
  * 视频收藏
  */
-export function movieCollect(params = {}) {
+export function movieCollectList(params = {}) {
 	return axios.get(baseUrl("collect/list"), {params});
 }
 export function movieCollectStore(params = {}) {
@@ -111,6 +118,22 @@ export function movieCollectDelete(params = {}) {
 }
 export function movieCollectClear(params = {}) {
 	return axios.post(baseUrl("collect/clear"), params);
+}
+
+/**
+ * 稍后观看
+ */
+export function movieWaitList(params = {}) {
+	return axios.get(baseUrl("wait/list"), {params});
+}
+export function movieWaitStore(params = {}) {
+	return axios.post(baseUrl("wait/store"), params);
+}
+export function movieWaitDelete(params = {}) {
+	return axios.post(baseUrl("wait/delete"), params);
+}
+export function movieWaitClear(params = {}) {
+	return axios.post(baseUrl("wait/clear"), params);
 }
 
 /**

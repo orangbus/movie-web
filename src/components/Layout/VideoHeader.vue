@@ -33,18 +33,7 @@
 
 
             <v-spacer></v-spacer>
-            <!--首页-->
-            <!--右侧按钮-->
-            <v-btn icon to="/search">
-                <v-icon>mdi-magnify</v-icon>
-            </v-btn>
-            <!--接口选择-->
-            <MovieApi @getResult="search"></MovieApi>
 
-            <!--历史记录-->
-            <v-btn icon to="/user?type=2">
-                <v-icon>mdi-history</v-icon>
-            </v-btn>
 
             <!--个人中心-->
             <v-btn icon @click="toUser">
@@ -134,32 +123,35 @@
 
 <script>
 import {mapActions, mapMutations, mapState} from "vuex";
-import MovieApi from "@/components/common/MovieApi";
 import Setting from "@/components/common/Setting";
+import {apiList} from "@/api/video";
 
 export default {
     name: "Header",
     components:{
-        Setting,MovieApi
+        Setting,
     },
     data() {
         return {
             drawer: false,
             setting:{},
             tab: 0,
-            tabs: [
-                {type: 0, name: '推荐'},
-                {type: 1, name: '电影'},
-                {type: 2, name: '电视剧'},
-                {type: 3, name: '综艺'},
-                {type: 4, name: '动漫'},
-            ],
+            tabs: [],
             keywords: "",
         }
+    },
+    mounted() {
+        this.getApi()
     },
     methods: {
         ...mapMutations(["setMovieType", "setMovieCate","setMovieApi","setSetting"]),
         ...mapActions(["getMovieApiList"]),
+        getApi(){
+            this.tabs.push( {id:0,name:"推荐"});
+            apiList().then(res=>{
+                this.tabs.push(...res.data);
+            });
+        },
 
         // 打开菜单
         openMenu(){

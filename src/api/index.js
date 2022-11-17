@@ -28,6 +28,19 @@ export function freeMovieCate(params = {}) {
 	return axios.get(baseUrl("free/cate"), {params});
 }
 
+/**
+ * 会员解析解析
+ */
+export function jiexiList(params = {}) {
+	return axios.get(baseUrl("jiexi"), {params});
+}
+
+/**
+ * m3u8 解析列表
+ */
+export function m3u8List(params = {}) {
+	return axios.get(baseUrl("m3u8List"), {params});
+}
 
 //
 // /**

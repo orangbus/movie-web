@@ -73,8 +73,8 @@ let mutations = {
      * 设置接口数据源
      */
     setMovieApi(state,data){
-        LocalStorage.set(EnumData.movieApi,data);
         state.movieApi = data;
+        LocalStorage.set(EnumData.movieApi,data);
     },
 
     /**
@@ -145,6 +145,15 @@ let mutations = {
         state.setting = data;
         LocalStorage.set(EnumData.setting,data);
     },
+
+    setJiexiList(state, data){
+        state.jiexi = data;
+        LocalStorage.set(EnumData.jiexiList,data);
+    },
+    setM3u8List(state, data){
+        state.parse = data;
+        LocalStorage.set(EnumData.m3u8List,data);
+    }
 
 }
 export default mutations;

@@ -135,7 +135,7 @@ export default {
         },
         confirm() {
             this.setMovieApi(this.movieApi);
-            this.$emit("changeMovieApi", this.movieApi);
+            this.$emit("changeApi", this.movieApi);
             this.$toast.info("接口已切换至：" + this.movieApi.name);
             this.submit();
         },

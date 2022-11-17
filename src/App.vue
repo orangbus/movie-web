@@ -8,6 +8,38 @@
                     <router-view v-if="$route.meta.keepAlive"></router-view>
                 </keep-alive>
             </v-main>
+
+            <!--全局公告-->
+            <v-dialog
+                v-model="dialog"
+                max-width="500"
+                scrollable
+            >
+                <v-card>
+                    <v-card-title class="text-h5 text-center">
+                        入站须知
+                    </v-card-title>
+                    <v-divider></v-divider>
+
+                    <v-card-text class="py-2" style="max-height: 500px">
+                        <p>本站资源来自互联网，无法保证内容的广告真实信，请100%不要相信.</p>
+                        <p>如果本站资源侵犯了你的权益，请联系站长尽快删除</p>
+                        <p>建议注册一个账号，获取更好的体验</p>
+                    </v-card-text>
+
+                    <v-divider></v-divider>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            color="blue blue-1"
+                            text
+                            @click="confirm"
+                        >
+                            朕已阅读
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </v-app>
     </div>
 </template>
@@ -17,7 +49,16 @@ import LocalStorage from "@/util/LocalStorage";
 import EnumData from "@/util/EnumData";
 
 export default {
+    data(){
+        return{
+            dialog: false,
+        }
+    },
     created() {
+        // 本站须知
+        if (LocalStorage.get("know") === null){
+            this.dialog = true;
+        }
         // 获取网站配置
         let website = LocalStorage.get("website");
         if (website == null) {
@@ -62,6 +103,12 @@ export default {
         let movieHistory = LocalStorage.get("movieHistory")
         if (movieHistory != null) {
             this.$store.commit("setMovieHistory", movieHistory);
+        }
+    },
+    methods:{
+        confirm(){
+            LocalStorage.set("know",true);
+            this.dialog = false;
         }
     }
 }

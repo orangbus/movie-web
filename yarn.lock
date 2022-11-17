@@ -8487,7 +8487,7 @@ uuid@^8.3.2:
 
 v-viewer@^1.6.4:
   version "1.6.4"
-  resolved "https://registry.yarnpkg.com/v-viewer/-/v-viewer-1.6.4.tgz#39e36b534baab34076fb816704c6a734de0dc72f"
+  resolved "https://registry.npmmirror.com/v-viewer/-/v-viewer-1.6.4.tgz#39e36b534baab34076fb816704c6a734de0dc72f"
   integrity sha512-LVkiUHpmsbsZXebeNXnu8krRCi5i2n07FeLFxoIVGhw8lVvTBO0ffpbDC6mLEuacCjrIh09HjIqpciwUtWE8lQ==
   dependencies:
     throttle-debounce "^2.0.1"

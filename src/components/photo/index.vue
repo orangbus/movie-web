@@ -2,9 +2,11 @@
     <div>
         <Header></Header>
 
-        <v-container style="margin-top: 100px">
+        <v-container style="margin-top: 60px">
             <!--接口调用-->
             <v-alert
+                v-if="false"
+                class="mt-2"
                 border="top"
                 colored-border
                 color="blue"
@@ -22,9 +24,9 @@
                     v-for="(item,index) in list"
                     :key="index"
                     class="d-flex"
-                    cols="3"
+                    v-bind="grid"
+                    @click="bigPic(item.url)"
                 >
-                    <!--` https://picsum.photos/500/300?image=${n * 5 + 10}` -->
                     <v-img
                         :src="item.url"
                         :lazy-src="item.url"
@@ -48,7 +50,7 @@
                 </v-col>
             </v-row>
 
-            <Page :total="total" @changePage="changePage"></Page>
+            <Page :loading="loading" :total="total" @changePage="changePage"></Page>
         </v-container>
     </div>
 </template>
@@ -63,6 +65,14 @@ export default {
     },
     data(){
         return{
+             grid: {
+                 xl: 3,
+                 lg: 3,
+                 md: 4,
+                 sm: 12,
+                 xs: 12
+             },
+            loading:true,
             page: 1,
             limit: 20,
             total: 0,
@@ -79,15 +89,24 @@ export default {
             this.getData();
         },
         getData(){
+            this.loading = true;
             wallpaperList({
                 page:this.page,
                 limit:this.limit,
             }).then(res=>{
+                this.loading = false;
                 let {data,total} = res;
                 this.list = data;
                 this.total = total;
             });
-        }
+        },
+        bigPic(url) {
+            let list = [];
+            list.push(url);
+            this.$viewerApi({
+                images: list, // 必须是已数组的形式传递 ["image.png","avatar.png",....]
+            })
+        },
     }
 }
 </script>

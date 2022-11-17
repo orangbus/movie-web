@@ -61,6 +61,10 @@ let state = {
 
     // 文章历史分类
     articleHistoryCate:[],
+    // 会员解析接口
+    jiexi:[],
+    // m3u8 接口
+    parse:[],
 }
 
 export default state;

@@ -87,6 +87,12 @@ import Profile from "@/components/User/Profile";
 
 export default {
     name: "Header",
+    props:{
+        tab:{
+            type: Number,
+            default:()=>0
+        }
+    },
     components:{
         MenuCommon,Logout,Coupon,ShareQr,Profile
     },
@@ -95,7 +101,6 @@ export default {
             drawer: false,
             setting:{},
             title: "个人中心",
-            tab: 0,
             tabs: [
                 {type: 0, name: '我的'},
                 {type: 1, name: '收藏'},

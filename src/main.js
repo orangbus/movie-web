@@ -35,6 +35,12 @@ Vue.use(Toast,{
 });
 
 
+// 图片放大
+import "viewerjs/dist/viewer.css"
+import viewer  from 'v-viewer'
+
+Vue.use(viewer);
+
 // 请求拦截
 window.axios = require('axios');
 

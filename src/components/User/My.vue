@@ -30,7 +30,9 @@
                         elevation="2"
                     >
                         <div class="text-center text-h5">我的配置</div>
-                        <p>分页条数：{{ setting.limit }}</p>
+                        <p>自定义分页条数：{{ setting.limit }}</p>
+                        <p>视频解析：{{ setting.jiexi ? setting.jiexi.name : '无'}}</p>
+                        <p>m3u8解析：{{ setting.parse ? setting.parse.name : '无'}} (当视频未使用加速播放时，使用该接口进行加速播放)</p>
                     </v-alert>
                 </v-col>
                 <!--<v-col cols="6">-->

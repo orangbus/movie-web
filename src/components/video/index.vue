@@ -1,6 +1,13 @@
 <template>
     <div>
+        <VideoHeader
+        @changeTab = "changeTab"
+        @search="search"
+        @clear="clear"
+        ></VideoHeader>
+
         <v-app-bar
+            v-if="false"
             absolute
             color="#2196F3"
             dark
@@ -26,7 +33,7 @@
                 label="支持全文搜索，电影，演员，类型"
                 prepend-inner-icon="mdi-magnify"
                 solo-inverted
-                v-model="keyword"
+                v-model="keywords"
                 @keyup.enter="search"
                 @click:clear="clear"
             ></v-text-field>
@@ -70,7 +77,7 @@
             </div>
 
             <!--视频列表-->
-            <VideoList  :list="list"></VideoList>
+            <VideoList :list="list"></VideoList>
             <!--分页-->
             <Page :loading="loading" :total="total" @changePage="changePage"></Page>
         </v-container>
@@ -79,14 +86,15 @@
 
 <script>
 import Page from "@/components/common/Page";
-import {apiList, videoList} from "@/api/video";
+import VideoHeader from "@/components/Layout/VideoHeader";
+import { videoList} from "@/api/video";
 import VideoList from "./VideoList";
 import {mapState} from "vuex";
 
 export default {
     name: "search",
     components:{
-        Page,VideoList
+        Page,VideoList,VideoHeader
     },
     data() {
     return{
@@ -99,7 +107,7 @@ export default {
         cate:{}, //当前选中分类
         cateList:[], // 视频分类
 
-        keyword: "",
+        keywords: "",
         page:1,
         total: 0,
         loading:true,
@@ -107,7 +115,6 @@ export default {
     }
     },
     created() {
-        this.getApi();
         this.getData();
     },
     methods:{
@@ -124,13 +131,15 @@ export default {
             this.search();
         },
 
-        search(){
+        search(keywords){
+            this.keywords = keywords;
             this.page = 1;
             this.total = 0;
+            this.list = [];
             this.getData();
         },
         clear(){
-            this.keyword = "";
+            this.keywords = "";
             this.search();
         },
 
@@ -144,7 +153,7 @@ export default {
             videoList({
                 page:this.page,
                 limit:this.setting.limit,
-                keyword: this.keyword,
+                keywords: this.keywords,
                 api_id:this.tab,
                 cid: this.cate ? this.cate.cid : 0
             }).then(res=>{
@@ -154,12 +163,7 @@ export default {
                 this.list = data;
             });
         },
-        getApi(){
-            this.tabs.push( {id:0,name:"推荐"});
-            apiList().then(res=>{
-                this.tabs.push(...res.data);
-            });
-        },
+
         // 打开菜单
         openMenu(){
             if (this.authorization){

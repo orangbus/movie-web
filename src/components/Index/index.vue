@@ -5,6 +5,7 @@
         @search="search"
         @clear="clear"
         @getData="getData"
+        @changeApi="changeApi"
         ></MovieHeader>
 
         <v-container style="margin-top: 100px" >
@@ -77,6 +78,10 @@ export default {
         },
         // 切换数据源
         changeApi(item){
+            this.tab = 0;
+            this.cate_id = 0;
+            // 重新获取列表
+            this.getCate();
             this.setMovieApi(item);
         },
 

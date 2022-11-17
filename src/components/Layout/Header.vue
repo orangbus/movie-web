@@ -16,34 +16,12 @@
             <!--首页图标-->
             <v-app-bar-nav-icon @click="openMenu"></v-app-bar-nav-icon>
             <!--标题-->
-            <v-app-bar-title>{{ movieType.name }}</v-app-bar-title>
-
-            <!--搜索-->
-            <v-text-field
-                class=" mt-10 ml-15"
-                flat
-                clearable
-                label="支持全文搜索，电影，演员，类型"
-                prepend-inner-icon="mdi-magnify"
-                solo-inverted
-                v-model="keywords"
-                @keyup.enter="search"
-                @click:clear="clear"
-            ></v-text-field>
-
+            <v-app-bar-title>{{ website.name }}</v-app-bar-title>
 
             <v-spacer></v-spacer>
-            <!--首页-->
             <!--右侧按钮-->
             <v-btn icon to="/search">
                 <v-icon>mdi-magnify</v-icon>
-            </v-btn>
-            <!--接口选择-->
-            <MovieApi @getResult="search"></MovieApi>
-
-            <!--历史记录-->
-            <v-btn icon to="/user?type=2">
-                <v-icon>mdi-history</v-icon>
             </v-btn>
 
             <!--个人中心-->
@@ -51,20 +29,8 @@
                 <v-icon>mdi-account-circle</v-icon>
             </v-btn>
 
-            <!--    设置-->
-            <Setting @getResult="search"></Setting>
-
-            <!--导航标签-->
-            <template v-slot:extension>
-                <!--centered-->
-                <v-tabs align-with-title >
-                    <v-tab
-                        v-for="(item,index) in tabs" :key="index"
-                        @click="changeTab(item)"
-                    >{{ item.name }}</v-tab>
-                </v-tabs>
-            </template>
         </v-app-bar>
+
         <!--侧边栏-->
         <v-navigation-drawer
             v-model="drawer"
@@ -81,7 +47,6 @@
                 </div>
 
                 <v-list-item-group
-                    v-model="movieApi.id"
                     color="primary"
                     active-class="deep-purple--text text--accent-4"
                 >
@@ -133,34 +98,17 @@
 </template>
 
 <script>
-import {mapActions, mapMutations, mapState} from "vuex";
-import MovieApi from "@/components/common/MovieApi";
-import Setting from "@/components/common/Setting";
+import { mapState} from "vuex";
 
 export default {
     name: "Header",
-    components:{
-        Setting,MovieApi
-    },
+
     data() {
         return {
             drawer: false,
-            setting:{},
-            tab: 0,
-            tabs: [
-                {type: 0, name: '推荐'},
-                {type: 1, name: '电影'},
-                {type: 2, name: '电视剧'},
-                {type: 3, name: '综艺'},
-                {type: 4, name: '动漫'},
-            ],
-            keywords: "",
         }
     },
     methods: {
-        ...mapMutations(["setMovieType", "setMovieCate","setMovieApi","setSetting"]),
-        ...mapActions(["getMovieApiList"]),
-
         // 打开菜单
         openMenu(){
             if (this.authorization){
@@ -170,18 +118,6 @@ export default {
                     path: "login"
                 })
             }
-        },
-        // 切换分类
-        changeTab(item) {
-            this.$emit("changeTab",item);
-        },
-        // 搜索
-        search() {
-            this.$emit("search",this.keywords);
-        },
-        clear(){
-            this.keywords = "";
-            this.$emit("clear");
         },
         // 个人中心
         toUser(){
@@ -204,7 +140,7 @@ export default {
         },
     },
     computed: {
-        ...mapState(["movieType","user","authorization","movieApi","website"]),
+        ...mapState(["user","authorization","website"]),
     }
 }
 </script>

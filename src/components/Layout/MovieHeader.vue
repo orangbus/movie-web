@@ -39,7 +39,7 @@
                 <v-icon>mdi-magnify</v-icon>
             </v-btn>
             <!--接口选择-->
-            <MovieApi @getResult="search"></MovieApi>
+            <MovieApi @getResult="search" @changeApi="changeApi"></MovieApi>
 
             <!--历史记录-->
             <v-btn icon to="/user?type=2">
@@ -174,6 +174,11 @@ export default {
         // 切换分类
         changeTab(item) {
             this.$emit("changeTab",item);
+        },
+        // 切换api
+        changeApi(movieapi){
+            this.tab = 0;
+            this.$emit("changeApi",movieapi)
         },
         // 搜索
         search() {

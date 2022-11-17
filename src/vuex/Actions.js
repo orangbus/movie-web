@@ -1,5 +1,5 @@
 import LocalStorage from "@/util/LocalStorage";
-import {website} from "../api/index";
+import {jiexiList, m3u8List, website} from "../api/index";
 import EnumData from "@/util/EnumData";
 import {userInfo} from "@/api/user";
 import {apiList, movieCate} from "@/api/movie"
@@ -36,7 +36,22 @@ let actions = {
 			}
 		});
 	},
-
+	// 会员解析
+	getJiexiList({commit}){
+		jiexiList().then(res=>{
+			if (res.code === 200){
+				commit("setJiexiList",res.data);
+			}
+		});
+	},
+	// m3u8 解析
+	getM3u8List({commit}){
+		m3u8List().then(res=>{
+			if (res.code === 200){
+				commit("setM3u8List",res.data);
+			}
+		});
+	},
 
 
 	/**

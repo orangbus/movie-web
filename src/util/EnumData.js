@@ -10,6 +10,10 @@ export default {
 	user:"user",
 
 	articleHistoryCate: "articleHistoryCate",
+	// 会员解析
+	jiexiList:"jiexiList",
+	// m3u8 解析列表
+	m3u8List:"m3u8List",
 
 	// 加载中的样式
 	loadingCircle:0,
@@ -24,6 +28,14 @@ export default {
 		limit:24, // 视频条数
 		page:true, // 开启本地分页,缓存记录起始加载页
 		loadingStyle: 0, // 加载样式
+		jiexi: {
+			id:0,
+			name : "请选择"
+		}, // 默认解析列表
+		parse: {
+			id:0,
+			name: "请选择"
+		}, // m3u8 默认解析接口
 	},
 	defaultTabs: [
 		{id: 1, name: '推荐'},

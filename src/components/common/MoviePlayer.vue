@@ -20,19 +20,19 @@
                                   <v-icon class="mr-1">
                                       mdi-playlist-plus
                                   </v-icon>
-                                  <span class="subheading mr-2">稍后观看</span>
+                                  <span class="subheading mr-2">{{ hasWait == null ? "稍后观看":"已加入稍后观看"}}</span>
                               </v-btn>
                               <v-btn color="primary" text @click="collect">
                                   <v-icon class="mr-1">
                                       mdi-heart
                                   </v-icon>
-                                  <span class="subheading mr-2">收藏</span>
+                                  <span class="subheading mr-2">{{ hasCollect == null ? "收藏":"已收藏"}}</span>
                               </v-btn>
                               <v-btn color="primary" text @click="addUpdate">
                                   <v-icon class="mr-1">
                                       mdi-movie-open-plus
                                   </v-icon>
-                                  <span class="subheading mr-2">追更</span>
+                                  <span class="subheading mr-2">{{ hasUpdate == null ? "追更":"已追更"}}</span>
                               </v-btn>
                           </v-col>
                        </v-row>
@@ -93,16 +93,23 @@ import EnumData from "@/util/EnumData";
 import TransformUrl from "@/util/TransformUrl";
 import Clipboard from "clipboard";
 import {mapState} from "vuex";
+import {movieCollectStore, movieStatus, movieToday, movieWaitStore} from "@/api/movie";
 export default {
     props:{
       movie:{
           type:Object,
           default:()=>{}
-      }
+      },
+        // 当前视频未使用解析的时候，优先使用自定义解析
+        userParse:{
+          type:Boolean,
+            default:()=>false
+        }
     },
     components:{
         Player
     },
+
     data: () => ({
          grid: {
              xl: 6,
@@ -119,16 +126,20 @@ export default {
         index: 0,
         typeIndex: 0,
         playerList: [], // 播放列表
+
+        hasCollect: null, // 是否收藏
+        hasUpdate: null, // 是否追根
+        hasWait: null, // 是否加入稍后观看
     }),
 
     mounted() {
         this.initPlayer();
+        this.getMovieStatus();
     },
 
     methods: {
         initPlayer(){
             // 播放地址转化
-            console.log("movie",this.movie)
             this.cateList = TransformUrl(this.movie)
             if (this.cateList.length > 0) {
                 let typeIndex = this.typeIndex; // 类型 m3u8 还是网页直接播放
@@ -142,6 +153,20 @@ export default {
                 this.cateList[typeIndex].list[index].selected = true;
                 this.playerList = this.cateList[this.typeIndex].list;
             }
+        },
+        getMovieStatus(){
+            movieStatus({id:this.movie.id}).then(res=>{
+                if (res.code === 200){
+                    let {
+                        hasCollect,
+                        hasUpdate,
+                        hasWait
+                    } = res.data;
+                    this.hasCollect = hasCollect;
+                    this.hasUpdate = hasUpdate;
+                    this.hasWait = hasWait;
+                }
+            });
         },
 
         // 点击播放集数
@@ -188,12 +213,15 @@ export default {
                 // 判断是否需要用解析
                 if (this.player_type === 0 && url.includes("m3u8")) {
                     this.url = api.parse_url + url;
-                }else{
-                    this.url = url;
                 }
-            } else {
+            } else if (this.userParse && this.setting.parse){
+                this.url = this.setting.parse.url + url;
+            }else{
                 this.url = url;
             }
+
+            console.log(this.setting)
+            console.log("url:"+this.url)
         },
 
         // 当页切换数据
@@ -208,13 +236,34 @@ export default {
         },
 
         addWait(){
-            this.$toast.info("功能暂未开放")
+            movieWaitStore({vid:this.movie.id}).then(res=>{
+                if (res.code === 200) {
+                    this.hasWait = this.hasWait === null;
+                    this.$toast.success(res.msg)
+                } else {
+                    this.$toast.error(res.msg);
+                }
+            })
         },
         collect(){
-            this.$toast.info("功能暂未开放")
+             movieCollectStore({api_id:this.movieApi.id,id:this.movie.id}).then(res=>{
+                if (res.code === 200) {
+                    this.hasCollect = this.hasCollect === null ? {id:0} : null;
+                    this.$toast.success(res.msg)
+                } else {
+                    this.$toast.error(res.msg);
+                }
+            })
         },
         addUpdate(){
-            this.$toast.info("功能暂未开放")
+            movieToday({id:this.movie.id}).then(res=>{
+                if (res.code === 200) {
+                    this.hasUpdate = this.hasUpdate === null ? {id:0} : null;
+                    this.$toast.success(res.msg)
+                } else {
+                    this.$toast.error(res.msg);
+                }
+            })
         },
 
         // 上下集
@@ -260,7 +309,7 @@ export default {
 
     },
     computed: {
-        ...mapState(["movieApi"])
+        ...mapState(["movieApi","setting"])
     }
 }
 </script>
