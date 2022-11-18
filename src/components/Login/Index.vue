@@ -30,6 +30,7 @@
                 </v-tabs>
             </template>
         </v-app-bar>
+
         <v-container style="margin-top: 100px" >
             <v-row class="mt-10">
                 <v-col v-bind="grid" offset-md="3" offset-lg="3" offset-sm="0" offset-xl="3">
@@ -62,6 +63,15 @@
                             required
                         ></v-text-field>
 
+                        <v-text-field
+                            v-if="tab === 2"
+                            type="password"
+                            v-model="form.confirm_password"
+                            :counter="15"
+                            label="重复密码"
+                            outlined
+                        ></v-text-field>
+
                         <v-btn
                             color="primary"
                             class="mr-4"
@@ -81,6 +91,7 @@
 import {login, register} from "@/api";
 import LocalStorage from "@/util/LocalStorage";
 import EnumData from "@/util/EnumData";
+import {mapState} from "vuex";
 
 export default {
     name: "Index",
@@ -102,8 +113,24 @@ export default {
             ],
             form:{
                 phone:"",
-                password: ""
+                password: "",
+                confirm_password:"",
+                code: ""
             }
+        }
+    },
+    created() {
+      let code = this.$route.query.code;
+      if (code != undefined && code != "" && code.length >0){
+          LocalStorage.set(EnumData.inviteCode,code);
+          this.code = code;
+      }
+    },
+    mounted() {
+        if (this.authorization){
+            this.$router.push({
+                path:"/user"
+            })
         }
     },
     methods:{
@@ -112,7 +139,7 @@ export default {
                 this.msg("请输入正确的手机号");
                 return;
             }
-            let {name,phone,password} = this.form;
+            let {name,phone,password,confirm_password} = this.form;
             if (this.tab === 1){
                 login({phone,password }).then(res=>{
                     if (res.code === 200){
@@ -128,7 +155,12 @@ export default {
                     }
                 });
             }else{
-                register({name,phone,password}).then(res=>{
+                if (password != confirm_password){
+                    this.$toast.error("两次输入的密码不一致");
+                    return;
+                }
+                let code = LocalStorage.get(EnumData.inviteCode);
+                register({name,phone,password,code}).then(res=>{
                     if (res.code === 200){
                         let {access_token,user} = res.data;
                         LocalStorage.set(EnumData.token,access_token);
@@ -153,6 +185,9 @@ export default {
              path: "/"
          })
         }
+    },
+    computed:{
+        ...mapState(["authorization"])
     }
 }
 </script>

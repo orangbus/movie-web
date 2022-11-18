@@ -35,11 +35,17 @@
             <v-spacer></v-spacer>
             <!--首页-->
             <!--右侧按钮-->
-            <v-btn icon to="/search">
+            <v-btn icon to="/search" v-if="false">
                 <v-icon>mdi-magnify</v-icon>
             </v-btn>
+
+            <!--首页-->
+            <v-btn icon to="/">
+                <v-icon>mdi-home</v-icon>
+            </v-btn>
+
             <!--接口选择-->
-            <MovieApi @getResult="search"></MovieApi>
+            <MovieApi v-if="false" @getResult="search"></MovieApi>
 
             <!--历史记录-->
             <v-btn icon to="/user?type=2" v-if="user.vip">

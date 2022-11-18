@@ -35,11 +35,12 @@
                                 <p>邀请一个好友即可获得7天会员奖励，可累加</p>
                             </v-alert>
                         </div>
-                        <v-img src="https://picsum.photos/1920/1080?random" class="border-radius" ></v-img>
+                        <div class="text-center">
+                            <VueQr :text="registerUrl"></VueQr>
+                        </div>
                         <div  class="my-2 text-center">
                             推荐码：{{ user.code }}
                         </div>
-
                     </div>
                 </div>
 
@@ -71,8 +72,14 @@
 import {mapState} from "vuex";
 import {couponStore} from "@/api/coupon";
 import Tool from "@/util/Tool";
+import VueQr from "vue-qr";
+
+const base_url = process.env.VUE_APP_WEB_URL;
 
 export default {
+    components:{
+        VueQr,
+    },
     data() {
         return{
             Tool,
@@ -101,7 +108,11 @@ export default {
         }
     },
     computed:{
-        ...mapState(["user","website"])
+        ...mapState(["user","website"]),
+        registerUrl(){
+            let code = this.user.code;
+            return base_url+"/#/login?code="+code;
+        }
     }
 }
 </script>

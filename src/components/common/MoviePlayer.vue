@@ -155,7 +155,7 @@ export default {
             }
         },
         getMovieStatus(){
-            movieStatus({id:this.movie.id}).then(res=>{
+            movieStatus(this.movie.id).then(res=>{
                 if (res.code === 200){
                     let {
                         hasCollect,

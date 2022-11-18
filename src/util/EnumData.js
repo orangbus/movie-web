@@ -8,12 +8,15 @@ export default {
 	token: "access_token",
 	authorization:"authorization",
 	user:"user",
+	know:"know",
 
 	articleHistoryCate: "articleHistoryCate",
 	// 会员解析
 	jiexiList:"jiexiList",
 	// m3u8 解析列表
 	m3u8List:"m3u8List",
+	// 邀请好友
+	inviteCode: "inviteCode",
 
 	// 加载中的样式
 	loadingCircle:0,

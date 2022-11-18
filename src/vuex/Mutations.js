@@ -27,6 +27,9 @@ let mutations = {
         LocalStorage.remove(EnumData.movieApi);
         LocalStorage.remove(EnumData.movieHistory);
         LocalStorage.remove(EnumData.movieHistoryCate);
+        LocalStorage.remove(EnumData.m3u8List);
+        LocalStorage.remove(EnumData.jiexiList);
+        LocalStorage.remove(EnumData.know);
     },
     /**
      * 清理缓存
@@ -42,6 +45,9 @@ let mutations = {
         LocalStorage.remove(EnumData.movieApi);
         LocalStorage.remove(EnumData.movieHistory);
         LocalStorage.remove(EnumData.movieHistoryCate);
+        LocalStorage.remove(EnumData.m3u8List);
+        LocalStorage.remove(EnumData.jiexiList);
+        LocalStorage.remove(EnumData.know);
     },
 
     /**

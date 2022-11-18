@@ -130,6 +130,12 @@ export default {
         getData() {
             this.loading = true;
             if (this.authorization){
+                // 是否选择了一个源
+                if (!this.movieApi.id){
+                    this.$toast.success("请点击右上角选择一个数据源");
+                    this.loading = false;
+                    return;
+                }
                 movieList({
                     page:this.page,
                     limit:this.setting.limit,

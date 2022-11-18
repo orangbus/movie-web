@@ -33,7 +33,10 @@
 
 
             <v-spacer></v-spacer>
-
+            <!--首页-->
+            <v-btn icon to="/">
+                <v-icon>mdi-home</v-icon>
+            </v-btn>
 
             <!--个人中心-->
             <v-btn icon @click="toUser">

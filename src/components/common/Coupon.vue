@@ -24,7 +24,9 @@
 
                 <div>
                     <div class="pt-3 px-3 pb-1">
-                        <v-img src="https://picsum.photos/1920/1080?random" class="border-radius" ></v-img>
+                        <div class="text-center" v-if="website.qq_url">
+                            <VudQr :text="website.qq_url"></VudQr>
+                        </div>
                         <div v-if="!user.vip" class="my-2 text-center">
                             扫描上方二维码获取【激活码】
                         </div>
@@ -75,8 +77,12 @@
 import {mapState} from "vuex";
 import {couponStore} from "@/api/coupon";
 import Tool from "@/util/Tool";
+import VudQr from "vue-qr"
 
 export default {
+    components:{
+        VudQr
+    },
     data() {
         return{
             Tool,
