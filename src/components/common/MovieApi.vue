@@ -44,7 +44,8 @@
                             color="primary"
                         >
                             <v-list-item v-for="(item,index) in apiList.length !== 0 ? apiList: movieApiList" :key="index" @click="changeApi(item)">
-                                <v-list-item-title>{{ item.name }}({{ item.is_vip ? '会员' : '免费' }})</v-list-item-title>
+                                <v-list-item-title>
+                                    {{ item.name }}({{ item.is_vip ? '会员' : '免费' }} <span style="color: red" v-if="item.default === 1">【默认数据源】</span>) </v-list-item-title>
                             </v-list-item>
                         </v-list-item-group>
                     </v-list>

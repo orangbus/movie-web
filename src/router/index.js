@@ -90,6 +90,37 @@ const routes = [
 			title: '视频'
 		}
 	},
+	{
+		path: "/code",
+		name: "Code",
+		component: require('../components/app/code/index').default,
+		meta: {
+			keepAlive: false,
+			required: false,
+			title: '活码'
+		}
+	},
+	{
+		path: "/player",
+		name: "player",
+		component: require('../components/app/player/index').default,
+		meta: {
+			keepAlive: false,
+			required: false,
+			title: '视频解析'
+		}
+	},
+	{
+		path: "/m3u8",
+		name: "m3u8",
+		component: require('../components/app/m3u8/index').default,
+		meta: {
+			keepAlive: false,
+			required: false,
+			title: 'm3u8播放器'
+		}
+	},
+
 
 	{
 		path: "/templet",

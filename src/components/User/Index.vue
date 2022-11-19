@@ -28,12 +28,6 @@ export default {
     components:{
         UserHeader,My,History,Collect,Wait
     },
-    created() {
-        let type = this.$route.query.type;
-        if (type){
-            this.tab  = type;
-        }
-    },
     data(){
         return{
             title: "个人中心",
