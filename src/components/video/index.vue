@@ -1,10 +1,13 @@
 <template>
     <div>
-        <VideoHeader
-        @changeTab = "changeTab"
-        @search="search"
-        @clear="clear"
-        ></VideoHeader>
+        <AppHeader
+            :tab="tab"
+            :tabs="tabs"
+            placeholder="支持全文搜索，电影，演员，类型"
+            @changeTab="changeTab"
+            @search="search"
+            @clear="clear"
+        ></AppHeader>
 
         <v-app-bar
             v-if="false"
@@ -53,16 +56,17 @@
             <!--导航标签-->
             <template v-slot:extension>
                 <!--centered-->
-                <v-tabs align-with-title >
+                <v-tabs align-with-title>
                     <v-tab
                         v-for="(item,index) in tabs" :key="index"
                         @click="changeTab(item)"
-                    >{{ item.name }}</v-tab>
+                    >{{ item.name }}
+                    </v-tab>
                 </v-tabs>
             </template>
         </v-app-bar>
 
-        <v-container style="margin-top: 110px" >
+        <v-container style="margin-top: 110px">
             <!--分类标签-->
             <div class="text-center" v-if="cateList.length > 0">
                 <v-chip
@@ -86,102 +90,93 @@
 
 <script>
 import Page from "@/components/common/Page";
-import VideoHeader from "@/components/Layout/VideoHeader";
-import { videoList} from "@/api/video";
+import {apiList, videoList} from "@/api/video";
 import VideoList from "./VideoList";
 import {mapState} from "vuex";
+import AppHeader from "@/components/Layout/AppHeader.vue";
 
 export default {
     name: "search",
-    components:{
-        Page,VideoList,VideoHeader
+    components: {
+        Page, VideoList, AppHeader
     },
     data() {
-    return{
-        drawer:false,
-        title: "聚合搜索",
+        return {
+            drawer: false,
+            title: "聚合搜索",
 
-        tab: 0,
-        tabs:[],
+            tab: 0,
+            tabs: [],
 
-        cate:{}, //当前选中分类
-        cateList:[], // 视频分类
+            cate: {}, //当前选中分类
+            cateList: [], // 视频分类
 
-        keywords: "",
-        page:1,
-        total: 0,
-        loading:true,
-        list:[],
-    }
+            keywords: "",
+            page: 1,
+            total: 0,
+            loading: true,
+            list: [],
+        }
     },
     created() {
+        this.getApi();
         this.getData();
     },
-    methods:{
+    methods: {
         // 切换视频源
-        changeTab(item){
+        changeTab(item) {
             this.cate = {};
             this.tab = item.id;
             this.cateList = item.cate;
             this.search();
         },
         // 切换分类
-        changeCate(cate){
+        changeCate(cate) {
             this.cate = cate;
             this.search();
         },
 
-        search(keywords){
+        search(keywords) {
             this.keywords = keywords;
             this.page = 1;
             this.total = 0;
             this.list = [];
             this.getData();
         },
-        clear(){
+        clear() {
             this.keywords = "";
             this.search();
         },
 
-        changePage(page){
+        changePage(page) {
             this.page = page;
             this.list = [];
             this.getData();
         },
-        getData(){
+        getData() {
             this.loading = true;
             videoList({
-                page:this.page,
-                limit:this.setting.limit,
+                page: this.page,
+                limit: this.setting.limit,
                 keywords: this.keywords,
-                api_id:this.tab,
+                api_id: this.tab,
                 cid: this.cate ? this.cate.cid : 0
-            }).then(res=>{
+            }).then(res => {
                 this.loading = false;
-                let {total,data} = res;
+                let {total, data} = res;
                 this.total = total;
                 this.list = data;
             });
         },
+        getApi(){
+            this.tabs.push( {id:0,name:"推荐"});
+            apiList().then(res=>{
+                this.tabs.push(...res.data);
+            });
+        },
 
-        // 打开菜单
-        openMenu(){
-            if (this.authorization){
-                this.drawer = !this.drawer;
-            }else{
-                this.$router.push({
-                    path: "login"
-                })
-            }
-        },
-        // 个人中心
-        toUser(){
-            this.$router.push({
-                path: this.authorization ? "user":"login"
-            })
-        },
     },
-    computed:{
+    computed: {
         ...mapState(["setting"])
     }
 }

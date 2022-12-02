@@ -17,7 +17,7 @@
             </template>
 
             <v-card>
-                <v-card-title class="text-h5 grey lighten-2">
+                <v-card-title class="text-h5 primary">
                     配置
                 </v-card-title>
 
@@ -26,6 +26,7 @@
                     <v-container>
                         <v-row>
                             <v-col
+                                v-if="false"
                                 cols="6"
                             >
                                 <v-radio-group
@@ -45,8 +46,10 @@
                             </v-col>
                             <v-col
                                 cols="6"
+                                v-if="false"
                             >
                                 <v-radio-group
+
                                     v-model="setting.page"
                                     label="开启本地分页"
                                     row

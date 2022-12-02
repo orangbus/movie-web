@@ -16,7 +16,7 @@ function baseUrl(url="") {
  * @returns {Promise<AxiosResponse<any>>}
  */
 export function articleList(params = {}) {
-	return axios.get(baseUrl("list"), params);
+	return axios.get(baseUrl("list"), {params});
 }
 
 /**

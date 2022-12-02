@@ -1,9 +1,12 @@
 <template>
     <div>
         <v-app-bar
-            absolute
+            app
+            :absolute="true"
             color="#2196F3"
             dark
+            :clipped-left="true"
+            :hide-on-scroll="true"
         >
             <!--背景渐变-->
             <template v-slot:img="{ props }">
@@ -20,10 +23,11 @@
 
             <!--搜索-->
             <v-text-field
+                v-if="!isMobile"
                 class=" mt-10 ml-15"
                 flat
                 clearable
-                label="聚合搜索，支持全文搜索，电影，演员，类型"
+                label="支持全文搜索，电影，演员，类型"
                 prepend-inner-icon="mdi-magnify"
                 solo-inverted
                 v-model="keywords"
@@ -31,37 +35,24 @@
                 @click:clear="clear"
             ></v-text-field>
 
-
             <v-spacer></v-spacer>
-            <!--首页-->
             <!--右侧按钮-->
-            <v-btn icon to="/search" v-if="false">
+            <v-btn icon to="/search">
                 <v-icon>mdi-magnify</v-icon>
             </v-btn>
-
-            <!--首页-->
-            <v-btn icon to="/">
-                <v-icon>mdi-home</v-icon>
-            </v-btn>
-
             <!--接口选择-->
-            <MovieApi v-if="false" @getResult="search"></MovieApi>
-
-            <!--历史记录-->
-            <v-btn icon to="/user?type=2" v-if="user.vip">
-                <v-icon>mdi-history</v-icon>
-            </v-btn>
+            <MovieApi @getResult="search" @changeApi="changeApi"></MovieApi>
 
             <!--个人中心-->
-            <v-btn icon @click="toUser" v-if="user.vip">
+            <v-btn icon @click="toUser">
                 <v-icon>mdi-account-circle</v-icon>
             </v-btn>
 
             <!--    设置-->
-            <Setting @getResult="search"  v-if="user.vip"></Setting>
+            <Setting @getResult="search"></Setting>
 
             <!--导航标签-->
-            <template v-slot:extension  v-if="user.vip">
+            <template v-slot:extension>
                 <!--centered-->
                 <v-tabs align-with-title >
                     <v-tab
@@ -71,8 +62,10 @@
                 </v-tabs>
             </template>
         </v-app-bar>
+
         <!--侧边栏-->
         <v-navigation-drawer
+            app
             v-model="drawer"
             absolute
             bottom
@@ -82,7 +75,7 @@
                 nav
                 dense
             >
-                <div class="text-center py-2 text-h5">
+                <div class="text-center py-2 text-h5" @click="toHome">
                     {{ website.name }}
                 </div>
 
@@ -92,8 +85,32 @@
                     active-class="deep-purple--text text--accent-4"
                 >
                     <!--公共导航-->
-                    <MenuCommon></MenuCommon>
+                    <v-list-item link to="/video" v-if="user.vip">
+                        <v-list-item-icon>
+                            <v-icon>mdi-video-image</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <v-list-item-title >视频</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
 
+                    <v-list-item link to="/article">
+                        <v-list-item-icon>
+                            <v-icon>mdi-list-box-outline</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <v-list-item-title >文章</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+
+                    <v-list-item link to="/photo">
+                        <v-list-item-icon>
+                            <v-icon>mdi-image-outline</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <v-list-item-title >图片</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
                     <!--分割线-->
                     <v-divider class="my-1" />
 
@@ -107,21 +124,23 @@
 import {mapActions, mapMutations, mapState} from "vuex";
 import MovieApi from "@/components/common/MovieApi";
 import Setting from "@/components/common/Setting";
-import MenuCommon from "@/components/Layout/MenuCommon";
 
 export default {
     name: "Header",
     components:{
-        Setting,MovieApi,MenuCommon
+        Setting,MovieApi
     },
     data() {
         return {
             drawer: false,
             setting:{},
             tab: 0,
-            tabs:[
-                {type:1,name:"免费"},
-                {type:2,name:"会员"},
+            tabs: [
+                {type: 0, name: '推荐'},
+                {type: 1, name: '电影'},
+                {type: 2, name: '电视剧'},
+                {type: 3, name: '综艺'},
+                {type: 4, name: '动漫'},
             ],
             keywords: "",
         }
@@ -143,6 +162,11 @@ export default {
         // 切换分类
         changeTab(item) {
             this.$emit("changeTab",item);
+        },
+        // 切换api
+        changeApi(movieapi){
+            this.tab = 0;
+            this.$emit("changeApi",movieapi)
         },
         // 搜索
         search() {
@@ -173,7 +197,7 @@ export default {
         },
     },
     computed: {
-        ...mapState(["movieType","user","authorization","movieApi","website"]),
+        ...mapState(["movieType","user","authorization","movieApi","website","isMobile"]),
     }
 }
 </script>

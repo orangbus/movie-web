@@ -28,15 +28,6 @@
         </v-list-item>
 
 
-        <v-list-item link to="/todayhistory">
-            <v-list-item-icon>
-                <v-icon>mdi-chart-timeline-variant-shimmer</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-                <v-list-item-title >历史上的今天</v-list-item-title>
-            </v-list-item-content>
-        </v-list-item>
-
         <!--分割线-->
         <v-divider class="my-1" />
 
@@ -48,7 +39,7 @@
                 <v-list-item-title >M3u8解析</v-list-item-title>
             </v-list-item-content>
         </v-list-item>
-        <v-list-item link to="/todayhistory">
+        <v-list-item link to="/player">
             <v-list-item-icon>
                 <v-icon>mdi-chart-timeline-variant-shimmer</v-icon>
             </v-list-item-icon>

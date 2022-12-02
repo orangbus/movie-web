@@ -11,7 +11,6 @@
 import Player from 'nplayer'
 import Hls from "hls.js"
 import flvjs from 'flv.js'
-import mdui from "mdui";
 
 export default {
     name: "Nplayer",
@@ -52,7 +51,7 @@ export default {
                 this.mobilePlayer = true;
                 this.flvPlayer(this.url, this.poster);
             } else {
-                mdui.snackbar("暂不支持该视频播放,切换其他视频试试")
+                this.$toast.error("暂不支持该视频播放,切换其他视频试试");
             }
         },
         DashHls(url, poster) {

@@ -119,7 +119,7 @@
 <script>
 import {movieDetail} from "@/api";
 import TransformUrl from "@/util/TransformUrl";
-import mdui from "mdui";
+
 import Clipboard from "clipboard";
 import Player from "../common/Player/Player";
 
@@ -181,7 +181,7 @@ export default {
                         this.playerList = this.cateList[this.typeIndex].list;
                     }
                 } else {
-                    mdui.snackbar(res.msg)
+                    this.$toast.info(res.msg);
                 }
             });
         },
@@ -277,13 +277,13 @@ export default {
         copyUrl() {
             var clipboard = new Clipboard('.copy')
             clipboard.on('success', () => {
-                mdui.snackbar("已复制播放链接")
+                this.$toast.info("已复制播放链接");
                 //  释放内存
                 clipboard.destroy()
             })
             clipboard.on('error', () => {
                 // 不支持复制
-                mdui.alert('该浏览器不支持复制', '错误提示！')
+                this.$toast.info("该浏览器不支持复制', '错误提示！");
                 // 释放内存
                 clipboard.destroy()
             })

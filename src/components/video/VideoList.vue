@@ -17,13 +17,14 @@
                             min-height="300"
                             max-width="100%"
                             :src="item.vod_pic"
+                            class="text-pointer"
                             @click="openPlayer(item)"
                         >
-                            <div class="d-flex justify-end white--text">
+                            <div class="d-flex justify-end white--text text-pointer">
                                   <v-card-title>{{ item.category }}</v-card-title>
                             </div>
                         </v-img>
-                        <v-card-subtitle class="text-truncate">{{ item.vod_title }}</v-card-subtitle>
+                        <v-card-subtitle class="text-truncate text-pointer">{{ item.vod_title }}</v-card-subtitle>
                         <v-card-text>
                             <div>{{ item.vod_area }}</div>
                             <div>{{ item.updated_at }}</div>
@@ -34,10 +35,12 @@
         </v-row>
 
         <v-row>
+
+            <!-- hide-overlay -->
             <v-dialog
                 v-model="dialog"
-                fullscreen
-                hide-overlay
+                width="900"
+                :fullscreen="isMobile"
                 transition="dialog-bottom-transition"
             >
                 <v-card v-if="dialog">
@@ -64,7 +67,7 @@
                         <v-row>
                             <v-col>
                                 <iframe  width="100%"
-                                         style="border-radius: 6px; max-height:750px;min-height: 750px;"
+                                         style="border-radius: 6px; max-height:750px;min-height: 700px;"
                                          :src="url" frameborder="0"
                                          allowfullscreen></iframe>
                             </v-col>
@@ -77,6 +80,8 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
     name: "VideoList",
     props: {
@@ -116,6 +121,9 @@ export default {
             this.dialog = true;
         }
     },
+    computed:{
+        ...mapState(["isMobile"])
+    }
 
 }
 </script>

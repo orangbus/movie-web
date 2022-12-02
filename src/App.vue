@@ -1,13 +1,12 @@
 <template>
     <div>
         <v-app>
-            <!--<router-view ></router-view>-->
-            <v-main>
+            <!--<v-main>-->
                 <router-view v-if="!$route.meta.keepAlive"></router-view>
                 <keep-alive>
                     <router-view v-if="$route.meta.keepAlive"></router-view>
                 </keep-alive>
-            </v-main>
+            <!--</v-main>-->
 
             <!--全局公告-->
             <v-dialog
@@ -47,11 +46,22 @@
 <script>
 import LocalStorage from "@/util/LocalStorage";
 import EnumData from "@/util/EnumData";
+import {mapMutations} from "vuex";
 
 export default {
     data(){
         return{
+            isMobile: false,
             dialog: false,
+        }
+    },
+    mounted() {
+        this.onResize()
+        window.addEventListener('resize', this.onResize, { passive: true })
+    },
+    watch:{
+        isMobile(result){
+            this.setIsMobile(result);
         }
     },
     created() {
@@ -106,10 +116,14 @@ export default {
         }
     },
     methods:{
+        ...mapMutations(["setIsMobile"]),
+        onResize () {
+            this.isMobile = window.innerWidth < 600
+        },
         confirm(){
             LocalStorage.set("know",true);
             this.dialog = false;
         }
-    }
+    },
 }
 </script>

@@ -65,6 +65,8 @@ let state = {
     jiexi:[],
     // m3u8 接口
     parse:[],
+    // 检测当前窗口是否是手机端
+    isMobile:false,
 }
 
 export default state;

@@ -5571,29 +5571,6 @@ mdn-data@2.0.4:
   resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-2.0.4.tgz#699b3c38ac6f1d728091a64650b65d388502fd5b"
   integrity sha512-iV3XNKw06j5Q7mi6h+9vbx23Tv7JkjEVgKHW4pimwyDGWm0OIQntJJ+u1C6mg6mK1EaTv42XQ7w76yuzH7M2cA==
 
-mdn-polyfills@^5.20.0:
-  version "5.20.0"
-  resolved "https://registry.yarnpkg.com/mdn-polyfills/-/mdn-polyfills-5.20.0.tgz#ca8247edf20a4f60dec6804372229812b348260b"
-  integrity sha512-AbTv1ytcoOUAkxw6u5oo2QPf27kEZgxBAQr49jFb4i2VnTnFGfJbcIQ9UDBOdfNECeXsgkYFwB2BkdeTfOzztw==
-
-mdui.jq@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/mdui.jq/-/mdui.jq-2.0.1.tgz#8c7ce143680ea2a8fa7511675dd0eca6fa57c1d5"
-  integrity sha512-BNT4q/4gAqDYVNUVHmYoJoIu04Rmz0Ow0j38VwZgIahWphpyDdOxReQZzMUGDizXZUJ0+r+JpdKVxKMVP27VAg==
-  dependencies:
-    mdn-polyfills "^5.20.0"
-    promise-polyfill "^8.2.0"
-
-mdui@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/mdui/-/mdui-1.0.2.tgz#c299320cb9f3c582cdc9977883ae1cce70fd61b2"
-  integrity sha512-LIaDjVjzyPY8PUjlhCXiE4mOXinh+jv38H/zsrR00/Y9OWzdncPlvir3mzZGuxT4sh9rHOrh06zfsOPoBjIhzA==
-  dependencies:
-    mdn-polyfills "^5.20.0"
-    mdui.jq "^2.0.1"
-    normalize.css "^8.0.1"
-    promise-polyfill "^8.2.0"
-
 media-typer@0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/media-typer/-/media-typer-0.3.0.tgz#8710d7af0aa626f8fffa1ce00168545263255748"
@@ -5984,11 +5961,6 @@ normalize-url@^3.0.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-3.3.0.tgz#b2e1c4dc4f7c6d57743df733a4f5978d18650559"
   integrity sha512-U+JJi7duF1o+u2pynbp2zXDW2/PADgC30f0GsHZtRh+HOcXHnw137TrNlyxxRvWW5fjKd3bcLHPxofWuCjaeZg==
-
-normalize.css@^8.0.1:
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/normalize.css/-/normalize.css-8.0.1.tgz#9b98a208738b9cc2634caacbc42d131c97487bf3"
-  integrity sha512-qizSNPO93t1YUuUhP22btGOo3chcvDFqFaj2TRybP0DMxkHOCTYwp3n34fel4a31ORXy4m1Xq0Gyqpb5m33qIg==
 
 nplayer@^1.0.15:
   version "1.0.15"
@@ -6889,7 +6861,7 @@ promise-inflight@^1.0.1:
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
   integrity sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==
 
-promise-polyfill@8.2.3, promise-polyfill@^8.2.0:
+promise-polyfill@8.2.3:
   version "8.2.3"
   resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-8.2.3.tgz#2edc7e4b81aff781c88a0d577e5fe9da822107c6"
   integrity sha512-Og0+jCRQetV84U8wVjMNccfGCnMQ9mGs9Hv78QFe+pSDD3gWTpz0y+1QCuxy5d/vBFuZ3iwP2eycAkvqIMPmWg==

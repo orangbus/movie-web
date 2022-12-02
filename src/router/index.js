@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import VueRouter from "vue-router";
 
-import Index from "../components/Index/index";
-import Login from "../components/Login/Index";
+import Index from "../components/index/index";
+import Login from "../components/login/Index";
 
 
 import store from "../vuex/index";
@@ -23,7 +23,7 @@ const routes = [
 	{
 		path: '/detail/:id',
 		name: "Detail",
-		component: require('../components/Index/Detail.vue').default,
+		component: require('../components/index/Detail.vue').default,
 		meta: {
 			keepAlive: false,
 			required: false,
@@ -33,7 +33,7 @@ const routes = [
 	{
 		path: "/user",
 		name: "User",
-		component: require('../components/User/Index.vue').default,
+		component: require('../components/user/Index.vue').default,
 		meta: {
 			keepAlive: false,
 			required: true,
@@ -53,7 +53,7 @@ const routes = [
 	{
 		path: "/search",
 		name: "Search",
-		component: require('../components/Index/search').default,
+		component: require('../components/index/search').default,
 		meta: {
 			keepAlive: false,
 			required: false,
@@ -121,10 +121,8 @@ const routes = [
 		}
 	},
 
-
 	{
 		path: "/templet",
-		name: "Templet2",
 		component: require('../components/templet/index.vue').default,
 		meta: {
 			keepAlive: false,

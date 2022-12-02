@@ -83,7 +83,7 @@ import MenuCommon from "@/components/Layout/MenuCommon";
 import Logout from "@/components/common/Logout";
 import Coupon from "@/components/common/Coupon";
 import ShareQr from "@/components/common/ShareQr";
-import Profile from "@/components/User/Profile";
+import Profile from "@/components/user/Profile";
 
 export default {
     name: "Header",

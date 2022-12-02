@@ -2,6 +2,9 @@ import LocalStorage from "@/util/LocalStorage";
 import EnumData from "@/util/EnumData";
 
 let mutations = {
+    setIsMobile(state,data){
+        state.isMobile = data;
+    },
     setUser(state, user) {
         state.user = user;
         state.authorization = true;

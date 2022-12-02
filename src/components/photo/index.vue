@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Header></Header>
+        <AppHeader></AppHeader>
 
         <v-container style="margin-top: 60px">
             <!--接口调用-->
@@ -55,13 +55,13 @@
     </div>
 </template>
 <script>
-import Header from "@/components/Layout/Header";
+import AppHeader from "@/components/Layout/AppHeader.vue";
 import Page from "@/components/common/Page";
 import {wallpaperList} from "@/api/wallpaper";
 export default {
     name: "index",
     components:{
-        Header,Page
+        AppHeader,Page
     },
     data(){
         return{

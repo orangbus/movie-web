@@ -4,7 +4,7 @@ const app_debug = process.env.VUE_APP_DEBUG;
 
 function baseUrl(url) {
 	if (app_debug){
-		return "/api/live/" + url;
+		return "/api/livecode/" + url;
 	}else{
 		return "/" + url;
 	}
@@ -16,7 +16,11 @@ function baseUrl(url) {
  * @returns {Promise<AxiosResponse<any>>}
  */
 export function liveCodeList(params = {}) {
-	return axios.get(baseUrl("live/list"), {params});
+	return axios.get(baseUrl("list"), {params});
+}
+
+export function liveCodeDetail(params = {}) {
+	return axios.get(baseUrl(""), {params});
 }
 
 

@@ -1,8 +1,12 @@
 <template>
     <div>
-        <ArticleHeader
-        @confirmCate="confirmCate"
-        ></ArticleHeader>
+        <AppHeader
+            :placeholder="'支持全文搜索，标题，内容关键词'"
+            @confirmCate="confirmCate"
+            @changeTab="changeTab"
+            @search="search"
+            @clear="clear"
+        ></AppHeader>
 
         <v-container style="margin-top: 120px" >
             <v-row>
@@ -76,14 +80,14 @@
 
 <script>
 import Page from "@/components/common/Page";
-import ArticleHeader from "@/components/Layout/ArticleHeader";
 import {mapState} from "vuex";
 import {articleList} from "@/api/article";
+import AppHeader from "@/components/Layout/AppHeader.vue";
 
 export default {
     name: "search",
     components:{
-        ArticleHeader,Page
+        AppHeader,Page
     },
     data() {
     return{
@@ -109,7 +113,6 @@ export default {
         // 分类
         cateList:[],
         cate:{},
-
     }
     },
     created() {
@@ -120,7 +123,12 @@ export default {
             this.article = item;
             this.dialog = true;
         },
-        search(){
+        search(keywords=""){
+            this.keywords = keywords;
+            this.page = 1;
+            this.getData();
+        },
+        resetData(){
             this.page = 1;
             this.getData();
         },
@@ -130,14 +138,15 @@ export default {
         },
         changePage(page){
             this.page = page;
-            this.getData();
+            this.resetData();
         },
         getData(){
             this.loading = true;
             articleList({
                 page:this.page,
                 limit: this.setting.limit,
-                keywords: this.keywords
+                keywords: this.keywords,
+                cate_id: this.cate.id
             }).then(res=>{
                 this.loading = false;
                 let {data,total} = res;
@@ -149,12 +158,12 @@ export default {
             this.cate = cate;
             this.page = 1;
             this.list = [];
-            this.getData();
+            this.resetData();
         },
 
         changeTab(item){
             this.cate = item;
-            this.search();
+            this.resetData();
         },
 
         // 选择分类
@@ -164,28 +173,6 @@ export default {
           });
           this.cateList[index].selected = true;
         },
-
-        // 打开菜单
-        openMenu(){
-            if (this.authorization){
-                this.drawer = !this.drawer;
-            }else{
-                this.$router.push({
-                    path: "login"
-                })
-            }
-        },
-        // 个人中心
-        toUser(){
-            this.$router.push({
-                path: this.authorization ? "user":"login"
-            })
-        },
-        toHome(){
-            this.$router.push({
-                path: "/"
-            })
-        }
     },
     computed:{
         ...mapState(["setting"])

@@ -24,6 +24,7 @@
                 <v-divider></v-divider>
 
                 <v-tabs
+                     v-if="user.vip"
                     v-model="tab"
                     centered
                     slider-color="blue"

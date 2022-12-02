@@ -1,7 +1,6 @@
 <template>
     <div>
         <!--@page-count="changePage"-->
-
         <v-data-table
             :headers="headers"
             :items="list"

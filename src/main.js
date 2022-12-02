@@ -16,12 +16,15 @@ import axios from "axios"
 import router from "./router/index";
 import store from "./vuex/index"
 
+Vue.use(Vuex, VuexAxios, axios)
+
+
 // 消息提示
 import Toast from "vue-toastification"
 import "vue-toastification/dist/index.css"
 Vue.use(Toast,{
 	position: "bottom-center",
-	timeout: 3000,
+	timeout: 1500,
 	closeOnClick: true,
 	pauseOnFocusLoss: true,
 	pauseOnHover: true,
@@ -39,12 +42,15 @@ import VueClipboard from "vue-clipboard2";
 VueClipboard.config.autoSetContainer = true
 Vue.use(VueClipboard);
 
-
 // 图片放大
 import "viewerjs/dist/viewer.css"
 import viewer  from 'v-viewer'
-
 Vue.use(viewer);
+
+
+// 自定义样式
+import "./assets/css/orangbus.css"
+import EnumData from "@/util/EnumData";
 
 // 请求拦截
 window.axios = require('axios');
@@ -84,8 +90,6 @@ axios.interceptors.response.use(function (response) {
 	}
 	return response;
 }, function (error) {
-	console.log(error)
-	// Message.closeAll();
 	const code = error.response.status;
 	// // 对响应错误做点什么
 	switch (code) {
@@ -97,19 +101,6 @@ axios.interceptors.response.use(function (response) {
 	}
 	return Promise.reject(error);
 });
-
-Vue.use(Vuex, VuexAxios, axios)
-
-// 图片放大
-import "viewerjs/dist/viewer.css"
-import VueViewer from 'v-viewer'
-
-Vue.use(VueViewer);
-
-// 自定义样式
-import "./assets/css/orangbus.css"
-import EnumData from "@/util/EnumData";
-
 
 new Vue({
 	vuetify,
