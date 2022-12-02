@@ -31,6 +31,15 @@ const Tool = {
         let m = date.getMinutes() + ':';
         let s = date.getSeconds();
         return Y+M+D+h+m+s;
+    },
+    /**
+     * 转化地址
+     */
+    transformAddr(country="",region="",city=""){
+        let list = [];
+        list.push(country,region,city)
+        return list.join("-")
     }
+
 }
 export default Tool

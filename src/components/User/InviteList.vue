@@ -1,58 +1,83 @@
 <template>
     <div>
-        <v-btn
-            color="pink"
-            dark
-            @click.stop="drawer = !drawer"
-        >
-            邀请列表
-        </v-btn>
+        <!--@page-count="changePage"-->
 
-        <v-navigation-drawer
-            v-model="drawer"
-            temporary
-        >
-            <v-list-item>
-                <v-list-item-avatar>
-                    <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
-                </v-list-item-avatar>
-
-                <v-list-item-content>
-                    <v-list-item-title>John Leider</v-list-item-title>
-                </v-list-item-content>
-            </v-list-item>
-
-            <v-divider></v-divider>
-
-            <v-list dense>
-                <v-list-item
-                    v-for="item in items"
-                    :key="item.title"
-                    link
-                >
-                    <v-list-item-icon>
-                        <v-icon>{{ item.icon }}</v-icon>
-                    </v-list-item-icon>
-
-                    <v-list-item-content>
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-            </v-list>
-        </v-navigation-drawer>
+        <v-data-table
+            :headers="headers"
+            :items="list"
+            :page="page"
+            :loading="loading"
+            :items-per-page="limit"
+            class="elevation-1"
+            @update:items-per-page="changeLimit"
+            :page-count="page"
+            :server-items-length=total
+            @pagination="changePage"
+        ></v-data-table>
     </div>
 </template>
 
 <script>
+import {inviteList} from "@/api/user";
+import Tool from "@/util/Tool";
+
 export default {
     name: "InviteList",
     data() {
         return {
-            drawer: null,
-            items: [
-                { title: 'Home', icon: 'mdi-view-dashboard' },
-                { title: 'About', icon: 'mdi-forum' },
+            loading:true,
+            headers: [
+                {
+                    text: 'ID',
+                    align: 'start',
+                    sortable: false,
+                    value: 'id',
+                },
+                { text: '用户名', value: 'name' },
+                { text: '手机号', value: 'phone' },
+                { text: '是否是会员', value: 'vip_status' },
+                { text: '到期时间', value: 'vip_etime_string',align: 'center' },
+                { text: '登录ip', value: 'login_ip' },
+                { text: '登录地址', value: 'addr' },
             ],
+            page: 1,
+            limit: 10,
+            total:0,
+            list:[],
+        }
+    },
+    mounted() {
+        this.getData();
+    },
+    methods:{
+        getData(){
+            this.loading = true;
+            inviteList({
+                page: this.page,
+                limit: this.limit
+            }).then(res=>{
+                this.loading = false;
+                let {code,data,total} = res;
+                if (code === 200){
+                    this.total = total;
+                    let list = [];
+                    data.forEach(item=>{
+                        item.vip_status = item.vip ? "vip用户":"普通用户";
+                        item.vip_etime_string = Tool.transformTimestamp(item.vip_etime);
+                        item.addr = Tool.transformAddr(item.country,item.region,item.city)
+                        list.push(item)
+                    })
+                    this.list = list;
+                }
+            });
+        },
+        changePage(item){
+            this.page = item.page;
+            this.getData();
+        },
+        changeLimit(limit){
+            this.limit = limit;
+            this.getData();
         }
     }
 }

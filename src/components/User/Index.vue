@@ -10,6 +10,7 @@
             <Collect v-if="tab === 1"></Collect>
             <History v-if="tab === 2"></History>
             <Wait v-if="tab === 3"></Wait>
+            <InviteList v-if="tab === 4"></InviteList>
         </v-container>
     </div>
 </template>
@@ -21,23 +22,18 @@ import History from "./History";
 import Collect from "./Collect";
 import Wait from "./Wait";
 import UserHeader from "@/components/Layout/UserHeader";
+import InviteList from "@/components/User/InviteList.vue";
 
 
 export default {
     name: "Index",
     components:{
-        UserHeader,My,History,Collect,Wait
+        UserHeader,My,History,Collect,Wait,InviteList
     },
     data(){
         return{
             title: "个人中心",
             tab: 0,
-            tabs: [
-                {type: 0, name: '我的'},
-                {type: 1, name: '收藏'},
-                {type: 2, name: '历史记录'},
-                {type: 3, name: '稍后观看'},
-            ],
         }
     },
     methods:{

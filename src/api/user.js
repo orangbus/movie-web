@@ -43,5 +43,11 @@ export function userCodeApply(params = {}) {
 	return axios.post(baseUrl("code/apply"), params);
 }
 
+/**
+ * 邀请列表
+ */
+export function inviteList(params = {}) {
+	return axios.get(baseUrl("list"), {params});
+}
 
 

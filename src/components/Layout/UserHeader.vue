@@ -106,6 +106,7 @@ export default {
                 {type: 1, name: '收藏'},
                 {type: 2, name: '历史记录'},
                 {type: 3, name: '稍后观看'},
+                {type: 4, name: '邀请列表'},
             ],
         }
     },
