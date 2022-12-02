@@ -7,7 +7,8 @@
                         <v-col
                             v-for="(item,index) in appList"
                             :key="index"
-                            v-bind="grid">
+                            cols="12"
+                            v-bind="navGrid">
                             <v-hover v-slot="{ hover }">
                                 <v-card :elevation="hover ? 12 : 2" @click="toPage(item)" class="text-pointer">
                                     <v-card-title>{{ item.name }}</v-card-title>
@@ -19,7 +20,7 @@
                 </v-col>
             </v-row>
             <v-row>
-                <v-col cols="6">
+                <v-col v-bind="grid" cols="12">
                     <v-alert
                         border="top"
                         colored-border
@@ -34,12 +35,17 @@
                             <div>
                                 到期时间：{{ user.vip_etime === 0 ? "不限" : Tool.transformTimestamp(user.vip_etime) }}
                             </div>
-                            <ShareQr></ShareQr>
+                            <div class="d-flex ">
+                                <ActiveCode></ActiveCode>
+                                <ShareQr></ShareQr>
+                            </div>
+                        </div>
+                        <div>
                         </div>
                     </v-alert>
                 </v-col>
 
-                <v-col cols="6">
+                <v-col v-bind="grid" cols="12">
                     <v-alert
                         border="top"
                         colored-border
@@ -53,7 +59,7 @@
                             (当视频未使用加速播放时，使用该接口进行加速播放)</p>
                     </v-alert>
                 </v-col>
-                <v-col cols="6">
+                <v-col v-bind="grid" cols="12">
                     <v-alert
                         border="top"
                         colored-border
@@ -66,7 +72,7 @@
                         <p>减少服务器压力，每天要更新50+个接口的数据</p>
                     </v-alert>
                 </v-col>
-                <v-col cols="6">
+                <v-col v-bind="grid" cols="12">
                     <v-alert
                         border="top"
                         colored-border
@@ -95,15 +101,24 @@
 import {mapState} from "vuex";
 import ShareQr from "@/components/common/ShareQr";
 import Tool from "@/util/Tool";
+import ActiveCode from "./ActiveCode"
+// import InviteList from "@/components/User/InviteList.vue";
 
 export default {
     components: {
-        ShareQr
+        ShareQr,ActiveCode
     },
     data() {
         return {
             Tool,
             grid: {
+                xl: 6,
+                lg: 6,
+                md: 6,
+                sm: 12,
+                xs: 12
+            },
+            navGrid:{
                 xl: 3,
                 lg: 3,
                 md: 3,
@@ -114,7 +129,13 @@ export default {
                 {type: 1, name: "Vip视频解析", "desc": "解析各大平台vip视频",url:"/player"},
                 {type: 2, name: "M3u8播放器", "desc": "解析播放m3u8视频链接",url:"/m3u8"},
                 {type: 3, name: "推广二维码", "desc": "动态切换二维码",url:"/code"},
-            ]
+            ],
+
+            drawer: null,
+            items: [
+                { title: 'Home', icon: 'mdi-view-dashboard' },
+                { title: 'About', icon: 'mdi-forum' },
+            ],
         }
     },
     mounted() {

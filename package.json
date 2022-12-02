@@ -20,6 +20,7 @@
     "v-viewer": "^1.6.4",
     "vue": "^2.6.11",
     "vue-axios": "^3.4.1",
+    "vue-clipboard2": "^0.3.3",
     "vue-qr": "^4.0.9",
     "vue-router": "^3.2.0",
     "vue-toastification": "^1.7.14",

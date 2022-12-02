@@ -34,6 +34,11 @@ Vue.use(Toast,{
 	rtl: false,
 });
 
+// 自动复制
+import VueClipboard from "vue-clipboard2";
+VueClipboard.config.autoSetContainer = true
+Vue.use(VueClipboard);
+
 
 // 图片放大
 import "viewerjs/dist/viewer.css"

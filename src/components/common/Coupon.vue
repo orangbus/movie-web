@@ -43,20 +43,71 @@
                 </div>
 
                 <v-card-actions>
+                    <v-dialog
+                        v-model="activeModal"
+                        persistent
+                        max-width="600px"
+                    >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                color="primary"
+                                dark
+                                text
+                                v-bind="attrs"
+                                v-on="on"
+                            >
+                                专属激活码
+                            </v-btn>
+                        </template>
+                        <v-card>
+                            <v-card-title>
+                                <span class="text-h5">专属激活码激活</span>
+                            </v-card-title>
+                            <v-card-text>
+                                <v-container>
+                                    <v-row>
+                                        <v-col
+                                            cols="12"
+                                        >
+                                            <v-text-field
+                                                v-model="userCode"
+                                                label="请输入好友激活码"
+                                                required
+                                            ></v-text-field>
+                                            <small>这里填写的是好友激活码，不是邀请码</small>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn
+                                    color="blue darken-1"
+                                    text
+                                    @click="activeModal = false"
+                                >
+                                    取消
+                                </v-btn>
+                                <v-btn
+                                    :loading="loading"
+                                    :disabled="loading"
+                                    color="blue darken-1"
+                                    text
+                                    @click="codeApply"
+                                >
+                                    立即激活
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+
+                    <v-spacer></v-spacer>
                     <v-btn
                         color="green darken-1"
                         text
                         @click="joinGroup"
                     >
                         加入群
-                    </v-btn>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        color="green darken-1"
-                        text
-                        @click="dialog = false"
-                    >
-                        取消
                     </v-btn>
 
                     <v-btn
@@ -74,10 +125,11 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapState,mapMutations} from "vuex";
 import {couponStore} from "@/api/coupon";
 import Tool from "@/util/Tool";
 import VudQr from "vue-qr"
+import {userCodeApply} from "@/api/user";
 
 export default {
     components:{
@@ -88,9 +140,14 @@ export default {
             Tool,
             dialog: false,
             code: "", // 激活码
+
+            activeModal: false,
+            loading:false,
+            userCode: ""
         }
     },
     methods:{
+        ...mapMutations(["setUser"]),
         joinGroup(){
             window.open(this.website.qq_url,"_blank")
         },
@@ -105,6 +162,25 @@ export default {
                     this.$toast.success(res.msg);
                 }else{
                     this.dialog = true;
+                    this.$toast.error(res.msg);
+                }
+            });
+        },
+
+        // 专属激活码
+        codeApply(){
+            if (this.userCode === ""){
+                this.$toast.error("请输入激活码");
+                return;
+            }
+            this.loading = true;
+            userCodeApply({code:this.userCode}).then(res=>{
+                this.loading = false;
+                if (res.code === 200) {
+                    this.$toast.success(res.msg);
+                    this.activeModal = false;
+                    this.setUser(res.data);
+                } else {
                     this.$toast.error(res.msg);
                 }
             });
