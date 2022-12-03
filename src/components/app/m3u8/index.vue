@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import AppHeader from "@/components/Layout/AppHeader";
+import AppHeader from "@/components/layout/AppHeader";
 export default {
     name: "index",
     components:{

@@ -82,7 +82,7 @@
 import Page from "@/components/common/Page";
 import {mapState} from "vuex";
 import {articleList} from "@/api/article";
-import AppHeader from "@/components/Layout/AppHeader.vue";
+import AppHeader from "@/components/layout/AppHeader.vue";
 
 export default {
     name: "search",

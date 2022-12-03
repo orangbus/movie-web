@@ -93,7 +93,7 @@ import Page from "@/components/common/Page";
 import {apiList, videoList} from "@/api/video";
 import VideoList from "./VideoList";
 import {mapState} from "vuex";
-import AppHeader from "@/components/Layout/AppHeader.vue";
+import AppHeader from "@/components/layout/AppHeader.vue";
 
 export default {
     name: "search",

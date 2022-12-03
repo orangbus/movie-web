@@ -33,7 +33,7 @@
     </div>
 </template>
 <script>
-import AppHeader from "@/components/Layout/AppHeader.vue";
+import AppHeader from "@/components/layout/AppHeader.vue";
 import MovieList from "./MovieList";
 import LocalStorage from "@/util/LocalStorage";
 import EnumData from "@/util/EnumData";

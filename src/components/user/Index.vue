@@ -23,7 +23,7 @@ import History from "./History";
 import Collect from "./Collect";
 import Wait from "./Wait";
 import InviteList from "@/components/user/InviteList";
-import AppHeader from "@/components/Layout/AppHeader.vue";
+import AppHeader from "@/components/layout/AppHeader.vue";
 
 
 export default {

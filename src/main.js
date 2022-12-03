@@ -26,12 +26,12 @@ Vue.use(Toast,{
 	position: "bottom-center",
 	timeout: 1500,
 	closeOnClick: true,
-	pauseOnFocusLoss: true,
+	pauseOnFocusLoss: false,
 	pauseOnHover: true,
 	draggable: true,
 	draggablePercent: 0.6,
 	showCloseButtonOnHover: false,
-	hideProgressBar: true,
+	hideProgressBar: false,
 	closeButton: "button",
 	icon: true,
 	rtl: false,
@@ -63,7 +63,7 @@ axios.interceptors.request.use(function (config) {
 	// 更新token值
 	config.headers.common['Authorization'] = 'Bearer ' + LocalStorage.get(EnumData.token);
 	// 加密字符串
-	config.headers.common['AppKey'] = app_key;
+	config.headers.common['appkey'] = app_key;
 	// 在发送请求之前做些什么
 	return config;
 }, function (error) {
@@ -91,13 +91,14 @@ axios.interceptors.response.use(function (response) {
 	return response;
 }, function (error) {
 	const code = error.response.status;
-	// // 对响应错误做点什么
+	// 对响应错误做点什么
 	switch (code) {
 		case 419:
-			router.push({path: "/"})
+			router.push({path: "/login"})
 			break;
 		default:
-			router.push({path: "/"})
+			Vue.$toast.error("服务器错误");
+			return ;
 	}
 	return Promise.reject(error);
 });

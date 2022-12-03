@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import AppHeader from "@/components/Layout/AppHeader";
+import AppHeader from "@/components/layout/AppHeader";
 import {mapState,mapActions} from "vuex";
 
 export default {

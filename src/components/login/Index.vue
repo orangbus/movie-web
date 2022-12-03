@@ -138,15 +138,15 @@ export default {
     methods:{
         userLogin(){
             if (this.form.phone.length < 11){
-                this.msg("请输入正确的手机号");
+                this.$toast.error("请输入正确的手机号");
                 return;
             }
             let {name,phone,password,confirm_password} = this.form;
-            this.submitting = false;
+            this.submitting = true;
             if (this.tab === 1){
                 login({phone,password }).then(res=>{
+                    this.submitting = false;
                     if (res.code === 200){
-                        this.submitting = false;
                         let {access_token,user} = res.data;
                         LocalStorage.set(EnumData.token,access_token);
                         this.$store.commit("setUser",user);
@@ -179,7 +179,6 @@ export default {
                     }
                 });
             }
-
         },
 
         changeTab(item){

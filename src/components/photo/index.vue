@@ -55,7 +55,7 @@
     </div>
 </template>
 <script>
-import AppHeader from "@/components/Layout/AppHeader.vue";
+import AppHeader from "@/components/layout/AppHeader.vue";
 import Page from "@/components/common/Page";
 import {wallpaperList} from "@/api/wallpaper";
 export default {

@@ -48,9 +48,9 @@ export function m3u8List(params = {}) {
 //  * @param id 电影id
 //  * @returns {Promise<AxiosResponse<any>>}
 //  */
-// export function movieDetail(id) {
-// 	return axios.get(baseUrl("detail/"+id));
-// }
+export function movieDetail(id) {
+	return axios.get(baseUrl("detail/"+id));
+}
 //
 // /**
 //  * 电影接口

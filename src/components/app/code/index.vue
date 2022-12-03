@@ -157,7 +157,7 @@
 </template>
 
 <script>
-import AppHeader from "@/components/Layout/AppHeader";
+import AppHeader from "@/components/layout/AppHeader";
 import Page from "@/components/common/Page";
 import {liveCodeDetail, liveCodeList} from "@/api/liveCode";
 
