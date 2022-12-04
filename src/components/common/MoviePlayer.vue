@@ -11,77 +11,87 @@
                        :poster="movie.vod_pic"
                    ></Player>
                </v-col>
-               <v-col>
-                   <div class="d-flex justify-space-between align-baseline">
-                       <v-row>
-                          <v-col v-bind="grid">正在播放：{{ name }}</v-col>
-                          <v-col v-bind="grid" class="text-right">
-                              <v-btn color="primary" text @click="addWait">
-                                  <v-icon class="mr-1">
-                                      mdi-playlist-plus
-                                  </v-icon>
-                                  <span class="subheading mr-2">{{ hasWait == null ? "稍后观看":"已加入稍后观看"}}</span>
-                              </v-btn>
-                              <v-btn color="primary" text @click="collect">
-                                  <v-icon class="mr-1">
-                                      mdi-heart
-                                  </v-icon>
-                                  <span class="subheading mr-2">{{ hasCollect == null ? "收藏":"已收藏"}}</span>
-                              </v-btn>
-                              <v-btn color="primary" text @click="addUpdate">
-                                  <v-icon class="mr-1">
-                                      mdi-movie-open-plus
-                                  </v-icon>
-                                  <span class="subheading mr-2">{{ hasUpdate == null ? "追更":"已追更"}}</span>
-                              </v-btn>
-                          </v-col>
-                       </v-row>
-                   </div>
-               </v-col>
+               <!--<v-col cols="12" >-->
+               <!--      <v-row class="d-flex justify-space-between align-baseline">-->
+               <!--                <v-col cols="12" v-bind="grid">正在播放：{{ name }}</v-col>-->
+               <!--                <v-col cols="12" v-bind="grid" :class="`${isMobile === true ? 'text-center':'text-right'}`">-->
+               <!--                    <v-btn color="primary" text @click="addWait">-->
+               <!--                        <v-icon class="mr-1">-->
+               <!--                            mdi-playlist-plus-->
+               <!--                        </v-icon>-->
+               <!--                        <span class="subheading mr-2">{{ hasWait == null ? "稍后观看":"已加入稍后观看"}}</span>-->
+               <!--                    </v-btn>-->
+               <!--                    <v-btn color="primary" text @click="collect">-->
+               <!--                        <v-icon class="mr-1">-->
+               <!--                            mdi-heart-->
+               <!--                        </v-icon>-->
+               <!--                        <span class="subheading mr-2">{{ hasCollect == null ? "收藏":"已收藏"}}</span>-->
+               <!--                    </v-btn>-->
+               <!--                    <v-btn color="primary" text @click="addUpdate">-->
+               <!--                        <v-icon class="mr-1">-->
+               <!--                            mdi-movie-open-plus-->
+               <!--                        </v-icon>-->
+               <!--                        <span class="subheading mr-2">{{ hasUpdate == null ? "追更":"已追更"}}</span>-->
+               <!--                    </v-btn>-->
+               <!--                </v-col>-->
+               <!--            </v-row>-->
+               <!--</v-col>-->
 
                <!--介绍-->
                <v-col cols="12">
-                   <v-card class="pb-10">
-                       <v-list-item class="pt-0" >
-                           <v-list-item-avatar color="grey darken-3">
-                               <v-img
-                                   class="elevation-6"
-                                   alt=""
-                                   :src="movie.vod_pic"
-                               ></v-img>
-                           </v-list-item-avatar>
-                           <v-list-item-content style="padding: 0px;">
-                               <v-card-title>{{ movie.vod_name }}</v-card-title>
-                               <v-card-subtitle>{{ movie.vod_year }} {{ movie.type_name }} {{ movie.vod_remarks }}</v-card-subtitle>
-                           </v-list-item-content>
-                       </v-list-item>
-                       <v-list-item-content class="pt-0 px-4">
+                   <v-card>
+                       <v-row class="d-flex justify-space-between align-baseline">
+                           <v-col cols="12" v-bind="grid" ><span class="px-4">正在播放：{{ name }}</span></v-col>
+                           <v-col cols="12" v-bind="grid" :class="`${isMobile === true ? 'text-center':'text-right'}`">
+                               <v-btn color="primary" text @click="addWait">
+                                   <v-icon class="mr-1">
+                                       mdi-playlist-plus
+                                   </v-icon>
+                                   <span class="subheading mr-2">{{ hasWait == null ? "稍后观看":"已加入稍后观看"}}</span>
+                               </v-btn>
+                               <v-btn color="primary" text @click="collect">
+                                   <v-icon class="mr-1">
+                                       mdi-heart
+                                   </v-icon>
+                                   <span class="subheading mr-2">{{ hasCollect == null ? "收藏":"已收藏"}}</span>
+                               </v-btn>
+                               <v-btn color="primary" text @click="addUpdate">
+                                   <v-icon class="mr-1">
+                                       mdi-movie-open-plus
+                                   </v-icon>
+                                   <span class="subheading mr-2">{{ hasUpdate == null ? "追更":"已追更"}}</span>
+                               </v-btn>
+                           </v-col>
+                       </v-row>
+                       <!--<v-card-title>{{ movie.vod_name }}</v-card-title>-->
+                       <v-card-subtitle>{{ movie.vod_year }} {{ movie.type_name }} {{ movie.vod_remarks }}</v-card-subtitle>
+                       <v-card-text class="pt-0 px-4">
                            <p v-if="movie.vod_director" class="mb-0">主演：{{ movie.vod_director}}</p>
                            <p  v-if="movie.vod_actor" class="mb-0">演员：{{ movie.vod_actor}}</p>
                            <div class="text-three-line" v-html="movie.vod_content"></div>
-                       </v-list-item-content>
-
-                       <!--选集-->
-                       <v-tabs>
-                           <v-tab
-                               v-for="(cate,cateIndex) in cateList"
-                               :key="cateIndex"
-                               @click="changeType(cateIndex)"
-                           >{{ cate.name }}</v-tab>
-                       </v-tabs>
-                       <v-list-item class="pt-0" >
-                           <div class="d-flex  flex-wrap justify-start">
-                               <v-btn
-                                   v-for="(item,index) in playerList"
-                                   :key="index"
-                                   :class="item.selected === true ? 'primary ma-2':' ma-2'"
-                                   @click="playMovie(item.url,index)"
-                               >
-                                   {{ item.name }}
-                               </v-btn>
-                           </div>
-                       </v-list-item>
+                       </v-card-text>
                    </v-card>
+
+                   <!--选集-->
+                   <v-tabs>
+                       <v-tab
+                           v-for="(cate,cateIndex) in cateList"
+                           :key="cateIndex"
+                           @click="changeType(cateIndex)"
+                       >{{ cate.name }}</v-tab>
+                   </v-tabs>
+                   <v-list-item class="pt-0" >
+                       <div class="d-flex  flex-wrap justify-start">
+                           <v-btn
+                               v-for="(item,index) in playerList"
+                               :key="index"
+                               :class="item.selected === true ? 'primary ma-2':' ma-2'"
+                               @click="playMovie(item.url,index)"
+                           >
+                               {{ item.name }}
+                           </v-btn>
+                       </div>
+                   </v-list-item>
                </v-col>
            </v-row>
        </v-container>
@@ -201,6 +211,7 @@ export default {
 
         // 重置播放
         resetPlayer(url,api){
+            console.log("form_url",url)
             if (this.player != null) {
                 this.player.destroy(false);
             }
@@ -220,7 +231,7 @@ export default {
                 this.url = url;
             }
 
-            console.log(this.setting)
+
             console.log("url:"+this.url)
         },
 
@@ -309,7 +320,7 @@ export default {
 
     },
     computed: {
-        ...mapState(["movieApi","setting"])
+        ...mapState(["movieApi","setting","isMobile"])
     }
 }
 </script>

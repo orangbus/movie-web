@@ -3,7 +3,7 @@
         <v-container>
             <v-row>
                 <v-col
-                    class="col-12"
+                    cols="6"
                     v-bind="grid"
                     v-for="(item,index) in list"
                     :key="index"
@@ -16,11 +16,10 @@
                             <span @click="toDetailPage(item)">
                         <v-img
                             :lazy-src="item.vod_pic"
-                            max-height="320"
-                            min-height="320"
+                            :max-height="movie_img_height"
+                            :min-height="movie_img_height"
                             max-width="100%"
-                            class="text-pointer"
-                            style="border-radius: 5px 5px 0px 0px"
+                            class="text-pointer movie-img-border"
                             :src="item.vod_pic"
                             @error="loadImg(item.vod_pic)"
                         >
@@ -71,12 +70,15 @@
 
         <v-row>
             <v-dialog
-                v-model="dialog"
-                fullscreen
                 hide-overlay
+                scrollable
+                persistent
+                v-model="dialog"
+                :fullscreen="setting.playerWay === EnumData.playerWayFullscreen"
                 transition="dialog-bottom-transition"
+                width="900"
             >
-                <v-card>
+                <v-card v-if="dialog">
                     <!--标题-->
                     <v-toolbar
                         dark
@@ -96,7 +98,9 @@
                     </v-toolbar>
 
                     <!--内容-->
-                    <MoviePlayer :movie="movie" v-if="dialog"></MoviePlayer>
+                    <v-card>
+                        <MoviePlayer :movie="movie" v-if="dialog"></MoviePlayer>
+                    </v-card>
                 </v-card>
             </v-dialog>
         </v-row>
@@ -107,6 +111,7 @@
 import {mapState} from "vuex";
 import MoviePlayer from "@/components/common/MoviePlayer";
 import {movieCollectStore, movieWaitStore} from "@/api/movie";
+import EnumData from "@/util/EnumData";
 
 export default {
     name: "MovieList",
@@ -125,6 +130,7 @@ export default {
     },
     data() {
         return {
+            EnumData,
             movie: {},
             dialog: false,
 
@@ -184,7 +190,14 @@ export default {
         },
     },
     computed: {
-        ...mapState(["user", "authorization", "movieApi"])
+        ...mapState(["user", "authorization", "movieApi","setting","isMobile"]),
+        movie_img_height(){
+            let height = 320;
+            if (this.isMobile){
+                height = 230
+            }
+            return  height;
+        }
     }
 }
 </script>

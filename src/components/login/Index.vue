@@ -33,7 +33,7 @@
 
         <v-container style="margin-top: 100px" >
             <v-row class="mt-10">
-                <v-col v-bind="grid" offset-md="3" offset-lg="3" offset-sm="0" offset-xl="3">
+                <v-col v-bind="grid" offset-md="4" offset-lg="4" offset-sm="0" offset-xl="4">
                     <v-form
                         ref="form"
                         lazy-validation
@@ -99,9 +99,9 @@ export default {
     data(){
         return{
             grid: {
-                xl: 6,
-                lg: 6,
-                md: 6,
+                xl: 4,
+                lg: 4,
+                md: 4,
                 sm: 24,
                 xs: 24
             },

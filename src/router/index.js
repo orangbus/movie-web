@@ -120,6 +120,16 @@ const routes = [
 			title: 'm3u8播放器'
 		}
 	},
+	{
+		path: "/notice",
+		name: "notice",
+		component: require('../components/notice/index').default,
+		meta: {
+			keepAlive: false,
+			required: false,
+			title: '公告'
+		}
+	},
 
 	{
 		path: "/templet",

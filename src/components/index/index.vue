@@ -24,12 +24,30 @@
                     {{ item.type_name }}
                 </v-chip>
             </div>
-
-            <MovieList :list="list" :to-detail="false"></MovieList>
-
-            <!--分页-->
-            <Page :loading="loading" :total="total" @changePage="changePage"></Page>
+            <div class="xyScrollBar" @scroll="loadMore">
+                <MovieList :list="list" :to-detail="false"></MovieList>
+                <!--分页-->
+                <Page :loading="loading" :total="total" @changePage="changePage"></Page>
+            </div>
+            <!--到顶部-->
+            <v-btn
+                v-if="list.length > 20 && false"
+                class="mx-3"
+                fab
+                fixed
+                right
+                dark
+                large
+                :bottom="true"
+                color="primary"
+                @click="toTop"
+            >
+                <v-icon dark>
+                    mdi-format-vertical-align-top
+                </v-icon>
+            </v-btn>
         </v-container>
+
     </div>
 </template>
 <script>
@@ -47,11 +65,16 @@ export default {
         MovieList,AppHeader,Page
     },
     data: () => ({
+        EnumData,
         page: 1,
         total: 0,
         keywords: "",
         list:[],
         loading : true,
+
+        // 底部加载
+        isEnd : false,
+        triggerDistance : 200,
 
         cate_id: 0, // 分类id
         cateData: [], // 分类列表元数据
@@ -158,12 +181,17 @@ export default {
                 }).then(res=>{
                     this.loading = false;
                     let {data,total} = res;
-                    this.list= data;
                     this.total= total;
+                    this.setting.showPage ? this.list= data : this.list.push(...data);
 
                     // 简单提示
                     if (this.page === 1 && this.keywords === "" && res.data.length === 0){
                         this.$toast.info("暂无数据，可点击右上角切换一个数据源！");
+                    }
+
+                    // 到底了提示
+                    if (data.length === 0){
+                        this.$toast.success("到底啦！");
                     }
                 });
             }else{
@@ -185,6 +213,20 @@ export default {
                         this.$toast.info("暂无数据，登录后可选择不用的源进行搜索哦！");
                     }
                 });
+            }
+        },
+        loadMore(event) {
+            if (this.setting.showPage){
+                return false;
+            }
+            //vue中获取滚动条到底部的距离
+            let scrollBottom = event.target.scrollHeight - event.target.scrollTop - event.target.clientHeight
+            //以下三个条件不执行数据加载：1.数据正在加载的状态，2.已经到底了，3.滚动条距离底部的距离小于100px
+            if (!this.loading && !this.isEnd && scrollBottom < 100) {
+                this.loading = true;
+                this.page +=1;
+                this.getData();
+                console.log("加载下一下")
             }
         },
 
@@ -228,9 +270,24 @@ export default {
             }
             this.search();
         },
+
+        toTop(){
+            window.scrollTo({
+                left: 0,
+                top: 0,
+                behavior: 'smooth'
+            })
+        }
     },
     computed: {
-        ...mapState(["movieType","user","authorization","movieApi","setting","movieHistoryCate"]),
+        ...mapState(["movieType","user","authorization","movieApi","setting","movieHistoryCate","isMobile"]),
     }
 }
 </script>
+<style scoped>
+.xyScrollBar {
+    overflow: scroll;
+    max-height: 100vh;
+    min-height: 100vh;
+}
+</style>

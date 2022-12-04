@@ -4,6 +4,7 @@
             absolute
             color="#2196F3"
             dark
+            style="position: fixed"
         >
             <!--背景渐变-->
             <template v-slot:img="{ props }">
@@ -19,7 +20,7 @@
             <v-app-bar-title><span class="text-pointer" @click="toHome">{{ website.name }}</span></v-app-bar-title>
             <!--搜索-->
             <v-text-field
-                v-if="!isMobile"
+                v-if="!isMobile && userSearch"
                 class=" mt-10 ml-15"
                 flat
                 clearable
@@ -30,7 +31,6 @@
                 @keyup.enter="search"
                 @click:clear="clear"
             ></v-text-field>
-
 
             <v-spacer></v-spacer>
             <!--右侧按钮-->
@@ -80,9 +80,9 @@
 
         <!--侧边栏-->
         <v-navigation-drawer
+            v-if="drawer"
             v-model="drawer"
             absolute
-            bottom
             temporary
         >
             <v-list
@@ -135,6 +135,17 @@
                             <v-list-item-title >活码</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
+                    <!--通知公告-->
+                    <v-divider class="my-1" />
+                    <v-list-item link to="/notice">
+                        <v-list-item-icon>
+                            <v-icon>mdi-message-reply-text-outline</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <v-list-item-title >公告</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+
                     <!--<v-list-item link to="/player">-->
                     <!--    <v-list-item-icon>-->
                     <!--        <v-icon>mdi-movie-play-outline</v-icon>-->
@@ -216,6 +227,7 @@ export default {
             cateList:[],
             cate:{},
 
+            path: "", // 当前页面内
             // 电影导航
             headerMovie: false,
             // 聚合搜索
@@ -229,12 +241,17 @@ export default {
             // 活码
             headerLiveCode:false,
             // 视频
-            headerVideo: false
+            headerVideo: false,
+            // 公告
+            headerNotice: false,
+
+            searchList:["/user","/notice","/photo"], // 排除不需要搜索的页面
 
         }
     },
     created() {
       let path = this.$route.path;
+      this.path = path;
       switch (path){
           case "/user":
               this.headerUser = true;
@@ -257,6 +274,9 @@ export default {
               break;
           case "/vide":
               this.headerVideo = true;
+              break;
+          case "/notice":
+              this.headerNotice = true;
               break;
       }
     },
@@ -346,6 +366,9 @@ export default {
     },
     computed: {
         ...mapState(["user","authorization","website","isMobile"]),
+        userSearch(){
+            return !this.searchList.includes(this.path);
+        }
     }
 }
 </script>

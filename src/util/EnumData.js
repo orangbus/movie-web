@@ -25,12 +25,24 @@ export default {
 		{type:0,name:"圆形"},
 		{type:1,name:"进度条"},
 	],
+
+	// 播放方式
+	playerWayFullscreen: 0,
+	playerWayDialog: 1,
+	playerWayDetail: 0,
+	playerWayList:[
+		{type:0,name:"全屏"},
+		{type:1,name:"弹窗"},
+		{type:2,name:"跳转详情"},
+	],
+
 	// 默认设置
 	defaultSetting:{
 		showPage: true, // 是否显示分页，false:滚动加载
 		limit:24, // 视频条数
 		page:true, // 开启本地分页,缓存记录起始加载页
 		loadingStyle: 0, // 加载样式
+		playerWay: 0, // 播放方式
 		jiexi: {
 			id:0,
 			name : "请选择"

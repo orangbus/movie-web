@@ -2,12 +2,15 @@
     <div>
         <div v-if="url !== ''">
             <!--html直接播放-->
-            <div v-if="player_type === 0" class="mdui-video-container">
-                <iframe  width="100%"
-                        style="border-radius: 6px; max-height:750px;min-height: 750px;"
-                        :src="url" frameborder="0"
-                        allowfullscreen></iframe>
+            <div v-if="player_type === 0">
+                <div style="width: 100%;">
+                    <iframe  width="100%"
+                             :style="playerStyle"
+                             :src="url" frameborder="0"
+                             allowfullscreen></iframe>
+                </div>
             </div>
+
             <Nplayer
                 v-if="player_type === 1"
                 :url="url"
@@ -19,6 +22,8 @@
 
 <script>
 import Nplayer from "./Nplayer";
+import {mapState} from "vuex";
+import EnumData from "@/util/EnumData";
 
 export default {
     components: {
@@ -43,6 +48,20 @@ export default {
             playerList: []
         }
     },
+    computed:{
+        ...mapState(["isMobile","setting"]),
+        playerStyle(){
+            let height = 730;
+            if (this.isMobile){
+                height = 300;
+            }
+            // 弹窗尺寸
+            if (!this.isMobile && this.setting.playerWay ===EnumData.playerWayDialog){
+                height = 650;
+            }
+            return `border-radius: 6px;max-height:${height}px;min-height: ${height}px;`;
+        }
+    }
 }
 </script>
 

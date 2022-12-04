@@ -17,7 +17,7 @@
             </template>
 
             <v-card>
-                <v-card-title class="text-h5 primary">
+                <v-card-title class="text--white primary">
                     配置
                 </v-card-title>
 
@@ -26,7 +26,6 @@
                     <v-container>
                         <v-row>
                             <v-col
-                                v-if="false"
                                 cols="6"
                             >
                                 <v-radio-group
@@ -46,30 +45,10 @@
                             </v-col>
                             <v-col
                                 cols="6"
-                                v-if="false"
-                            >
-                                <v-radio-group
-
-                                    v-model="setting.page"
-                                    label="开启本地分页"
-                                    row
-                                >
-                                    <v-radio
-                                        label="开启"
-                                        :value="true"
-                                    ></v-radio>
-                                    <v-radio
-                                        label="关闭"
-                                        :value="false"
-                                    ></v-radio>
-                                </v-radio-group>
-                            </v-col>
-                            <v-col
-                                cols="6"
                             >
                                 <v-radio-group
                                     v-model="setting.loadingStyle"
-                                    label="加载跟多样式"
+                                    label="加载更多样式"
                                     row
                                 >
                                     <v-radio
@@ -81,6 +60,25 @@
 
                                 </v-radio-group>
                             </v-col>
+
+                            <v-col
+                                cols="6"
+                            >
+                                <v-radio-group
+                                    v-model="setting.playerWay"
+                                    label="播放方式"
+                                    row
+                                >
+                                    <v-radio
+                                        v-for="(item,index) in EnumData.playerWayList"
+                                        :key="index"
+                                        :label="item.name"
+                                        :value="item.type"
+                                    ></v-radio>
+
+                                </v-radio-group>
+                            </v-col>
+
                             <v-col
                                 cols="6"
                             >

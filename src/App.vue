@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="body-bg">
         <v-app>
             <!--<v-main>-->
                 <router-view v-if="!$route.meta.keepAlive"></router-view>
@@ -127,3 +127,6 @@ export default {
     },
 }
 </script>
+<style scoped>
+
+</style>

@@ -18,13 +18,18 @@
                         color="cyan"
                     ></v-progress-linear>
 
+                    <!--滚动加载分页提示-->
+                    <div class="text-center">
+                        第{{page}}页，累计{{ total }}条
+                    </div>
+
                     <!--分页-->
                     <div class="text-center mt-4 pb-10" v-if="setting.showPage && total > (limit === 0 ? 20:setting.limit)">
                         <v-pagination
                             v-model="page"
                             :length="Math.trunc(total/(limit === 0 ? 20:setting.limit))"
                             :total-visible="10"
-                            @input="loadMore"
+                            @input="changePage"
                         ></v-pagination>
                     </div>
                 </v-col>
@@ -39,6 +44,10 @@ import EnumData from "@/util/EnumData";
 
 export default {
     props:{
+        page:{
+            type:Number,
+            default:()=> 1
+        },
         limit:{
             type:Number,
             default:()=>0
@@ -55,14 +64,13 @@ export default {
     data() {
         return{
             EnumData,
-            page: 1
         }
     },
     methods:{
-        loadMore(page){
-            document.body.scrollTop = document.documentElement.scrollTop = 0;
+        changePage(page){
             this.$emit("changePage",page);
-        }
+        },
+
     },
     computed:{
         ...mapState(["setting"])

@@ -75,6 +75,24 @@
                 </v-container>
             </v-card>
         </v-dialog>
+
+        <!--到顶部-->
+        <v-btn
+            v-if="list.length > 20"
+            class="mx-3"
+            fab
+            fixed
+            right
+            dark
+            large
+            :bottom="true"
+            color="primary"
+            @click="toTop"
+        >
+            <v-icon dark>
+                mdi-format-vertical-align-top
+            </v-icon>
+        </v-btn>
     </div>
 </template>
 
@@ -92,11 +110,14 @@ export default {
     data() {
     return{
         grid: {
-            xl: 8,
-            lg: 8,
-            md: 8,
-            sm: 12,
-            xs: 12
+            xl: 8, // 4K 和超宽屏幕
+            lg: 8, // 桌面端
+            md: 8, // 大型号平板到手提电脑
+            sm: 12, // 小型号到中型号的平板
+            xs: 12, // 小型号到大型号的手机
+            offsetMd: 2,
+            offsetLg: 2,
+            offsetXl: 2,
         },
         drawer:false,
         title: "聚合搜索",
@@ -173,6 +194,13 @@ export default {
           });
           this.cateList[index].selected = true;
         },
+        toTop(){
+            window.scrollTo({
+                left: 0,
+                top: 0,
+                behavior: 'smooth'
+            })
+        }
     },
     computed:{
         ...mapState(["setting"])
