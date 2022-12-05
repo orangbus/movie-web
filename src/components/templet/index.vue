@@ -51,10 +51,12 @@
                 </v-list>
             </v-navigation-drawer>
 
+
+
             <!--主体内容-->
             <v-main>
                 <v-container>
-                    <v-row>
+                    <v-row v-if="false" >
                         <v-col v-bind="grid" cols="6" v-for="(item,index) in list"
                                :key="index">
                             <v-hover v-if="true" v-slot="{ hover }" >
@@ -87,82 +89,90 @@
                 </v-container>
             </v-main>
 
-        <div class="text-center">
-            <v-dialog
-                scrollable
-                :fullscreen="setting.playerWay === EnumData.playerWayFullscreen"
-                v-model="dialog"
-                width="800"
-            >
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                        color="red lighten-2"
-                        dark
-                        v-bind="attrs"
-                        v-on="on"
-                    >
-                        Click Me
-                    </v-btn>
-                </template>
 
-                <v-card>
-                    <v-toolbar
-                       short
-                    >
-                        <v-toolbar-title>{{ movie.vod_name }}</v-toolbar-title>
-                        <v-spacer></v-spacer>
-                        <v-toolbar-items>
-                            <v-btn
-                                icon
-                                dark
-                                color="primary"
-                                @click="dialog = false"
-                            >
-                                <v-icon>mdi-close</v-icon>
-                            </v-btn>
-                        </v-toolbar-items>
-                    </v-toolbar>
-
-                    <!--<v-card-title>-->
-                    <!--    {{ movie.vod_name }}-->
-                    <!--</v-card-title>-->
-                    <!--<v-spacer></v-spacer>-->
-                    <!--<v-btn-->
-                    <!--    icon-->
-                    <!--    dark-->
-                    <!--    @click="dialog = false"-->
-                    <!--&gt;-->
-                    <!--    <v-icon>mdi-close</v-icon>-->
-                    <!--</v-btn>-->
+        <div>
+            <DownloadList :movie-list="list"></DownloadList>
 
 
-                    <v-card-text>
-                        <iframe  width="100%"
-                                 :style="`margin-top:10px; border-radius: 6px;max-height:${isMobile === true ? 600: 450}px;min-height: ${isMobile === true ? 600: 450}px;`"
-                                 :src="url" frameborder="0"
-                                 allowfullscreen></iframe>
-                        <div class="">
-                            <div>正在播放第一集 {{ EnumData.playerWayFullscreen}}</div>
-                            <div v-html="movie.vod_content"></div>
+        </div>
 
-                        </div>
-                    </v-card-text>
 
-                    <v-divider></v-divider>
+        <v-dialog
+            v-if="false"
+            scrollable
+            :fullscreen="setting.playerWay === EnumData.playerWayFullscreen"
+            v-model="dialog"
+            width="800"
+        >
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                    color="red lighten-2"
+                    dark
+                    v-bind="attrs"
+                    v-on="on"
+                >
+                    Click Me
+                </v-btn>
+            </template>
 
-                    <v-card-actions v-if="isMobile">
-                        <v-spacer></v-spacer>
+            <v-card>
+                <v-toolbar
+                    short
+                >
+                    <v-toolbar-title>{{ movie.vod_name }}</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-toolbar-items>
                         <v-btn
+                            icon
+                            dark
                             color="primary"
-                            text
                             @click="dialog = false"
                         >
-                            关闭
+                            <v-icon>mdi-close</v-icon>
                         </v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
-        </div>
+                    </v-toolbar-items>
+                </v-toolbar>
+
+                <!--<v-card-title>-->
+                <!--    {{ movie.vod_name }}-->
+                <!--</v-card-title>-->
+                <!--<v-spacer></v-spacer>-->
+                <!--<v-btn-->
+                <!--    icon-->
+                <!--    dark-->
+                <!--    @click="dialog = false"-->
+                <!--&gt;-->
+                <!--    <v-icon>mdi-close</v-icon>-->
+                <!--</v-btn>-->
+
+
+                <v-card-text>
+                    <iframe  width="100%"
+                             :style="`margin-top:10px; border-radius: 6px;max-height:${isMobile === true ? 600: 450}px;min-height: ${isMobile === true ? 600: 450}px;`"
+                             :src="url" frameborder="0"
+                             allowfullscreen></iframe>
+                    <div class="">
+                        <div>正在播放第一集 {{ EnumData.playerWayFullscreen}}</div>
+                        <div v-html="movie.vod_content"></div>
+
+                    </div>
+                </v-card-text>
+
+                <v-divider></v-divider>
+
+                <v-card-actions v-if="isMobile">
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        color="primary"
+                        text
+                        @click="dialog = false"
+                    >
+                        关闭
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
     </div>
 </template>
 <script>
@@ -172,10 +182,11 @@ import EnumData from "@/util/EnumData";
 import axios from "axios";
 import TransformUrl from "@/util/TransformUrl";
 import MovieDownload from "@/components/common/movie/Download.vue"
+import DownloadList from "@/components/common/movie/DownloadList.vue";
 
 export default {
     components:{
-        MovieDownload
+        MovieDownload,DownloadList
     },
     data() {
         return {
