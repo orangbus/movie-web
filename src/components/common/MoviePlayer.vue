@@ -41,8 +41,8 @@
                <v-col cols="12">
                    <v-card>
                        <v-row class="d-flex justify-space-between align-baseline">
-                           <v-col cols="12" v-bind="grid" ><span class="px-4">正在播放：{{ name }}</span></v-col>
-                           <v-col cols="12" v-bind="grid" :class="`${isMobile === true ? 'text-center':'text-right'}`">
+                           <v-col cols="12"  v-bind="grid"><span class="px-4">正在播放：{{ name }}</span></v-col>
+                           <v-col cols="12"  v-bind="grid" :class="`${isMobile === true ? 'text-center':'text-right'}`">
                                <v-btn color="primary" text @click="addWait">
                                    <v-icon class="mr-1">
                                        mdi-playlist-plus
@@ -55,12 +55,17 @@
                                    </v-icon>
                                    <span class="subheading mr-2">{{ hasCollect == null ? "收藏":"已收藏"}}</span>
                                </v-btn>
+
                                <v-btn color="primary" text @click="addUpdate">
                                    <v-icon class="mr-1">
                                        mdi-movie-open-plus
                                    </v-icon>
                                    <span class="subheading mr-2">{{ hasUpdate == null ? "追更":"已追更"}}</span>
                                </v-btn>
+                               <!--下载-->
+                               <span class="mr-2">
+                               <MovieDownload :movie="movie" ></MovieDownload>
+                               </span>
                            </v-col>
                        </v-row>
                        <!--<v-card-title>{{ movie.vod_name }}</v-card-title>-->
@@ -104,6 +109,8 @@ import TransformUrl from "@/util/TransformUrl";
 import Clipboard from "clipboard";
 import {mapState} from "vuex";
 import {movieCollectStore, movieStatus, movieToday, movieWaitStore} from "@/api/movie";
+import MovieDownload from "@/components/common/movie/Download.vue"
+
 export default {
     props:{
       movie:{
@@ -117,7 +124,7 @@ export default {
         }
     },
     components:{
-        Player
+        Player,MovieDownload
     },
 
     data: () => ({

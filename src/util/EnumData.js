@@ -51,6 +51,8 @@ export default {
 			id:0,
 			name: "请选择"
 		}, // m3u8 默认解析接口
+		download_port: "8787", // 下载端口
+		download_enable: false, // 是否可以下载
 	},
 	defaultTabs: [
 		{id: 1, name: '推荐'},

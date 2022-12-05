@@ -123,6 +123,24 @@
                                     @input="changeParse"
                                 ></v-select>
                             </v-col>
+
+                            <v-col
+                                cols="12"
+                                v-if="user.vip"
+                            >
+                                <v-row>
+                                    <v-col>
+                                        <v-text-field
+                                            label="请输入端口号：默认：8787"
+                                            hint="若提示服务器错误等，请打开下载软件，或者检查端口是否被占用"
+                                            v-model="setting.download_port"
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col>
+                                        <v-btn text color="primary" class="mt-3" @click="testConnect">{{ setting.download_enable === true ? '连接成功':'连接测试'}}</v-btn>
+                                    </v-col>
+                                </v-row>
+                            </v-col>
                         </v-row>
                     </v-container>
 
@@ -163,6 +181,7 @@
 import LocalStorage from "@/util/LocalStorage";
 import EnumData from "@/util/EnumData";
 import { mapMutations,mapState,mapActions} from "vuex";
+import {checkStatus} from "@/api/download";
 
 export default {
     name: "Setting",
@@ -222,6 +241,17 @@ export default {
         submit(data={}){
             this.settingDialog = false;
             this.$emit("getResult",data)
+        },
+
+        // 连接测试
+        async testConnect(){
+            let status =  await checkStatus();
+            if (status){
+                this.setting.download_enable = true;
+                this.$toast.success("连接成功");
+            }else{
+                this.$toast.error("连接失败");
+            }
         }
     },
     computed:{

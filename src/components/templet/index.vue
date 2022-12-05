@@ -21,7 +21,6 @@
                 v-model="drawer"
                 absolute
                 temporary
-                v-if="false"
             >
                 <v-list-item>
                     <v-list-item-avatar>
@@ -56,113 +55,7 @@
             <v-main>
                 <v-container>
                     <v-row>
-                        <v-col cols="12" v-if="false">
-                            <v-tabs vertical>
-                                <v-tab>
-                                    <v-icon left>
-                                        mdi-account
-                                    </v-icon>
-                                    个人中心
-                                </v-tab>
-                                <v-tab>
-                                    <v-icon left>
-                                        mdi-lock
-                                    </v-icon>
-                                    通知公告
-                                </v-tab>
-                                <v-tab>
-                                    <v-icon left>
-                                        mdi-access-point
-                                    </v-icon>
-                                    Option 3
-                                </v-tab>
-
-                                <v-tab-item>
-                                    <v-card flat>
-                                        <v-card-text>
-                                            <p>
-                                                Sed aliquam ultrices mauris. Donec posuere vulputate arcu. Morbi ac
-                                                felis. Etiam feugiat lorem non metus. Sed a libero.
-                                            </p>
-
-                                            <p>
-                                                Nam ipsum risus, rutrum vitae, vestibulum eu, molestie vel, lacus.
-                                                Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Aliquam
-                                                lobortis. Aliquam lobortis. Suspendisse non nisl sit amet velit
-                                                hendrerit rutrum.
-                                            </p>
-
-                                            <p class="mb-0">
-                                                Phasellus dolor. Fusce neque. Fusce fermentum odio nec arcu.
-                                                Pellentesque libero tortor, tincidunt et, tincidunt eget, semper nec,
-                                                quam. Phasellus blandit leo ut odio.
-                                            </p>
-                                        </v-card-text>
-                                    </v-card>
-                                </v-tab-item>
-                                <v-tab-item>
-                                    <v-card flat>
-                                        <v-card-text>
-                                            <p>
-                                                Morbi nec metus. Suspendisse faucibus, nunc et pellentesque egestas,
-                                                lacus ante convallis tellus, vitae iaculis lacus elit id tortor. Sed
-                                                mollis, eros et ultrices tempus, mauris ipsum aliquam libero, non
-                                                adipiscing dolor urna a orci. Curabitur ligula sapien, tincidunt non,
-                                                euismod vitae, posuere imperdiet, leo. Nunc sed turpis.
-                                            </p>
-
-                                            <p>
-                                                Suspendisse feugiat. Suspendisse faucibus, nunc et pellentesque egestas,
-                                                lacus ante convallis tellus, vitae iaculis lacus elit id tortor. Proin
-                                                viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien,
-                                                a accumsan nisi mauris ac eros. In hac habitasse platea dictumst. Fusce
-                                                ac felis sit amet ligula pharetra condimentum.
-                                            </p>
-
-                                            <p>
-                                                Sed consequat, leo eget bibendum sodales, augue velit cursus nunc, quis
-                                                gravida magna mi a libero. Nam commodo suscipit quam. In consectetuer
-                                                turpis ut velit. Sed cursus turpis vitae tortor. Aliquam eu nunc.
-                                            </p>
-
-                                            <p>
-                                                Etiam ut purus mattis mauris sodales aliquam. Ut varius tincidunt
-                                                libero. Aenean viverra rhoncus pede. Duis leo. Fusce fermentum odio nec
-                                                arcu.
-                                            </p>
-
-                                            <p class="mb-0">
-                                                Donec venenatis vulputate lorem. Aenean viverra rhoncus pede. In dui
-                                                magna, posuere eget, vestibulum et, tempor auctor, justo. Fusce commodo
-                                                aliquam arcu. Suspendisse enim turpis, dictum sed, iaculis a,
-                                                condimentum nec, nisi.
-                                            </p>
-                                        </v-card-text>
-                                    </v-card>
-                                </v-tab-item>
-                                <v-tab-item>
-                                    <v-card flat>
-                                        <v-card-text>
-                                            <p>
-                                                Fusce a quam. Phasellus nec sem in justo pellentesque facilisis. Nam
-                                                eget dui. Proin viverra, ligula sit amet ultrices semper, ligula arcu
-                                                tristique sapien, a accumsan nisi mauris ac eros. In dui magna, posuere
-                                                eget, vestibulum et, tempor auctor, justo.
-                                            </p>
-
-                                            <p class="mb-0">
-                                                Cras sagittis. Phasellus nec sem in justo pellentesque facilisis. Proin
-                                                sapien ipsum, porta a, auctor quis, euismod ut, mi. Donec quam felis,
-                                                ultricies nec, pellentesque eu, pretium quis, sem. Nam at tortor in
-                                                tellus interdum sagittis.
-                                            </p>
-                                        </v-card-text>
-                                    </v-card>
-                                </v-tab-item>
-                            </v-tabs>
-                        </v-col>
-
-                        <v-col v-bind="grid" cols="6" v-for="(item,index) in 10"
+                        <v-col v-bind="grid" cols="6" v-for="(item,index) in list"
                                :key="index">
                             <v-hover v-if="true" v-slot="{ hover }" >
                                 <v-card
@@ -173,36 +66,24 @@
                                         max-height="310"
                                         min-height="310"
                                         class="white--text text-pointer align-end movie-img-border"
-                                        src="https://www.zy018.com/upload/vod/20221127-1/7fb56eaffb0a7a3832509e74a99b58e0.jpg"
+                                        :src="item.vod_pic"
                                     >
                                         <div class="fill-height bottom-gradient"></div>
                                     </v-img>
 
                                     <div>
-                                        <v-card-title class="m-0">斗罗大陆</v-card-title>
-                                        <v-card-subtitle>唐家三少</v-card-subtitle>
-                                        <v-card-text>这是一个备注信息</v-card-text>
+                                        <v-card-title class="m-0">{{ item.vod_name}}</v-card-title>
+                                        <v-card-subtitle>{{ item.vod_actor}}</v-card-subtitle>
+                                        <v-card-text v-html="item.vod_remarks"></v-card-text>
                                         <v-card-actions>
-                                            <v-btn text color="primary">收藏</v-btn>
+                                            <MovieDownload :movie="item"></MovieDownload>
+                                            <!--<v-btn text color="primary" @click="showDownload(item)">下载</v-btn>-->
                                         </v-card-actions>
                                     </div>
                                 </v-card>
                             </v-hover>
                         </v-col>
                     </v-row>
-
-                    <!--到顶部-->
-                    <v-btn
-                        :elevation=" 2"
-                        style="position: fixed;bottom:60px;right:70px;"
-                        color="primary"
-                        large
-                        fab
-                        right
-                        bottom
-                    >
-                        <v-icon>mdi-chevron-up</v-icon>
-                    </v-btn>
                 </v-container>
             </v-main>
 
@@ -290,8 +171,12 @@ import {mapState} from "vuex";
 import EnumData from "@/util/EnumData";
 import axios from "axios";
 import TransformUrl from "@/util/TransformUrl";
+import MovieDownload from "@/components/common/movie/Download.vue"
 
 export default {
+    components:{
+        MovieDownload
+    },
     data() {
         return {
             EnumData,
@@ -363,6 +248,37 @@ export default {
                 "created_at": "2022-10-15 20:00:49",
                 "updated_at": "2022-10-15 20:00:49"
             },
+            list2:[
+                {
+                    "id": 898260,
+                    "api_id": 30,
+                    "status": 1,
+                    "vod_id": 59961,
+                    "vod_name": "全能高手",
+                    "type_id": 3,
+                    "vod_tag": "",
+                    "type_name": "动漫",
+                    "vod_pic": "https://soutre.com/upload/vod/20220604-1/acaacd102c6c2ee38dee311191a9ac9e.jpg",
+                    "vod_area": "内地",
+                    "vod_lang": "国语",
+                    "vod_year": "2022",
+                    "vod_actor": "秦墨",
+                    "vod_director": "心虎",
+                    "vod_remarks": "第50集",
+                    "vod_content": "<p>少年秦墨为寻双亲被害真相，踏出间荒禁地，誓要成为全能高手，争做这天地霸主！ 一人一狗，坑蒙拐骗，一路逆袭，注定要掀起一场腥风血雨……</p>",
+                    "vod_play_from": "'xlyun$$$xlm3u8'",
+                    "vod_play_note": "$$$",
+                    "vod_play_url": "'第01话$https://s.xlzys.com/play/qaQW667d#第02话$https://s.xlzys.com/play/BeXDrrke#第03话$https://s.xlzys.com/play/rb2k77Jd#第04话$https://s.xlzys.com/play/9b68BB7e#第05话$https://s.xlzys.com/play/Xe0R007b#第06话$https://s.xlzys.com/play/nelY22la#第07话$https://s.xlzys.com/play/mepYkk1a#第08话$https://s.xlzys.com/play/DdwpKKJe#第09话$https://s.xlzys.com/play/nelY22Ja#第10话$https://s.xlzys.com/play/mepYkkra#第11集$https://s.xlzys.com/play/BeXDPx8e#第12集$https://s.xlzys.com/play/rb2kX4jd#第13集$https://s.xlzys.com/play/9b68MoLe#第14集$https://s.xlzys.com/play/rb2kAzAd#第15集$https://s.xlzys.com/play/DdwjrpJb#第16集$https://s.xlzys.com/play/DdwpYqme#第17集$https://s.xlzys.com/play/1aMjQLmb#第18集$https://s.xlzys.com/play/qaQ10PGa#第19集$https://s.xlzys.com/play/9b66YL7b#第20集$https://s.xlzys.com/play/Xe0gAv7d#第21集$https://s.xlzys.com/play/1aMjX8Ob#第22集$https://s.xlzys.com/play/RdGZA6Lb#第23集$https://s.xlzys.com/play/nelOovVd#第24集$https://s.xlzys.com/play/mepgvRmd#第25集$https://s.xlzys.com/play/rb2RKyKb#第26集$https://s.xlzys.com/play/Xe0gGwvd#第27集$https://s.xlzys.com/play/9b66rm9b#第28集$https://s.xlzys.com/play/Xe0gl2Xd#第29集$https://s.xlzys.com/play/Xe0V0nKb#第30集$https://s.xlzys.com/play/nel52yra#第31集$https://s.xlzys.com/play/9b6RNm9b#第32集$https://s.xlzys.com/play/Xe0V72Xb#第33集$https://s.xlzys.com/play/mepQMMma#第34集$https://s.xlzys.com/play/DdwmWWza#第35集$https://s.xlzys.com/play/mep8YAQe#第36集$https://s.xlzys.com/play/DdwVpLrb#第37集$https://s.xlzys.com/play/1aMwpWPd#第38集$https://s.xlzys.com/play/qaQnwgMb#第39集$https://s.xlzys.com/play/nelxZ1ge#第40集$https://s.xlzys.com/play/mep84N1e#第41集$https://s.xlzys.com/play/BeXQrLAa#第42集$https://s.xlzys.com/play/rb287xNe#第43集$https://s.xlzys.com/play/rb2873je#第44集$https://s.xlzys.com/play/nelR7gVb#第45集$https://s.xlzys.com/play/nelR7z6b#第46集$https://s.xlzys.com/play/mepZzLpb#第47集$https://s.xlzys.com/play/rb28g4Ke#第48集$https://s.xlzys.com/play/RdGRY2Lb#第49集$https://s.xlzys.com/play/RdGRwv8b#第50集$https://s.xlzys.com/play/1aMZgmmb$$$第01话$https://s.xlzys.com/play/qaQW667d/index.m3u8#第02话$https://s.xlzys.com/play/BeXDrrke/index.m3u8#第03话$https://s.xlzys.com/play/rb2k77Jd/index.m3u8#第04话$https://s.xlzys.com/play/9b68BB7e/index.m3u8#第05话$https://s.xlzys.com/play/Xe0R007b/index.m3u8#第06话$https://s.xlzys.com/play/nelY22la/index.m3u8#第07话$https://s.xlzys.com/play/mepYkk1a/index.m3u8#第08话$https://s.xlzys.com/play/DdwpKKJe/index.m3u8#第09话$https://s.xlzys.com/play/nelY22Ja/index.m3u8#第10话$https://s.xlzys.com/play/mepYkkra/index.m3u8#第11集$https://s.xlzys.com/play/BeXDPx8e/index.m3u8#第12集$https://s.xlzys.com/play/rb2kX4jd/index.m3u8#第13集$https://s.xlzys.com/play/9b68MoLe/index.m3u8#第14集$https://s.xlzys.com/play/rb2kAzAd/index.m3u8#第15集$https://s.xlzys.com/play/DdwjrpJb/index.m3u8#第16集$https://s.xlzys.com/play/DdwpYqme/index.m3u8#第17集$https://s.xlzys.com/play/1aMjQLmb/index.m3u8#第18集$https://s.xlzys.com/play/qaQ10PGa/index.m3u8#第19集$https://s.xlzys.com/play/9b66YL7b/index.m3u8#第20集$https://s.xlzys.com/play/Xe0gAv7d/index.m3u8#第21集$https://s.xlzys.com/play/1aMjX8Ob/index.m3u8#第22集$https://s.xlzys.com/play/RdGZA6Lb/index.m3u8#第23集$https://s.xlzys.com/play/nelOovVd/index.m3u8#第24集$https://s.xlzys.com/play/mepgvRmd/index.m3u8#第25集$https://s.xlzys.com/play/rb2RKyKb/index.m3u8#第26集$https://s.xlzys.com/play/Xe0gGwvd/index.m3u8#第27集$https://s.xlzys.com/play/9b66rm9b/index.m3u8#第28集$https://s.xlzys.com/play/Xe0gl2Xd/index.m3u8#第29集$https://s.xlzys.com/play/Xe0V0nKb/index.m3u8#第30集$https://s.xlzys.com/play/nel52yra/index.m3u8#第31集$https://s.xlzys.com/play/9b6RNm9b/index.m3u8#第32集$https://s.xlzys.com/play/Xe0V72Xb/index.m3u8#第33集$https://s.xlzys.com/play/mepQMMma/index.m3u8#第34集$https://s.xlzys.com/play/DdwmWWza/index.m3u8#第35集$https://s.xlzys.com/play/mep8YAQe/index.m3u8#第36集$https://s.xlzys.com/play/DdwVpLrb/index.m3u8#第37集$https://s.xlzys.com/play/1aMwpWPd/index.m3u8#第38集$https://s.xlzys.com/play/qaQnwgMb/index.m3u8#第39集$https://s.xlzys.com/play/nelxZ1ge/index.m3u8#第40集$https://s.xlzys.com/play/mep84N1e/index.m3u8#第41集$https://s.xlzys.com/play/BeXQrLAa/index.m3u8#第42集$https://s.xlzys.com/play/rb287xNe/index.m3u8#第43集$https://s.xlzys.com/play/rb2873je/index.m3u8#第44集$https://s.xlzys.com/play/nelR7gVb/index.m3u8#第45集$https://s.xlzys.com/play/nelR7z6b/index.m3u8#第46集$https://s.xlzys.com/play/mepZzLpb/index.m3u8#第47集$https://s.xlzys.com/play/rb28g4Ke/index.m3u8#第48集$https://s.xlzys.com/play/RdGRY2Lb/index.m3u8#第49集$https://s.xlzys.com/play/RdGRwv8b/index.m3u8#第50集$https://s.xlzys.com/play/1aMZgmmb/index.m3u8'",
+                    "vod_down_note": "",
+                    "vod_down_url": "",
+                    "vod_hits": 378,
+                    "vod_hits_day": 545,
+                    "vod_hits_week": 841,
+                    "vod_hits_month": 935,
+                    "created_at": "2022-10-15 20:00:49",
+                    "updated_at": "2022-10-15 20:00:49"
+                },
+            ],
             list:[
                 {
                     "id": 898260,
@@ -1072,9 +988,14 @@ export default {
         }
     },
     mounted() {
-        this.getData();
+        // this.getData();
     },
     methods: {
+        showDownload(item){
+            console.log(item)
+        },
+
+
         async getData(){
             // 提取地址
             let result = TransformUrl(this.movie2);
