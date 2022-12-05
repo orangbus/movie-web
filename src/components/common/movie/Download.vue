@@ -6,30 +6,18 @@
     >
         <template v-slot:activator="{ on, attrs }">
             <v-btn
+                v-if="user.vip"
                 color="primary"
                 v-bind="attrs"
                 v-on="on"
                 icon
                 text
+                small
                 @click="parseUrl">
                 <v-icon class="mr-1">
                     mdi-tray-arrow-down
                 </v-icon>
-                <!--<span class="subheading mr-2">{{ hasUpdate == null ? "追更":"已追更"}}</span>-->
             </v-btn>
-
-            <!--<v-btn-->
-            <!--    color="primary"-->
-            <!--    text-->
-            <!--    dark-->
-            <!--    icon-->
-            <!--    v-bind="attrs"-->
-            <!--    v-on="on"-->
-            <!--    @click="parseUrl"-->
-            <!--&gt;-->
-            <!--   <v-icon>mdi-tray-arrow-down</v-icon>-->
-            <!--    <span class="subheading mr-2">下载</span>-->
-            <!--</v-btn>-->
         </template>
 
         <v-card>
@@ -105,6 +93,7 @@
 <script>
 import TransformUrl from "@/util/TransformUrl";
 import {checkStatus, pushDownload} from "@/api/download";
+import {mapState} from "vuex";
 
 export default {
     name: "MovieDownload",
@@ -112,7 +101,7 @@ export default {
         movie:{
             type:Object,
             default:()=>{}
-        }
+        },
     },
     data() {
         return{
@@ -211,6 +200,7 @@ export default {
         }
     },
     computed:{
+        ...mapState(["user","isMobile"]),
         total(){
             return this.count === this.selectedCount;
         },

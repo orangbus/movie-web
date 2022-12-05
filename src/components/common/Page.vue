@@ -19,7 +19,7 @@
                     ></v-progress-linear>
 
                     <!--滚动加载分页提示-->
-                    <div class="text-center">
+                    <div class="text-center" v-if="!setting.showPage">
                         第{{page}}页，累计{{ total }}条
                     </div>
 

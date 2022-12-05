@@ -33,7 +33,7 @@ export default {
 	playerWayList:[
 		{type:0,name:"全屏"},
 		{type:1,name:"弹窗"},
-		{type:2,name:"跳转详情"},
+		// {type:2,name:"跳转详情"},
 	],
 
 	// 默认设置

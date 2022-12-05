@@ -8,6 +8,7 @@
         >
             <template v-slot:activator="{ on, attrs }">
                 <v-btn
+                    v-if="user.vip"
                     color="primary"
                     v-bind="attrs"
                     v-on="on"
@@ -40,13 +41,17 @@
 
                             <v-list-item-content>
                                 <v-list-item-title>{{ item.title }}</v-list-item-title>
-                                <v-list-item-subtitle>{{ `总数${item.list.length}, 已下载${item.remain}`}}</v-list-item-subtitle>
-                                <v-progress-linear v-if="item.downloading && item.remain > 1"  :value="`progress(item) %`"></v-progress-linear>
+                                <v-list-item-subtitle>{{ `总数${item.list.length}, 已下载${item.remain}` }}
+                                </v-list-item-subtitle>
+                                <v-progress-linear v-if="item.downloading && item.remain > 1"
+                                                   :value="`progress(item) %`"></v-progress-linear>
                             </v-list-item-content>
 
                             <v-list-item-action>
                                 <v-btn icon @click="showDetail(item)">
-                                    <v-icon :color="item.list.length === item.remain ? 'primary':'grey' ">{{ item.list.length === item.remain ? 'mdi-check-underline':'mdi-format-list-bulleted'}}</v-icon>
+                                    <v-icon :color="item.list.length === item.remain ? 'primary':'grey' ">
+                                        {{ item.list.length === item.remain ? 'mdi-check-underline' : 'mdi-format-list-bulleted' }}
+                                    </v-icon>
                                 </v-btn>
 
                                 <v-btn icon @click="removeRemove(item.title,index)">
@@ -89,7 +94,7 @@
         >
             <v-card>
                 <v-card-title class="text-h5">
-                    {{detailList.title }} - 下载列表
+                    {{ detailList.title }} - 下载列表
                 </v-card-title>
 
                 <v-card-text>
@@ -98,9 +103,12 @@
                         subheader
                         three-line
                     >
-                        <v-list-item-subtitle>如果未能下载成功,提示服务器错误，请先启动下载器或者检查端口是否正确,下载软件请加群获取。</v-list-item-subtitle>
+                        <v-list-item-subtitle>
+                            如果未能下载成功,提示服务器错误，请先启动下载器或者检查端口是否正确,下载软件请加群获取。
+                        </v-list-item-subtitle>
                         <v-subheader>
-                            <v-checkbox v-model="total" @change="selectAll" ></v-checkbox> 已选择：{{selectedCount}}
+                            <v-checkbox v-model="total" @change="selectAll"></v-checkbox>
+                            已选择：{{ selectedCount }}
                         </v-subheader>
 
                         <v-list-item-group
@@ -113,16 +121,19 @@
                             >
                                 <template>
                                     <v-list-item-action>
-                                        <v-checkbox v-model="item.selected" :disabled="item.disable" @change="changeSelect(item,index)"></v-checkbox>
+                                        <v-checkbox v-model="item.selected" :disabled="item.disable"
+                                                    @change="changeSelect(item,index)"></v-checkbox>
                                     </v-list-item-action>
 
                                     <v-list-item-content>
-                                        <v-list-item-title>{{ item.name}}</v-list-item-title>
-                                        <v-list-item-subtitle>{{ item.url}}</v-list-item-subtitle>
+                                        <v-list-item-title>{{ item.name }}</v-list-item-title>
+                                        <v-list-item-subtitle>{{ item.url }}</v-list-item-subtitle>
                                     </v-list-item-content>
                                     <v-list-item-action>
                                         <v-list-item-action-text>
-                                            <span :style="`color:${item.status === true ? '#CFD8DC':'#37474F'}`">{{ item.status === true ? '已推送下载':'待下载' }}</span>
+                                            <span :style="`color:${item.status === true ? '#CFD8DC':'#37474F'}`">{{
+                                                    item.status === true ? '已推送下载' : '待下载'
+                                                }}</span>
                                         </v-list-item-action-text>
                                     </v-list-item-action>
                                 </template>
@@ -162,64 +173,66 @@
 <script>
 import TransformUrl from "@/util/TransformUrl";
 import {checkStatus, pushDownload} from "@/api/download";
+import {mapState} from "vuex";
 
 export default {
     name: "MovieDownload",
-    props:{
-        movie:{
-            type:Object,
-            default:()=>{}
+    props: {
+        movie: {
+            type: Object,
+            default: () => {
+            }
         },
-        movieList:{
-            type:Array,
-            default:()=>[]
+        movieList: {
+            type: Array,
+            default: () => []
         }
     },
     data() {
-        return{
+        return {
             dialog: false,
             list: [], // 待下载
 
             detailDialog: false, // 详情
-            detailList:[],
+            detailList: [],
 
-            m3u8Item:{},
-            selectedCount:0, // 总数
-            remain:0, // 剩余
-            count:0,
+            m3u8Item: {},
+            selectedCount: 0, // 总数
+            remain: 0, // 剩余
+            count: 0,
         }
     },
-    methods:{
+    methods: {
         // 解析列表
-        parseUrl(){
+        parseUrl() {
             this.list = [];
             this.downloadList = [];
             let list = [];
-            this.movieList.forEach(item=>{
+            this.movieList.forEach(item => {
                 // 提取地址
                 let result = TransformUrl(item);
                 // 寻找m3u8连接
                 let m3u8Item = [];
-                if (result.length > 1){
-                    result.forEach(item=>{
-                        if (item.name.includes("m3u8")){
+                if (result.length > 1) {
+                    result.forEach(item => {
+                        if (item.name.includes("m3u8")) {
                             m3u8Item = item;
                         }
                     })
-                }else{
+                } else {
                     m3u8Item = result[0];
                 }
 
                 // 重构数据接口
                 let data = [];
-                m3u8Item.list.forEach((item,index)=>{
+                m3u8Item.list.forEach((item, index) => {
                     item.id = index;
                     item.status = false;
                     item.selected = true; // 默认全选
                     item.disable = false;
                     data.push(item);
-                    this.selectedCount +=1;
-                    this.count +=1;
+                    this.selectedCount += 1;
+                    this.count += 1;
                 });
                 m3u8Item.list = data;
                 m3u8Item.remain = 0;
@@ -233,15 +246,15 @@ export default {
         },
 
         // 开始下载
-        async startDownload(){
+        async startDownload() {
             let total = this.list.length;
-            for (let index = 0; index < total ; index++) {
+            for (let index = 0; index < total; index++) {
                 let item = this.list[index];
                 // 标记当前下载
                 this.list[index].downloading = true;
                 // 推送下载
-                let result = await this.push(item,index);
-                if (result){
+                let result = await this.push(item, index);
+                if (result) {
                     // 完成
                     this.list[index].downloading = false;
                     this.list[index].remain = item.list.length;
@@ -254,58 +267,57 @@ export default {
         },
 
 
-        async push(item,index){
+        async push(item, index) {
             for (let i = 0; i < item.list.length; i++) {
-                await pushDownload(item.title,item.list[i]);
-                this.list[index].remain +=1;
+                await pushDownload(item.title, item.list[i]);
+                this.list[index].remain += 1;
             }
             return true;
         },
 
 
-
-        progress(item={}){
+        progress(item = {}) {
             let total = item.selectedCount;
             let remain = item.remain;
-            if (total === 0 || remain === 0){
+            if (total === 0 || remain === 0) {
                 return 0;
             }
-            return (remain/total)*100;
+            return (remain / total) * 100;
         },
 
-        showDetail(item){
+        showDetail(item) {
             this.detailList = item;
             this.detailDialog = true;
         },
 
         // 全选
-        selectAll(status){
-            this.downloadList.list.forEach((item,index)=>{
+        selectAll(status) {
+            this.downloadList.list.forEach((item, index) => {
                 this.downloadList.list[index].selected = status;
 
             })
-            this.selectedCount = status ? this.downloadList.list.length: 0;
+            this.selectedCount = status ? this.downloadList.list.length : 0;
         },
-        changeSelect(item,index){
+        changeSelect(item, index) {
             let status = this.downloadList.list[index].selected
             this.downloadList.list[index].selected = status === true;
-            if (status){
-                this.selectedCount +=1;
-            }else{
-                this.selectedCount -=1;
+            if (status) {
+                this.selectedCount += 1;
+            } else {
+                this.selectedCount -= 1;
             }
         },
 
         // 移除某个影片下载
-        removeRemove(name,index){
-            this.list.splice(index,1);
+        removeRemove(name, index) {
+            this.list.splice(index, 1);
             this.$toast.success(`${name} 移除成功！`);
         },
 
         // 单个下载 推送下载
-        async downloadPlayer(){
+        async downloadPlayer() {
             let status = await checkStatus();
-            if (!status){
+            if (!status) {
                 return;
             }
 
@@ -313,18 +325,18 @@ export default {
             let error = 0;
             // 提交下载
             let list = this.downloadList.list;
-            if (list.length > 0){
+            if (list.length > 0) {
                 for (const item of list) {
                     const index = list.indexOf(item);
-                    if (item.selected){
-                        let result = await pushDownload(this.this.downloadList.title,item);
-                        this.remain +=1;
-                        if (result){
+                    if (item.selected) {
+                        let result = await pushDownload(this.this.downloadList.title, item);
+                        this.remain += 1;
+                        if (result) {
                             this.downloadList.list[index].status = true;
                             this.downloadList.list[index].disable = true;
-                            success +=1;
-                        }else{
-                            error +=1;
+                            success += 1;
+                        } else {
+                            error += 1;
                         }
                     }
                 }
@@ -334,8 +346,9 @@ export default {
             this.dialog = false;
         }
     },
-    computed:{
-        total(){
+    computed: {
+        ...mapState(["user","isMobile"]),
+        total() {
             return this.count === this.selectedCount;
         },
     }

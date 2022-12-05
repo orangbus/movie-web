@@ -27,7 +27,7 @@
             <div class="xyScrollBar" @scroll="loadMore">
                 <MovieList :list="list" :to-detail="false"></MovieList>
                 <!--分页-->
-                <Page :loading="loading" :total="total" @changePage="changePage"></Page>
+                <Page :page="page" :loading="loading" :total="total" @changePage="changePage"></Page>
             </div>
             <!--到顶部-->
             <v-btn
@@ -47,8 +47,6 @@
                 </v-icon>
             </v-btn>
         </v-container>
-
-
     </div>
 </template>
 <script>
@@ -75,7 +73,6 @@ export default {
 
         // 底部加载
         isEnd : false,
-        triggerDistance : 200,
 
         cate_id: 0, // 分类id
         cateData: [], // 分类列表元数据
@@ -116,6 +113,7 @@ export default {
         changeApi(item){
             this.tab = 0;
             this.cate_id = 0;
+            this.cateList = [];
             // 重新获取列表
             this.getCate();
             this.setMovieApi(item);
@@ -192,7 +190,10 @@ export default {
 
                     // 到底了提示
                     if (data.length === 0){
+                        this.isEnd = true;
                         this.$toast.success("到底啦！");
+                    }else{
+                        this.isEnd = false;
                     }
                 });
             }else{
@@ -227,7 +228,6 @@ export default {
                 this.loading = true;
                 this.page +=1;
                 this.getData();
-                console.log("加载下一下")
             }
         },
 
@@ -286,9 +286,5 @@ export default {
 }
 </script>
 <style scoped>
-.xyScrollBar {
-    overflow: scroll;
-    max-height: 100vh;
-    min-height: 100vh;
-}
+
 </style>

@@ -102,7 +102,6 @@ import {mapState} from "vuex";
 import ShareQr from "@/components/common/ShareQr";
 import Tool from "@/util/Tool";
 import ActiveCode from "./ActiveCode"
-// import InviteList from "@/components/User/InviteList.vue";
 
 export default {
     components: {
@@ -138,21 +137,12 @@ export default {
             ],
         }
     },
-    mounted() {
-        this.getData();
-    },
     methods: {
         changePage(page) {
             this.page = page;
             this.getData();
         },
-        getData() {
-            for (let i = 0; i < 30; i++) {
-                this.list.push(i)
-            }
-            this.total = 1000;
-            console.log(this.list)
-        },
+
         toPage(item){
             this.$router.push({
                 path: item.url

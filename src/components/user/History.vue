@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-row>
-            <v-col cols="12">
+            <v-col cols="12" class="d-flex">
                 <v-btn
                     small
                     color="primary"
@@ -13,12 +13,18 @@
                     color="primary"
                     @click="clearExpire"
                 >清除本页失效视频</v-btn>
+                <div class="ml-3">
+                    <DownloadList :movie-list="downloadList"></DownloadList>
+                </div>
             </v-col>
         </v-row>
+
+        <div class="xyScrollBar" @scroll="loadMore">
         <v-row>
             <v-col
                 v-for="(item,index) in list"
                 :key="index"
+                cols="12"
                 v-bind="grid">
                 <v-card hover>
                     <div class="d-flex justify-start">
@@ -57,14 +63,19 @@
                                 >
                                     删除
                                 </v-btn>
+                                <v-spacer></v-spacer>
+                                <Download :movie="item.movie"></Download>
                             </v-card-actions>
                         </div>
                     </div>
                 </v-card>
             </v-col>
+            <v-col cols="12" class="text-center">
+                <Page :page="page" :loading="loading" :total="total" @changePage="changePage"></Page>
+            </v-col>
         </v-row>
+        </div>
 
-        <Page :loading="loading" :total="total" @changePage="changePage"></Page>
 
         <!--播放器-->
         <v-row>
@@ -104,10 +115,12 @@ import Page from "@/components/common/Page";
 import {movieHistoryClear, movieHistoryDelete, movieHistoryList} from "@/api/movie";
 import {mapState} from "vuex";
 import MoviePlayer from "@/components/common/MoviePlayer"
+import Download from "@/components/common/movie/Download.vue";
+import DownloadList from "@/components/common/movie/DownloadList.vue";
 
 export default {
     components:{
-        Page,MoviePlayer
+        Page,MoviePlayer,Download, DownloadList
     },
     data() {
         return{
@@ -125,6 +138,7 @@ export default {
                 sm: 6,
                 xs: 12
             },
+            downloadList:[],
         }
     },
     mounted() {
@@ -138,19 +152,44 @@ export default {
         },
         getData(){
             this.loading = true;
+            if (this.setting.showPage){
+                this.list = [];
+                this.downloadList = []
+            }
             movieHistoryList({
                 page:this.page,
                 limit: this.setting.limit,
             }).then(res=>{
                 this.loading = false;
                 let {data,total}  =res;
-                this.list = data;
+                this.list.push(...data);
+                data.forEach(item=>{
+                    this.downloadList.push(item.movie);
+                })
                 this.total = total;
+                // 到底了提示
                 if (data.length === 0){
-                    this.$toast.info("暂无数据");
+                    this.isEnd = true;
+                    this.$toast.success("到底啦！");
+                }else{
+                    this.isEnd = false;
                 }
             });
         },
+        loadMore(event) {
+            if (this.setting.showPage){
+                return false;
+            }
+            //vue中获取滚动条到底部的距离
+            let scrollBottom = event.target.scrollHeight - event.target.scrollTop - event.target.clientHeight
+            //以下三个条件不执行数据加载：1.数据正在加载的状态，2.已经到底了，3.滚动条距离底部的距离小于100px
+            if (!this.loading && !this.isEnd && scrollBottom < 100) {
+                this.loading = true;
+                this.page +=1;
+                this.getData();
+            }
+        },
+
         playerMovie(item){
             if (item.movie === null){
                 this.$toast.error("视频可能已经失效");
