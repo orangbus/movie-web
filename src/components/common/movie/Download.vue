@@ -6,7 +6,7 @@
     >
         <template v-slot:activator="{ on, attrs }">
             <v-btn
-                v-if="user.vip"
+                v-if="user.vip && !isMobile"
                 color="primary"
                 v-bind="attrs"
                 v-on="on"
@@ -81,7 +81,7 @@
                 <v-btn
                     color="primary"
                     text
-                    @click="downloadPlayer"
+                    @click="downloadText"
                 >
                     立即下载
                 </v-btn>
@@ -94,6 +94,7 @@
 import TransformUrl from "@/util/TransformUrl";
 import {checkStatus, pushDownload} from "@/api/download";
 import {mapState} from "vuex";
+import {saveAs} from 'file-saver';
 
 export default {
     name: "MovieDownload",
@@ -197,7 +198,28 @@ export default {
             // 执行结束后关闭弹窗
             this.$toast.info(`成功推送${success}条,失败${error}条`);
             this.dialog = false;
-        }
+        },
+
+        // 转化为文本下载
+        downloadText(){
+            let list = this.downloadList.list;
+
+            let name = this.movie.vod_name;
+            let textArray = [];
+            if (list.length > 0){
+                list.forEach(item=>{
+                    if (item.selected){
+                        textArray.push(`${name}-${item.name},${item.url}`);
+                    }
+                })
+                let str = new Blob([textArray.join("\r\n")],{
+                    type: "text/plain;charset=utf-8"
+                })
+                saveAs(str,`${name}.txt`);
+            }else{
+                this.$toast.error("暂无下载");
+            }
+        },
     },
     computed:{
         ...mapState(["user","isMobile"]),

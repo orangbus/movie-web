@@ -51,8 +51,6 @@
                 </v-list>
             </v-navigation-drawer>
 
-
-
             <!--主体内容-->
             <v-main>
                 <v-container>
@@ -183,6 +181,7 @@ import axios from "axios";
 import TransformUrl from "@/util/TransformUrl";
 import MovieDownload from "@/components/common/movie/Download.vue"
 import DownloadList from "@/components/common/movie/DownloadList.vue";
+import {saveAs} from 'file-saver';
 
 export default {
     components:{
@@ -1000,10 +999,30 @@ export default {
     },
     mounted() {
         // this.getData();
+        this.downloadText();
     },
     methods: {
-        showDownload(item){
-            console.log(item)
+        downloadText(){
+            let result = TransformUrl(this.movie2);
+            let m3u8Item = {};
+            if (result.length > 1){
+                result.forEach(item=>{
+                    if (item.name.includes("m3u8")){
+                        m3u8Item = item;
+                    }
+                })
+            }else{
+                m3u8Item = result[0];
+            }
+            console.log(m3u8Item)
+            let textArray = [];
+            m3u8Item.list.forEach(item=>{
+                textArray.push(`${item.name},${item.url}`);
+            })
+            let str = new Blob([textArray.join("\r\n")],{
+                type: "text/plain;charset=utf-8"
+            })
+            saveAs(str,"demo.txt");
         },
 
 
