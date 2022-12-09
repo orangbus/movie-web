@@ -57,7 +57,7 @@ export default {
     },
     mounted() {
         this.onResize()
-        window.addEventListener('resize', this.onResize, { passive: true })
+        window.addEventListener('resize', this.onResize, { passive: true });
     },
     watch:{
         isMobile(result){
@@ -65,6 +65,8 @@ export default {
         }
     },
     created() {
+        // 访问统计
+        this.$store.dispatch("userVisit");
         // 本站须知
         if (LocalStorage.get("know") === null){
             this.dialog = true;
@@ -118,7 +120,7 @@ export default {
     methods:{
         ...mapMutations(["setIsMobile"]),
         onResize () {
-            this.isMobile = window.innerWidth < 600
+            this.isMobile = window.innerWidth < 600;
         },
         confirm(){
             LocalStorage.set("know",true);

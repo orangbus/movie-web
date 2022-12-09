@@ -68,7 +68,7 @@
 
         <v-container style="margin-top: 110px">
             <!--分类标签-->
-            <div class="text-center" v-if="cateList.length > 0">
+            <div  v-if="cateList.length > 0">
                 <v-chip
                     class="ma-2"
                     :color="item.cid === cate.cid ? 'primary':''"
@@ -80,10 +80,21 @@
                 </v-chip>
             </div>
 
-            <!--视频列表-->
-            <VideoList :list="list"></VideoList>
-            <!--分页-->
-            <Page :loading="loading" :total="total" @changePage="changePage"></Page>
+            <!--搜索-->
+            <v-text-field
+                v-if="isMobile"
+                v-model="keywords"
+                label="请输入你的关键词，支持全文搜索"
+                @keyup.enter="resetData"
+            ></v-text-field>
+
+            <div class="xyScrollBar" @scroll="loadMore">
+                <!--视频列表-->
+                <VideoList :list="list"></VideoList>
+                <!--分页-->
+                <Page :page="page" :loading="loading" :total="total" @changePage="changePage"></Page>
+            </div>
+
         </v-container>
     </div>
 </template>
@@ -115,6 +126,7 @@ export default {
             page: 1,
             total: 0,
             loading: true,
+            isEnd: false,
             list: [],
         }
     },
@@ -136,11 +148,15 @@ export default {
             this.search();
         },
 
+        // 搜索
         search(keywords) {
             this.keywords = keywords;
+            this.resetData();
+        },
+        resetData(){
             this.page = 1;
-            this.total = 0;
             this.list = [];
+            this.total = 0;
             this.getData();
         },
         clear() {
@@ -165,8 +181,34 @@ export default {
                 this.loading = false;
                 let {total, data} = res;
                 this.total = total;
-                this.list = data;
+                this.setting.showPage ? this.list= data : this.list.push(...data);
+
+                // 简单提示
+                if (this.page === 1 && this.keywords === "" && res.data.length === 0){
+                    this.$toast.info("暂无数据，可点击右上角切换一个数据源！");
+                }
+
+                // 到底了提示
+                if (data.length === 0){
+                    this.isEnd = true;
+                    this.$toast.success("到底啦！");
+                }else{
+                    this.isEnd = false;
+                }
             });
+        },
+        loadMore(event) {
+            if (this.setting.showPage){
+                return false;
+            }
+            //vue中获取滚动条到底部的距离
+            let scrollBottom = event.target.scrollHeight - event.target.scrollTop - event.target.clientHeight
+            //以下三个条件不执行数据加载：1.数据正在加载的状态，2.已经到底了，3.滚动条距离底部的距离小于100px
+            if (!this.loading && !this.isEnd && scrollBottom < 100) {
+                this.loading = true;
+                this.page +=1;
+                this.getData();
+            }
         },
         getApi(){
             this.tabs.push( {id:0,name:"推荐"});
@@ -177,7 +219,7 @@ export default {
 
     },
     computed: {
-        ...mapState(["setting"])
+        ...mapState(["setting","isMobile"])
     }
 }
 </script>

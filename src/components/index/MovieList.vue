@@ -1,7 +1,7 @@
 <template>
     <div>
-        <v-container>
-            <v-row>
+        <v-container style="padding: 10px 0px 0px 0px ">
+            <v-row :dense="isMobile">
                 <v-col
                     cols="6"
                     v-bind="grid"

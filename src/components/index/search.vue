@@ -10,7 +10,12 @@
 
         <v-container style="margin-top: 100px">
             <!--手机端搜索-->
-
+            <v-text-field
+                v-if="isMobile"
+                v-model="keywords"
+                label="请输入你的关键词，支持全文搜索"
+                @keyup.enter="resetData"
+            ></v-text-field>
             <!--内容-->
             <MovieList :list="list"></MovieList>
 
@@ -75,6 +80,7 @@ export default {
         },
         resetData(){
             this.page = 1;
+            this.total = 0;
             this.list = [];
             this.getData();
         },
@@ -110,7 +116,7 @@ export default {
         },
     },
     computed: {
-        ...mapState(["setting"])
+        ...mapState(["setting","isMobile"])
     }
 }
 </script>

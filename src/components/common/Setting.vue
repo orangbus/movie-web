@@ -26,7 +26,8 @@
                     <v-container>
                         <v-row>
                             <v-col
-                                cols="6"
+                                cols="12"
+                                v-bind="grid"
                             >
                                 <v-radio-group
                                     v-model="setting.showPage"
@@ -44,7 +45,8 @@
                                 </v-radio-group>
                             </v-col>
                             <v-col
-                                cols="6"
+                                cols="12"
+                                v-bind="grid"
                             >
                                 <v-radio-group
                                     v-model="setting.loadingStyle"
@@ -62,7 +64,8 @@
                             </v-col>
 
                             <v-col
-                                cols="6"
+                                cols="12"
+                                v-bind="grid"
                             >
                                 <v-radio-group
                                     v-model="setting.playerWay"
@@ -80,7 +83,8 @@
                             </v-col>
 
                             <v-col
-                                cols="6"
+                                cols="12"
+                                v-bind="grid"
                             >
                                 <v-select
                                     :items="[24, 30, 36, 42]"
@@ -90,7 +94,8 @@
                                 ></v-select>
                             </v-col>
                             <v-col
-                                cols="6"
+                                cols="12"
+                                v-bind="grid"
                                 v-if="user.vip"
                             >
                                 <v-select
@@ -107,7 +112,8 @@
                                 ></v-select>
                             </v-col>
                             <v-col
-                                cols="6"
+                                cols="12"
+                                v-bind="grid"
                                 v-if="user.vip"
                             >
                                 <v-select
@@ -126,7 +132,8 @@
 
                             <v-col
                                 cols="12"
-                                v-if="user.vip"
+                                v-bind="grid"
+                                v-if="user.vip && !isMobile"
                             >
                                 <v-row>
                                     <v-col>
@@ -191,6 +198,13 @@ export default {
            // 配置
            settingDialog: false,
            setting: {},
+            grid: {
+                xl: 6,
+                lg: 6,
+                md: 6,
+                sm: 12,
+                xs: 12
+            },
        }
     },
     mounted() {
@@ -255,7 +269,7 @@ export default {
         }
     },
     computed:{
-        ...mapState(["jiexi","parse","user"])
+        ...mapState(["jiexi","parse","user","isMobile"])
     }
 }
 </script>

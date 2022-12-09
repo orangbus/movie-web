@@ -80,10 +80,8 @@
 
         <!--侧边栏-->
         <v-navigation-drawer
-            v-if="drawer"
             v-model="drawer"
             absolute
-            temporary
         >
             <v-list
                 nav

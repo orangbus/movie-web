@@ -24,6 +24,14 @@
                     {{ item.type_name }}
                 </v-chip>
             </div>
+            <!--搜索-->
+            <v-text-field
+                v-if="isMobile"
+                v-model="keywords"
+                label="请输入你的关键词，支持全文搜索"
+                @keyup.enter="resetData"
+            ></v-text-field>
+
             <div class="xyScrollBar" @scroll="loadMore">
                 <MovieList :list="list" :to-detail="false"></MovieList>
                 <!--分页-->
@@ -142,6 +150,9 @@ export default {
         // 搜索
         search(keywords) {
             this.keywords = keywords;
+            this.resetData();
+        },
+        resetData(){
             this.page = 1;
             this.list = [];
             this.total = 0;
