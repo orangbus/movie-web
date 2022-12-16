@@ -5,14 +5,15 @@
             :tabs="tabs"
             @changeTab="changeTab"
         ></AppHeader>
-
-        <v-container style="margin-top: 110px">
-            <My v-if="tab === 0"></My>
-            <Collect v-if="tab === 1"></Collect>
-            <History v-if="tab === 2"></History>
-            <Wait v-if="tab === 3"></Wait>
-            <InviteList v-if="tab === 4"></InviteList>
-        </v-container>
+        <v-main>
+            <v-container >
+                <My v-if="tab === 0"></My>
+                <Collect v-if="tab === 1"></Collect>
+                <History v-if="tab === 2"></History>
+                <Wait v-if="tab === 3"></Wait>
+                <InviteList v-if="tab === 4"></InviteList>
+            </v-container>
+        </v-main>
     </div>
 </template>
 

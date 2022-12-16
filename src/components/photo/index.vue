@@ -1,24 +1,7 @@
 <template>
     <div>
         <AppHeader></AppHeader>
-
-        <v-container style="margin-top: 60px">
-            <!--接口调用-->
-            <v-alert
-                v-if="false"
-                class="mt-2"
-                border="top"
-                colored-border
-                color="blue"
-                elevation="2"
-                close-text="Close Alert"
-                dismissible
-            >
-                <p>接口调用说明</p>
-                <p>随机图片：</p>
-                <p>接口访问：</p>
-            </v-alert>
-
+        <v-main>
             <v-row>
                 <v-col
                     v-for="(item,index) in list"
@@ -48,10 +31,12 @@
                         </template>
                     </v-img>
                 </v-col>
-            </v-row>
 
-            <Page :loading="loading" :total="total" @changePage="changePage"></Page>
-        </v-container>
+                <v-col cols="12">
+                    <Page :loading="loading" :total="total" @changePage="changePage"></Page>
+                </v-col>
+            </v-row>
+        </v-main>
     </div>
 </template>
 <script>

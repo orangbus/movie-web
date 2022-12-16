@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="xyScrollBar" @scroll="loadMore" id="backTop">
         <v-row>
             <v-col cols="12" class="d-flex">
                 <v-btn
@@ -21,64 +21,80 @@
             </v-col>
         </v-row>
 
-        <div class="xyScrollBar" @scroll="loadMore">
-            <v-row>
-                <v-col
-                    v-for="(item,index) in list"
-                    :key="index"
-                    cols="12"
-                    v-bind="grid" >
-                    <v-card hover>
-                        <div class="d-flex justify-start">
-                            <v-avatar
-                                class="ma-0"
-                                size="155"
-                                tile
-                                rounded
-                            >
-                                <v-img class="border-radius" :src="item.movie ? item.movie.vod_pic: ''"></v-img>
-                            </v-avatar>
+        <v-row>
+            <v-col
+                v-for="(item,index) in list"
+                :key="index"
+                cols="12"
+                v-bind="grid" >
+                <v-card hover>
+                    <div class="d-flex justify-start">
+                        <v-avatar
+                            class="ma-0"
+                            size="155"
+                            tile
+                            rounded
+                        >
+                            <v-img class="border-radius" :src="item.movie ? item.movie.vod_pic: ''"></v-img>
+                        </v-avatar>
 
-                            <div class="w-full">
-                                <v-card-title class="pt-0"><span
-                                    class="text-two-line">{{ item.movie ? item.movie.vod_name : '' }}</span>
-                                </v-card-title>
+                        <div class="w-full">
+                            <v-card-title class="pt-0"><span
+                                class="text-two-line">{{ item.movie ? item.movie.vod_name : '' }}</span>
+                            </v-card-title>
 
-                                <v-card-subtitle class="py-0">
-                                    <p class="my-0 py-0">{{ item.movie ? item.movie.type_name : '' }}</p>
-                                    <p class="my-0 py-0">{{ item.updated_at }}</p>
-                                </v-card-subtitle>
+                            <v-card-subtitle class="py-0">
+                                <p class="my-0 py-0">{{ item.movie ? item.movie.type_name : '' }}</p>
+                                <p class="my-0 py-0">{{ item.updated_at }}</p>
+                            </v-card-subtitle>
 
-                                <v-card-actions>
-                                    <v-btn
-                                        class="ml-2"
-                                        small
-                                        color="primary"
-                                        @click="playerMovie(item)"
-                                    >
-                                        立即观看
-                                    </v-btn>
-                                    <v-btn
-                                        class="ml-2"
-                                        outlined
-                                        small
-                                        color="error"
-                                        @click="unCollect(item)"
-                                    >
-                                        取消收藏
-                                    </v-btn>
-                                    <v-spacer></v-spacer>
-                                    <Download :movie="item.movie"></Download>
-                                </v-card-actions>
-                            </div>
+                            <v-card-actions>
+                                <v-btn
+                                    class="ml-2"
+                                    small
+                                    color="primary"
+                                    @click="playerMovie(item)"
+                                >
+                                    立即观看
+                                </v-btn>
+                                <v-btn
+                                    class="ml-2"
+                                    outlined
+                                    small
+                                    color="error"
+                                    @click="unCollect(item)"
+                                >
+                                    取消收藏
+                                </v-btn>
+                                <v-spacer></v-spacer>
+                                <Download :movie="item.movie"></Download>
+                            </v-card-actions>
                         </div>
-                    </v-card>
-                </v-col>
-                <v-col cols="12" class="text-center">
-                    <Page :loading="loading" :total="total" @changePage="changePage"></Page>
-                </v-col>
-            </v-row>
-        </div>
+                    </div>
+                </v-card>
+            </v-col>
+            <v-col cols="12" class="text-center">
+                <Page :loading="loading" :total="total" @changePage="changePage"></Page>
+            </v-col>
+        </v-row>
+
+        <!--到顶部-->
+        <v-btn
+            v-if="showTop"
+            class="mx-3"
+            fab
+            fixed
+            right
+            dark
+            large
+            :bottom="true"
+            color="primary"
+            @click="toTop"
+        >
+            <v-icon dark>
+                mdi-format-vertical-align-top
+            </v-icon>
+        </v-btn>
 
 
         <!--播放器-->
@@ -128,6 +144,7 @@ export default {
     },
     data() {
         return {
+            showTop:false,
             dialog: false,
             movie: {},
 
@@ -188,13 +205,18 @@ export default {
                 return false;
             }
             //vue中获取滚动条到底部的距离
-            let scrollBottom = event.target.scrollHeight - event.target.scrollTop - event.target.clientHeight
+            let scrollBottom = event.target.scrollHeight - event.target.scrollTop - event.target.clientHeight;
+            // 显示到顶部
+            this.showTop = event.target.scrollTop > 1000;
             //以下三个条件不执行数据加载：1.数据正在加载的状态，2.已经到底了，3.滚动条距离底部的距离小于100px
             if (!this.loading && !this.isEnd && scrollBottom < 100) {
                 this.loading = true;
                 this.page += 1;
                 this.getData();
             }
+        },
+        toTop(){
+            document.getElementById("backTop").scrollTop = -100;
         },
 
         playerMovie(item) {
@@ -241,7 +263,8 @@ export default {
                     this.$toast.error(res.msg);
                 }
             });
-        }
+        },
+
     },
     computed: {
         ...mapState(["setting"])

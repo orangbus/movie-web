@@ -1,12 +1,9 @@
 <template>
-    <div class="body-bg">
-        <v-app>
-            <!--<v-main>-->
+        <v-app style="background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);">
                 <router-view v-if="!$route.meta.keepAlive"></router-view>
                 <keep-alive>
                     <router-view v-if="$route.meta.keepAlive"></router-view>
                 </keep-alive>
-            <!--</v-main>-->
 
             <!--全局公告-->
             <v-dialog
@@ -40,7 +37,6 @@
                 </v-card>
             </v-dialog>
         </v-app>
-    </div>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="xyScrollBar" id="backTop" @scroll="loadMore">
         <v-row>
             <v-col cols="12" class="d-flex">
                 <v-btn
@@ -19,7 +19,7 @@
             </v-col>
         </v-row>
 
-        <div class="xyScrollBar" @scroll="loadMore">
+        <div >
         <v-row>
             <v-col
                 v-for="(item,index) in list"
@@ -75,6 +75,23 @@
             </v-col>
         </v-row>
         </div>
+        <!--到顶部-->
+        <v-btn
+            v-if="showTop"
+            class="mx-3"
+            fab
+            fixed
+            right
+            dark
+            large
+            :bottom="true"
+            color="primary"
+            @click="toTop"
+        >
+            <v-icon dark>
+                mdi-format-vertical-align-top
+            </v-icon>
+        </v-btn>
 
         <!--播放器-->
         <v-row>
@@ -123,6 +140,7 @@ export default {
     },
     data() {
         return{
+            showTop:false,
             dialog:false,
             movie: {},
 
@@ -187,6 +205,11 @@ export default {
                 this.page +=1;
                 this.getData();
             }
+            // 显示到顶部
+            this.showTop = event.target.scrollTop > 1000;
+        },
+        toTop(){
+            document.getElementById("backTop").scrollTop = -100;
         },
 
         playerMovie(item){
