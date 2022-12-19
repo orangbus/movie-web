@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-container style="padding: 10px 0px 0px 0px ">
+        <v-container style="padding: 10px 0px 0px 0px;">
             <v-row :dense="isMobile">
                 <v-col
                     cols="6"
@@ -28,7 +28,7 @@
                             </div>
                         </v-img>
                                 </span>
-                            <v-card-subtitle class="text-truncate"><span @click="toDetailPage(item)">{{
+                            <v-card-subtitle class="text-truncate text-pointer"><span @click="toDetailPage(item)">{{
                                     item.vod_name
                                 }}</span></v-card-subtitle>
                             <v-card-text>
@@ -66,44 +66,45 @@
                     </v-hover>
                 </v-col>
             </v-row>
-        </v-container>
 
-        <v-row>
-            <v-dialog
-                hide-overlay
-                scrollable
-                persistent
-                v-model="dialog"
-                :fullscreen="setting.playerWay === EnumData.playerWayFullscreen"
-                transition="dialog-bottom-transition"
-                width="900"
-            >
-                <v-card v-if="dialog">
-                    <!--标题-->
-                    <v-toolbar
-                        dark
-                        color="primary"
-                    >
-                        <v-toolbar-title>{{ movie.vod_name }}</v-toolbar-title>
-                        <v-spacer></v-spacer>
-                        <v-toolbar-items>
-                            <v-btn
-                                icon
-                                dark
-                                @click="dialog = false"
-                            >
-                                <v-icon>mdi-close</v-icon>
-                            </v-btn>
-                        </v-toolbar-items>
-                    </v-toolbar>
+            <!--弹窗播放-->
+            <v-row>
+                <v-dialog
+                    hide-overlay
+                    scrollable
+                    persistent
+                    v-model="dialog"
+                    :fullscreen="setting.playerWay === EnumData.playerWayFullscreen"
+                    transition="dialog-bottom-transition"
+                    width="900"
+                >
+                    <v-card v-if="dialog" >
+                        <!--标题-->
+                        <v-toolbar
+                            dark
+                            color="primary"
+                        >
+                            <v-toolbar-title>{{ movie.vod_name }}</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                            <v-toolbar-items>
+                                <v-btn
+                                    icon
+                                    dark
+                                    @click="dialog = false"
+                                >
+                                    <v-icon>mdi-close</v-icon>
+                                </v-btn>
+                            </v-toolbar-items>
+                        </v-toolbar>
 
-                    <!--内容-->
-                    <v-card>
-                        <MoviePlayer :movie="movie" v-if="dialog"></MoviePlayer>
+                        <!--内容-->
+                        <v-card style="background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);">
+                            <MoviePlayer :movie="movie" v-if="dialog"></MoviePlayer>
+                        </v-card>
                     </v-card>
-                </v-card>
-            </v-dialog>
-        </v-row>
+                </v-dialog>
+            </v-row>
+        </v-container>
     </div>
 </template>
 

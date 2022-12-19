@@ -16,6 +16,7 @@
                 <!--电影分类-->
                 <div class="text-center" v-if="cateList.length > 0">
                     <v-chip
+                        :label="true"
                         class="ma-2"
                         :color="item.type_id === cate_id ? 'primary':''"
                         v-for="(item,index) in cateList"
@@ -101,9 +102,6 @@ export default {
         this.getMenus();
         this.getCate();
         this.getData();
-    },
-    mounted() {
-        console.log(this.$vuetify)
     },
     methods: {
         ...mapMutations(["setMovieType", "setMovieCate","setMovieApi","setMovieHistoryCate"]),

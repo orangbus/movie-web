@@ -19,7 +19,7 @@
             <!--        </v-row>-->
             <!--    </v-col>-->
             <!--</v-row>-->
-            <v-row>
+            <v-row dense>
                 <v-col v-bind="grid" cols="12">
                     <v-alert
                         border="top"

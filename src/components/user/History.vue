@@ -1,7 +1,7 @@
 <template>
     <div class="xyScrollBar" id="backTop" @scroll="loadMore">
         <v-row>
-            <v-col cols="12" class="d-flex">
+            <v-col  cols="12" class="d-flex">
                 <v-btn
                     small
                     color="primary"
@@ -19,8 +19,9 @@
             </v-col>
         </v-row>
 
-        <v-row>
+        <v-row dense>
             <v-col
+                class="m-0"
                 v-for="(item,index) in list"
                 :key="index"
                 cols="12"

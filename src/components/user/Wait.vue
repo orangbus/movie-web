@@ -19,9 +19,9 @@
             </v-col>
         </v-row>
 
-        <div >
-        <v-row>
+        <v-row dense>
             <v-col
+                class="m-0"
                 v-for="(item,index) in list"
                 :key="index"
                 cols="12"
@@ -33,14 +33,15 @@
                             size="155"
                             tile
                             rounded
+                            @click="playerMovie(item)"
                         >
                             <v-img class="border-radius" :src="item.movie ? item.movie.vod_pic: ''"></v-img>
                         </v-avatar>
 
                         <div class="w-full">
-                            <v-card-title class="pt-0"><span class="text-two-line">{{ item.movie? item.movie.vod_name: '' }}</span></v-card-title>
+                            <v-card-title class="pt-0"><span @click="playerMovie(item)" class="text-two-line">{{ item.movie? item.movie.vod_name: '' }}</span></v-card-title>
 
-                            <v-card-subtitle class="py-0">
+                            <v-card-subtitle class="py-0" @click="playerMovie(item)">
                                 <p class="my-0 py-0">{{ item.movie ? item.movie.type_name: '' }}</p>
                                 <p class="my-0 py-0">{{ item.updated_at }}</p>
                             </v-card-subtitle>
@@ -74,7 +75,6 @@
                 <Page :loading="loading" :total="total" @changePage="changePage"></Page>
             </v-col>
         </v-row>
-        </div>
         <!--到顶部-->
         <v-btn
             v-if="showTop"

@@ -7,7 +7,6 @@
                        v-on="on"
                        @click="dialog = true">
                     <v-icon>mdi-qrcode-plus</v-icon>
-                    <!--{{ // user.vip ? '会员':'普通用户' }}-->
                 </v-btn>
             </template>
             <span>推广码</span>
@@ -32,15 +31,19 @@
                             <VueQr :text="registerUrl"></VueQr>
                         </div>
                         <div  class="my-2 text-center">
-                            推荐码：{{ user.code }}
+                            <p>推荐码：{{ user.code }}</p>
+                            <p>邀请链接：{{ registerUrl}}</p>
+
                         </div>
                     </div>
                 </div>
 
                 <v-card-actions>
                     <v-btn
-                        color="blue blue-1 copy"
+                        class="copy"
+                        color="blue blue-1"
                         text
+                        data-clipboard-action="copy"
                         :data-clipboard-text="registerUrl"
                         @click="copyUrl"
                     >
@@ -112,9 +115,8 @@ export default {
         // 复制邀请链接
         copyUrl(){
             let clipboard = new Clipboard('.copy')
-            console.log(clipboard)
             clipboard.on('success', () => {
-                this.$toast.info("已复制播放链接");
+                this.$toast.info("复制成功");
                 //  释放内存
                 clipboard.destroy()
             })

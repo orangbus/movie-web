@@ -14,6 +14,7 @@
                 <!--分类标签-->
                 <div  v-if="cateList.length > 0">
                     <v-chip
+                        :label="true"
                         class="ma-2"
                         :color="item.cid === cate.cid ? 'primary':''"
                         v-for="(item,index) in cateList"
