@@ -60,7 +60,7 @@
                                     outlined
                                     small
                                     color="error"
-                                    @click="unCollect(item)"
+                                    @click="unCollect(item,index)"
                                 >
                                     删除
                                 </v-btn>
@@ -220,11 +220,12 @@ export default {
             this.movie = item.movie;
             this.dialog = true;
         },
-        unCollect(item){
+        unCollect(item,index){
             movieWaitDelete({
                 id:item.id
             }).then(res=>{
                 if (res.code === 200){
+                    this.list.splice(index,1);
                     this.$toast.success(res.msg)
                 }else{
                     this.$toast.error(res.msg)

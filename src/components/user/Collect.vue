@@ -64,7 +64,7 @@
                                     outlined
                                     small
                                     color="error"
-                                    @click="unCollect(item)"
+                                    @click="unCollect(item,index)"
                                 >
                                     取消收藏
                                 </v-btn>
@@ -230,12 +230,13 @@ export default {
             this.movie = item.movie;
             this.dialog = true;
         },
-        unCollect(item) {
+        unCollect(item,index) {
             movieCollectDelete({
                 id: item.id
             }).then(res => {
                 if (res.code === 200) {
-                    this.$toast.success(res.msg)
+                    this.$toast.success(res.msg);
+                    this.list.splice(index,1)
                 } else {
                     this.$toast.error(res.msg)
                 }
