@@ -139,6 +139,7 @@ export default {
         },
         getData() {
             this.loading = true;
+            this.list = [];
             videoList({
                 page: this.page,
                 limit: this.setting.limit,

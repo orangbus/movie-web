@@ -163,7 +163,7 @@ export default {
                 sm: 6,
                 xs: 12
             },
-            downloadList: [],
+            downloadList: [], // 下载列表
         }
     },
     mounted() {

@@ -107,6 +107,7 @@ export default {
         },
         getData() {
             this.loading = true;
+            this.list = [];
             movieSearch({
                 type: this.tab,
                 page: this.page,
