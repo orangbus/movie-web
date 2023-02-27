@@ -8,7 +8,7 @@
             @clear="clear"
         ></AppHeader>
 
-        <v-container style="margin-top: 120px" >
+        <v-container style="margin-top: 80px" >
             <v-row>
                 <v-col v-bind="grid">
                     <v-card
@@ -61,16 +61,18 @@
 
                 <!--内容-->
                 <v-container>
-                    <v-row>
-                        <v-col cols="12">
-                            <div v-html="article.content"></div>
-                        </v-col>
-                        <v-col cols="12">
-                            <div class="d-flex justify-space-between mt-2">
-                                <v-chip color="primary">{{ article.cate ? article.cate.name : ''  }}</v-chip>
-                                <div>{{ article.visit}} | {{ article.site_name}} | {{ article.updated_at }}</div>
-                            </div>
-                        </v-col>
+                    <v-row >
+                        <div class="xyScrollBar">
+                            <v-col cols="12">
+                                <div v-html="article.content"></div>
+                            </v-col>
+                            <v-col cols="12">
+                                <div class="d-flex justify-space-between mt-2">
+                                    <v-chip color="primary">{{ article.cate ? article.cate.name : ''  }}</v-chip>
+                                    <div>{{ article.visit}} | {{ article.site_name}} | {{ article.updated_at }}</div>
+                                </div>
+                            </v-col>
+                        </div>
                     </v-row>
                 </v-container>
             </v-card>

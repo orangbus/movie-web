@@ -26,6 +26,7 @@
                         <div>状态：{{ userCode.status === 1 ? '可用':'不可用'}}</div>
                         <div>开通vip可自定义专属激活码</div>
                     </v-card-text>
+                    <v-card-text v-else>邀请好友后会自动产生</v-card-text>
 
                     <v-divider></v-divider>
 
@@ -42,7 +43,7 @@
                                     text
                                     v-bind="attrs"
                                     v-on="on"
-                                    v-if="user.vip"
+                                    v-if="user.vip && code != null"
                                 >
                                     修改
                                 </v-btn>
@@ -76,6 +77,7 @@
                                        取消
                                     </v-btn>
                                     <v-btn
+                                        v-if="code != null"
                                         :loading="loading"
                                         :disabled="loading"
                                         color="blue darken-1"
@@ -115,7 +117,7 @@ export default {
             userCode:null,
 
             editModal: false,
-            code: "",
+            code: null,
         }
     },
     methods:{

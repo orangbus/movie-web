@@ -67,6 +67,7 @@ let state = {
     parse:[],
     // 检测当前窗口是否是手机端
     isMobile:false,
+    movie_img_height:0,
 }
 
 export default state;

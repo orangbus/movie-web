@@ -1,10 +1,16 @@
 import LocalStorage from "@/util/LocalStorage";
-import {jiexiList, m3u8List, website} from "../api/index";
+import {jiexiList, m3u8List, visitCount, website} from "../api/index";
 import EnumData from "@/util/EnumData";
 import {userInfo} from "@/api/user";
 import {apiList, movieCate} from "@/api/movie"
 
 let actions = {
+	// 访问统计
+	userVisit(){
+		visitCount().then(res=>{
+			console.log(res)
+		});
+	},
 	// 获取网站配置
 	getWebSite({commit}) {
 		website().then(res => {

@@ -54,4 +54,27 @@ https://vue-toastification.maronato.dev/
 
 https://github.com/Maronato/vue-toastification/tree/main#usage
 
+ 点击复制
+```html
+ <v-btn class="ma-2 copy" color="primary" :data-clipboard-text="url" @click="copyUrl">复制地址 </v-btn>
+```
+```javascript
+import Clipboard from "clipboard";
+
+copyUrl() {
+    let clipboard = new Clipboard('.copy')
+    clipboard.on('success', () => {
+        this.$toast.info("已复制播放链接");
+        //  释放内存
+        clipboard.destroy()
+    })
+    clipboard.on('error', () => {
+        // 不支持复制
+        this.$toast.info("该浏览器不支持复制', '错误提示！");
+        // 释放内存
+        clipboard.destroy()
+    })
+},
+```
+
 

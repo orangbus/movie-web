@@ -26,8 +26,22 @@
                 </v-card-title>
 
                 <v-card-text>
-                    <div> 请等待下载全部推送完成后在关闭此窗口</div>
+                    <div class="d-flex justify-lg-space-between">
+                        <v-switch
+                            v-model="isShowUrlList"
+                            @change="showUrlList"
+                            label="显示地址"
+                        ></v-switch>
+                        <v-switch
+                            v-show="isShowUrlList"
+                            v-model="isHideName"
+                            @change="hideName"
+                            label="隐藏标题"
+                        ></v-switch>
+                    </div>
+                    <!--<div> 请等待下载全部推送完成后在关闭此窗口</div>-->
                     <v-list
+                        v-show="!isShowUrlList"
                         subheader
                         two-line
                     >
@@ -60,10 +74,16 @@
                             </v-list-item-action>
                         </v-list-item>
                     </v-list>
+                <!--    地址列表-->
+                    <div v-show="isShowUrlList">
+                        <p
+                        v-for="(item,index) in urlList"
+                        :key="index"
+                        ><span v-show="!isHideName">{{ item.name }},</span>{{ item.url}}</p>
+                    </div>
                 </v-card-text>
 
                 <v-divider></v-divider>
-
                 <v-card-actions>
                     <v-progress-linear v-if="progress > 1" :value="progress"></v-progress-linear>
 
@@ -208,9 +228,31 @@ export default {
             selectedCount: 0, // 总数
             remain: 0, // 剩余
             count: 0,
+
+            isShowUrlList: false, // 显示列表
+            isHideName: false,
+            urlList:[],
         }
     },
     methods: {
+        // 显示链接列表
+        showUrlList(status){
+            let list = [];
+            this.list.forEach(row=>{
+                let temp = {};
+                row.list.forEach(data=>{
+                    temp.name = `${row.title}-${data.name}`;
+                    temp.url = data.url;
+                })
+                list.push(temp)
+            })
+            this.urlList = list;
+            this.isShowUrlList = status;
+        },
+        // 隐藏地址
+        hideName(status){
+            this.isHideName = status;
+        },
         // 解析列表
         parseUrl() {
             this.list = [];

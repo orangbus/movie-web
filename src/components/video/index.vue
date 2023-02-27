@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="xyScrollBar" @scroll="loadMore" id="backTop" >
         <AppHeader
             :tab="tab"
             :tabs="tabs"
@@ -9,82 +9,54 @@
             @clear="clear"
         ></AppHeader>
 
-        <v-app-bar
-            v-if="false"
-            absolute
-            color="#2196F3"
-            dark
-        >
-            <!--背景渐变-->
-            <template v-slot:img="{ props }">
-                <v-img
-                    v-bind="props"
-                    gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"
-                ></v-img>
-            </template>
+        <v-main >
+            <v-container>
+                <!--分类标签-->
+                <div  v-if="cateList.length > 0">
+                    <v-chip
+                        :label="true"
+                        class="ma-2"
+                        :color="item.cid === cate.cid ? 'primary':''"
+                        v-for="(item,index) in cateList"
+                        :key="index"
+                        @click="changeCate(item)"
+                    >
+                        {{ item.name }}
+                    </v-chip>
+                </div>
 
-            <!--首页图标-->
-            <v-app-bar-nav-icon @click="openMenu"></v-app-bar-nav-icon>
-            <!--标题-->
-            <v-app-bar-title>{{ title }}</v-app-bar-title>
+                <!--搜索-->
+                <v-text-field
+                    v-if="isMobile"
+                    v-model="keywords"
+                    label="请输入你的关键词，支持全文搜索"
+                    @keyup.enter="resetData"
+                ></v-text-field>
 
-            <!--搜索-->
-            <v-text-field
-                class=" mt-10 ml-15"
-                flat
-                clearable
-                label="支持全文搜索，电影，演员，类型"
-                prepend-inner-icon="mdi-magnify"
-                solo-inverted
-                v-model="keywords"
-                @keyup.enter="search"
-                @click:clear="clear"
-            ></v-text-field>
+                <!--视频列表-->
+                <VideoList :list="list"></VideoList>
+                <!--分页-->
+                <Page :page="page" :loading="loading" :total="total" @changePage="changePage"></Page>
 
-            <v-spacer></v-spacer>
-
-            <!--历史记录-->
-            <v-btn icon>
-                <v-icon>mdi-history</v-icon>
-            </v-btn>
-
-            <!--个人中心-->
-            <v-btn icon @click="toUser">
-                <v-icon>mdi-account-circle</v-icon>
-            </v-btn>
-
-            <!--导航标签-->
-            <template v-slot:extension>
-                <!--centered-->
-                <v-tabs align-with-title>
-                    <v-tab
-                        v-for="(item,index) in tabs" :key="index"
-                        @click="changeTab(item)"
-                    >{{ item.name }}
-                    </v-tab>
-                </v-tabs>
-            </template>
-        </v-app-bar>
-
-        <v-container style="margin-top: 110px">
-            <!--分类标签-->
-            <div class="text-center" v-if="cateList.length > 0">
-                <v-chip
-                    class="ma-2"
-                    :color="item.cid === cate.cid ? 'primary':''"
-                    v-for="(item,index) in cateList"
-                    :key="index"
-                    @click="changeCate(item)"
+                <!--到顶部-->
+                <v-btn
+                    v-if="showTop"
+                    class="mx-3"
+                    fab
+                    fixed
+                    right
+                    dark
+                    large
+                    :bottom="true"
+                    color="primary"
+                    @click="toTop"
                 >
-                    {{ item.name }}
-                </v-chip>
-            </div>
-
-            <!--视频列表-->
-            <VideoList :list="list"></VideoList>
-            <!--分页-->
-            <Page :loading="loading" :total="total" @changePage="changePage"></Page>
-        </v-container>
+                    <v-icon dark>
+                        mdi-format-vertical-align-top
+                    </v-icon>
+                </v-btn>
+            </v-container>
+        </v-main>
     </div>
 </template>
 
@@ -102,6 +74,7 @@ export default {
     },
     data() {
         return {
+            showTop:false,
             drawer: false,
             title: "聚合搜索",
 
@@ -115,6 +88,7 @@ export default {
             page: 1,
             total: 0,
             loading: true,
+            isEnd: false,
             list: [],
         }
     },
@@ -135,12 +109,22 @@ export default {
             this.cate = cate;
             this.search();
         },
+        getApi(){
+            this.tabs.push( {id:0,name:"推荐"});
+            apiList().then(res=>{
+                this.tabs.push(...res.data);
+            });
+        },
 
+        // 搜索
         search(keywords) {
             this.keywords = keywords;
+            this.resetData();
+        },
+        resetData(){
             this.page = 1;
-            this.total = 0;
             this.list = [];
+            this.total = 0;
             this.getData();
         },
         clear() {
@@ -155,6 +139,7 @@ export default {
         },
         getData() {
             this.loading = true;
+            this.list = [];
             videoList({
                 page: this.page,
                 limit: this.setting.limit,
@@ -165,19 +150,44 @@ export default {
                 this.loading = false;
                 let {total, data} = res;
                 this.total = total;
-                this.list = data;
-            });
-        },
-        getApi(){
-            this.tabs.push( {id:0,name:"推荐"});
-            apiList().then(res=>{
-                this.tabs.push(...res.data);
-            });
-        },
+                this.setting.showPage ? this.list= data : this.list.push(...data);
 
+                // 简单提示
+                if (this.page === 1 && this.keywords === "" && res.data.length === 0){
+                    this.$toast.info("暂无数据，可点击右上角切换一个数据源！");
+                }
+
+                // 到底了提示
+                if (data.length === 0){
+                    this.isEnd = true;
+                    this.$toast.success("到底啦！");
+                }else{
+                    this.isEnd = false;
+                }
+            });
+        },
+        loadMore(event) {
+            if (this.setting.showPage){
+                return false;
+            }
+            //vue中获取滚动条到底部的距离
+            let scrollBottom = event.target.scrollHeight - event.target.scrollTop - event.target.clientHeight;
+            // 显示到顶部
+            this.showTop = event.target.scrollTop > 1000;
+
+            //以下三个条件不执行数据加载：1.数据正在加载的状态，2.已经到底了，3.滚动条距离底部的距离小于100px
+            if (!this.loading && !this.isEnd && scrollBottom < 100) {
+                this.loading = true;
+                this.page +=1;
+                this.getData();
+            }
+        },
+        toTop(){
+            document.getElementById("backTop").scrollTop = -100;
+        }
     },
     computed: {
-        ...mapState(["setting"])
+        ...mapState(["setting","isMobile"])
     }
 }
 </script>

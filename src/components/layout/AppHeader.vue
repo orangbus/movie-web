@@ -1,6 +1,7 @@
 <template>
     <div>
         <v-app-bar
+            app
             absolute
             color="#2196F3"
             dark
@@ -78,9 +79,8 @@
             </template>
         </v-app-bar>
 
-        <!--侧边栏-->
+        <!--侧边栏 absolute floating-->
         <v-navigation-drawer
-            v-if="drawer"
             v-model="drawer"
             absolute
             temporary
@@ -246,7 +246,6 @@ export default {
             headerNotice: false,
 
             searchList:["/user","/notice","/photo"], // 排除不需要搜索的页面
-
         }
     },
     created() {

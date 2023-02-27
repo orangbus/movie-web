@@ -1,7 +1,7 @@
 <template>
     <div>
         <AppHeader></AppHeader>
-        <v-main style="margin-top: 80px">
+        <v-main >
         <v-container>
             <v-row>
                 <v-col cols="12"
@@ -53,7 +53,6 @@
                 </v-card>
             </v-dialog>
         </v-container>
-
             <!--到顶部-->
             <v-btn
                 v-if="list.length > 20"

@@ -78,4 +78,12 @@ export function register(data={}) {
 	return axios.post(baseUrl("register"),data);
 }
 
+/**
+ * 访问统计
+ */
+export function visitCount(data={}) {
+	return axios.get(baseUrl("visit"),data);
+}
+
+
 

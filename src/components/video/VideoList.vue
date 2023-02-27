@@ -1,7 +1,9 @@
 <template>
-    <div>
-        <v-row>
+    <div >
+        <v-row :dense="isMobile">
+
             <v-col
+                cols="6"
                 v-bind="grid"
                 v-for="(item,index) in list"
                 :key="index"
@@ -10,15 +12,15 @@
                     <v-card
                         :elevation="hover ? 12 : 2"
                         :class="{ 'on-hover': hover }"
+                        @click="openPlayer(item)"
                     >
                         <v-img
                             :lazy-src="item.vod_pic"
-                            max-height="300"
-                            min-height="300"
+                            :max-height="movie_img_height"
+                            :min-height="movie_img_height"
                             max-width="100%"
                             :src="item.vod_pic"
                             class="text-pointer"
-                            @click="openPlayer(item)"
                         >
                             <div class="d-flex justify-end white--text text-pointer">
                                   <v-card-title>{{ item.category }}</v-card-title>
@@ -32,10 +34,10 @@
                     </v-card>
                 </v-hover>
             </v-col>
+
         </v-row>
 
         <v-row>
-
             <!-- hide-overlay -->
             <v-dialog
                 v-model="dialog"
@@ -122,7 +124,14 @@ export default {
         }
     },
     computed:{
-        ...mapState(["isMobile"])
+        ...mapState(["isMobile"]),
+        movie_img_height(){
+            let height = 320;
+            if (this.isMobile){
+                height = 230
+            }
+            return  height;
+        }
     }
 
 }

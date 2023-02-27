@@ -1,12 +1,9 @@
 <template>
-    <div class="body-bg">
-        <v-app>
-            <!--<v-main>-->
+        <v-app style="background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);">
                 <router-view v-if="!$route.meta.keepAlive"></router-view>
                 <keep-alive>
                     <router-view v-if="$route.meta.keepAlive"></router-view>
                 </keep-alive>
-            <!--</v-main>-->
 
             <!--全局公告-->
             <v-dialog
@@ -40,7 +37,6 @@
                 </v-card>
             </v-dialog>
         </v-app>
-    </div>
 </template>
 
 <script>
@@ -57,7 +53,7 @@ export default {
     },
     mounted() {
         this.onResize()
-        window.addEventListener('resize', this.onResize, { passive: true })
+        window.addEventListener('resize', this.onResize, { passive: true });
     },
     watch:{
         isMobile(result){
@@ -65,6 +61,8 @@ export default {
         }
     },
     created() {
+        // 访问统计
+        this.$store.dispatch("userVisit");
         // 本站须知
         if (LocalStorage.get("know") === null){
             this.dialog = true;
@@ -118,7 +116,7 @@ export default {
     methods:{
         ...mapMutations(["setIsMobile"]),
         onResize () {
-            this.isMobile = window.innerWidth < 600
+            this.isMobile = window.innerWidth < 600;
         },
         confirm(){
             LocalStorage.set("know",true);

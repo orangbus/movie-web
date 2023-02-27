@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="xyScrollBar" @scroll="loadMore" id="backTop">
         <AppHeader
             :tab="tab"
             :tabs="tabs"
@@ -8,15 +8,39 @@
             @changeTab="changeTab"
         ></AppHeader>
 
-        <v-container style="margin-top: 100px">
+        <v-main>
             <!--手机端搜索-->
+            <v-text-field
+                v-if="isMobile"
+                v-model="keywords"
+                label="请输入你的关键词，支持全文搜索"
+                @keyup.enter="resetData"
+            ></v-text-field>
 
             <!--内容-->
             <MovieList :list="list"></MovieList>
 
             <!--分页-->
             <Page :loading="loading" :total="total" @changePage="changePage"></Page>
-        </v-container>
+
+            <!--到顶部-->
+            <v-btn
+                v-if="showTop"
+                class="mx-3"
+                fab
+                fixed
+                right
+                dark
+                large
+                :bottom="true"
+                color="primary"
+                @click="toTop"
+            >
+                <v-icon dark>
+                    mdi-format-vertical-align-top
+                </v-icon>
+            </v-btn>
+        </v-main>
     </div>
 </template>
 
@@ -34,7 +58,9 @@ export default {
     },
     data() {
         return {
+            showTop: false,
             drawer: false,
+            isEnd: false,
             title: "聚合搜索",
 
             tab: 0,
@@ -75,11 +101,13 @@ export default {
         },
         resetData(){
             this.page = 1;
+            this.total = 0;
             this.list = [];
             this.getData();
         },
         getData() {
             this.loading = true;
+            this.list = [];
             movieSearch({
                 type: this.tab,
                 page: this.page,
@@ -88,10 +116,40 @@ export default {
             }).then(res => {
                 this.loading = false;
                 let {data, total} = res;
-                this.list = data;
                 this.total = total;
+                this.setting.showPage ? this.list= data : this.list.push(...data);
+                // 简单提示
+                if (this.page === 1 && this.keywords === "" && res.data.length === 0){
+                    this.$toast.info("暂无数据，可点击右上角切换一个数据源！");
+                }
+                // 到底了提示
+                if (data.length === 0){
+                    this.isEnd = true;
+                    this.$toast.success("到底啦！");
+                }else{
+                    this.isEnd = false;
+                }
             });
         },
+        loadMore(event) {
+            if (this.setting.showPage){
+                return false;
+            }
+            //vue中获取滚动条到底部的距离
+            let scrollBottom = event.target.scrollHeight - event.target.scrollTop - event.target.clientHeight;
+            // 显示到顶部
+            this.showTop = event.target.scrollTop > 1000;
+            //以下三个条件不执行数据加载：1.数据正在加载的状态，2.已经到底了，3.滚动条距离底部的距离小于100px
+            if (!this.loading && !this.isEnd && scrollBottom < 100) {
+                this.loading = true;
+                this.page +=1;
+                this.getData();
+            }
+        },
+        toTop(){
+            document.getElementById("backTop").scrollTop = -100;
+        },
+
         // 打开菜单
         openMenu() {
             if (this.authorization) {
@@ -110,7 +168,7 @@ export default {
         },
     },
     computed: {
-        ...mapState(["setting"])
+        ...mapState(["setting","isMobile"])
     }
 }
 </script>

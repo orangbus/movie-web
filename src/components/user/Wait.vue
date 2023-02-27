@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="xyScrollBar" id="backTop" @scroll="loadMore">
         <v-row>
             <v-col cols="12" class="d-flex">
                 <v-btn
@@ -19,9 +19,9 @@
             </v-col>
         </v-row>
 
-        <div class="xyScrollBar" @scroll="loadMore">
-        <v-row>
+        <v-row dense>
             <v-col
+                class="m-0"
                 v-for="(item,index) in list"
                 :key="index"
                 cols="12"
@@ -33,14 +33,15 @@
                             size="155"
                             tile
                             rounded
+                            @click="playerMovie(item)"
                         >
                             <v-img class="border-radius" :src="item.movie ? item.movie.vod_pic: ''"></v-img>
                         </v-avatar>
 
                         <div class="w-full">
-                            <v-card-title class="pt-0"><span class="text-two-line">{{ item.movie? item.movie.vod_name: '' }}</span></v-card-title>
+                            <v-card-title class="pt-0"><span @click="playerMovie(item)" class="text-two-line">{{ item.movie? item.movie.vod_name: '' }}</span></v-card-title>
 
-                            <v-card-subtitle class="py-0">
+                            <v-card-subtitle class="py-0" @click="playerMovie(item)">
                                 <p class="my-0 py-0">{{ item.movie ? item.movie.type_name: '' }}</p>
                                 <p class="my-0 py-0">{{ item.updated_at }}</p>
                             </v-card-subtitle>
@@ -59,7 +60,7 @@
                                     outlined
                                     small
                                     color="error"
-                                    @click="unCollect(item)"
+                                    @click="unCollect(item,index)"
                                 >
                                     删除
                                 </v-btn>
@@ -74,7 +75,23 @@
                 <Page :loading="loading" :total="total" @changePage="changePage"></Page>
             </v-col>
         </v-row>
-        </div>
+        <!--到顶部-->
+        <v-btn
+            v-if="showTop"
+            class="mx-3"
+            fab
+            fixed
+            right
+            dark
+            large
+            :bottom="true"
+            color="primary"
+            @click="toTop"
+        >
+            <v-icon dark>
+                mdi-format-vertical-align-top
+            </v-icon>
+        </v-btn>
 
         <!--播放器-->
         <v-row>
@@ -123,6 +140,7 @@ export default {
     },
     data() {
         return{
+            showTop:false,
             dialog:false,
             movie: {},
 
@@ -187,6 +205,11 @@ export default {
                 this.page +=1;
                 this.getData();
             }
+            // 显示到顶部
+            this.showTop = event.target.scrollTop > 1000;
+        },
+        toTop(){
+            document.getElementById("backTop").scrollTop = -100;
         },
 
         playerMovie(item){
@@ -197,11 +220,12 @@ export default {
             this.movie = item.movie;
             this.dialog = true;
         },
-        unCollect(item){
+        unCollect(item,index){
             movieWaitDelete({
                 id:item.id
             }).then(res=>{
                 if (res.code === 200){
+                    this.list.splice(index,1);
                     this.$toast.success(res.msg)
                 }else{
                     this.$toast.error(res.msg)

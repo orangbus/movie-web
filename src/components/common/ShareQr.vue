@@ -7,7 +7,6 @@
                        v-on="on"
                        @click="dialog = true">
                     <v-icon>mdi-qrcode-plus</v-icon>
-                    <!--{{ // user.vip ? '会员':'普通用户' }}-->
                 </v-btn>
             </template>
             <span>推广码</span>
@@ -25,26 +24,31 @@
                 <div>
                     <div class="pt-3 px-3 pb-1">
                         <div class="my-2 ">
-                            <v-alert
-                                border="left"
-                                colored-border
-                                color="deep-purple accent-4"
-                                elevation="2"
-                            >
-                                <p>规则说明：</p>
-                                <p>邀请一个好友即可获得7天会员奖励，可累加</p>
-                            </v-alert>
+                            <p>规则说明：</p>
+                            <p>邀请一个好友即可获得7天会员奖励，可累加</p>
                         </div>
                         <div class="text-center">
                             <VueQr :text="registerUrl"></VueQr>
                         </div>
                         <div  class="my-2 text-center">
-                            推荐码：{{ user.code }}
+                            <p>推荐码：{{ user.code }}</p>
+                            <p>邀请链接：{{ registerUrl}}</p>
+
                         </div>
                     </div>
                 </div>
 
                 <v-card-actions>
+                    <v-btn
+                        class="copy"
+                        color="blue blue-1"
+                        text
+                        data-clipboard-action="copy"
+                        :data-clipboard-text="registerUrl"
+                        @click="copyUrl"
+                    >
+                        复制邀请链接
+                    </v-btn>
                     <v-spacer></v-spacer>
                     <v-btn
                         color="green darken-1"
@@ -73,6 +77,7 @@ import {mapState} from "vuex";
 import {couponStore} from "@/api/coupon";
 import Tool from "@/util/Tool";
 import VueQr from "vue-qr";
+import Clipboard from "clipboard";
 
 const base_url = process.env.VUE_APP_WEB_URL;
 
@@ -105,10 +110,27 @@ export default {
                     this.$toast.error(res.msg);
                 }
             });
+        },
+
+        // 复制邀请链接
+        copyUrl(){
+            let clipboard = new Clipboard('.copy')
+            clipboard.on('success', () => {
+                this.$toast.info("复制成功");
+                //  释放内存
+                clipboard.destroy()
+            })
+            clipboard.on('error', () => {
+                // 不支持复制
+                this.$toast.info("该浏览器不支持复制', '错误提示！");
+                // 释放内存
+                clipboard.destroy()
+            })
         }
     },
     computed:{
         ...mapState(["user","website"]),
+        // 邀请链接
         registerUrl(){
             let code = this.user.code;
             return base_url+"/#/login?code="+code;
