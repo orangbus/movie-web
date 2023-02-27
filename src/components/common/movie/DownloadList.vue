@@ -78,6 +78,13 @@
                     <v-btn
                         color="primary"
                         text
+                        @click="downloadText2"
+                    >
+                        格式2下载
+                    </v-btn>
+                    <v-btn
+                        color="primary"
+                        text
                         @click="downloadText"
                     >
                         立即下载
@@ -298,6 +305,30 @@ export default {
                     item.list.forEach(data=>{
                         if (data.selected){
                             textArray.push(`${item.title}-${data.name},${data.url}`);
+                        }
+                    })
+                }
+
+                let str = new Blob([textArray.join("\r\n")],{
+                    type: "text/plain;charset=utf-8"
+                })
+                saveAs(str,`下载列表.txt`);
+            }else{
+                this.$toast.error("暂无下载");
+            }
+        },
+        // 模式2 下载
+        downloadText2(){
+            let list = this.list;
+
+            let textArray = [];
+            if (list.length > 0){
+                for (let index = 0; index < list.length; index++) {
+                    let item = list[index];
+
+                    item.list.forEach(data=>{
+                        if (data.selected){
+                            textArray.push(`${data.url} ${item.title}-${data.name}.mp4`);
                         }
                     })
                 }
