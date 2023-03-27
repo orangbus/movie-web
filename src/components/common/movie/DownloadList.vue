@@ -98,6 +98,13 @@
                     <v-btn
                         color="primary"
                         text
+                        @click="downloadText(2)"
+                    >
+                        地址+标题
+                    </v-btn>
+                    <v-btn
+                        color="primary"
+                        text
                         @click="downloadText"
                     >
                         立即下载
@@ -195,6 +202,7 @@ import TransformUrl from "@/util/TransformUrl";
 import {checkStatus, pushDownload} from "@/api/download";
 import {mapState} from "vuex";
 import {saveAs} from 'file-saver';
+import Tool from "@/util/Tool";
 
 export default {
     name: "MovieDownload",
@@ -225,6 +233,11 @@ export default {
             isShowUrlList: false, // 显示列表
             isHideName: false,
             urlList:[],
+        }
+    },
+    watch:{
+        movieList(list){
+            this.list = list;
         }
     },
     methods: {
@@ -328,18 +341,28 @@ export default {
             return (remain / total) * 100;
         },
 
-        // 转化为文本下载
-        downloadText(){
+        // 转化为文本下载 ,1:标题 + 地址，2：地址+标题
+        downloadText(type=1){
             let list = this.list;
 
             let textArray = [];
             if (list.length > 0){
                 for (let index = 0; index < list.length; index++) {
                     let item = list[index];
+                    let name = "";
 
                     item.list.forEach(data=>{
                         if (data.selected){
-                            textArray.push(`${item.title}-${data.name},${data.url}`);
+                            let url = data.url.replace("'",""); // 视频地址
+                            switch (type) {
+                                case 2:
+                                   name = Tool.removeSpace(`${item.title}-${data.name}.mp4`)
+                                    textArray.push(`${url} ${name}`);
+                                    break;
+                                default:
+                                    name = Tool.removeSpace(`${item.title}-${data.name}`)
+                                    textArray.push(`${name},${url}`);
+                            }
                         }
                     })
                 }

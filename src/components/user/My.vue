@@ -1,24 +1,6 @@
 <template>
     <div>
         <v-container>
-            <!--<v-row>-->
-            <!--    <v-col cols="12">-->
-            <!--        <v-row>-->
-            <!--            <v-col-->
-            <!--                v-for="(item,index) in appList"-->
-            <!--                :key="index"-->
-            <!--                cols="12"-->
-            <!--                v-bind="navGrid">-->
-            <!--                <v-hover v-slot="{ hover }">-->
-            <!--                    <v-card :elevation="hover ? 12 : 2" @click="toPage(item)" class="text-pointer">-->
-            <!--                        <v-card-title>{{ item.name }}</v-card-title>-->
-            <!--                        <v-card-subtitle>{{ item.desc }}</v-card-subtitle>-->
-            <!--                    </v-card>-->
-            <!--                </v-hover>-->
-            <!--            </v-col>-->
-            <!--        </v-row>-->
-            <!--    </v-col>-->
-            <!--</v-row>-->
             <v-row dense>
                 <v-col v-bind="grid" cols="12">
                     <v-alert
@@ -33,7 +15,7 @@
                         <p>api_token：{{ user.api_token }}</p>
                         <div class="d-flex justify-space-between align-end">
                             <div>
-                                到期时间：{{ user.vip_etime === 0 ? "不限" : Tool.transformTimestamp(user.vip_etime) }}
+                                到期时间：{{ user.vip_etime === 0 ? "不限" : Tool.transformTimestamp(user.vip_etime).substring(0,10) }}
                             </div>
                             <div class="d-flex ">
                                 <ActiveCode></ActiveCode>
@@ -57,15 +39,7 @@
                         <p>视频解析：{{ setting.jiexi ? setting.jiexi.name : '无' }}</p>
                         <p>m3u8解析：{{ setting.parse ? setting.parse.name : '无' }}
                             (当视频未使用加速播放时，使用该接口进行加速播放)</p>
-                    </v-alert>
-                </v-col>
-                <v-col v-bind="grid" cols="12">
-                    <v-alert
-                        border="top"
-                        colored-border
-                        color="blue"
-                        elevation="2"
-                    >
+
                         <div class="text-center text-h5">视频更新规则</div>
                         <p>【默认接口】每天中午 12：00 更新</p>
                         <p>【其他数据源】 每天晚上 8:00 更新</p>
@@ -89,6 +63,10 @@
                         <p>4、本站基于vue开发，如果页面有所卡顿，可刷新一下浏览器。</p>
                         <p>5、如果你有好的创意好意见，欢迎到群反馈</p>
                         <p>6、建议看到喜欢的视频加入收藏，后期可生成m3u8播放链接</p>
+                        <p> 推荐一个小巧的下载器
+                            <a href="https://github.com/oopsguy/m3u8" target="_blank">https://github.com/oopsguy/m3u8</a>
+                            搭配本站资源列表，资源卡顿也能流畅播放
+                        </p>
                     </v-alert>
                 </v-col>
             </v-row>
@@ -115,7 +93,10 @@ export default {
                 lg: 6,
                 md: 6,
                 sm: 12,
-                xs: 12
+                xs: 12,
+                offsetXl:3,
+                offsetLg:3,
+                offsetMd:3,
             },
             navGrid:{
                 xl: 3,
