@@ -36,7 +36,7 @@
                                 <div>{{ item.vod_remarks }}</div>
                                 <div>{{ item.updated_at }}</div>
                                  </span>
-                                <div class="d-flex justify-lg-space-between mt-2" v-if="authorization">
+                                <div class="d-flex justify-space-between mt-2" v-if="authorization">
                                     <v-tooltip bottom>
                                         <template v-slot:activator="{ on, attrs }">
                                             <div @click="collect(item)"

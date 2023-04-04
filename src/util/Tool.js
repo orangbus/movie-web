@@ -39,7 +39,13 @@ const Tool = {
         let list = [];
         list.push(country,region,city)
         return list.join("-")
-    }
+    },
 
+    /**
+     * 去除空格
+     */
+    removeSpace(str=""){
+        return str.replaceAll("/\\s*/g","");
+    }
 }
 export default Tool

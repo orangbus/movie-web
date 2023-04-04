@@ -98,9 +98,9 @@
                     <v-btn
                         color="primary"
                         text
-                        @click="downloadText2"
+                        @click="downloadText(2)"
                     >
-                        格式2下载
+                        地址+标题
                     </v-btn>
                     <v-btn
                         color="primary"
@@ -202,6 +202,7 @@ import TransformUrl from "@/util/TransformUrl";
 import {checkStatus, pushDownload} from "@/api/download";
 import {mapState} from "vuex";
 import {saveAs} from 'file-saver';
+import Tool from "@/util/Tool";
 
 export default {
     name: "MovieDownload",
@@ -232,6 +233,11 @@ export default {
             isShowUrlList: false, // 显示列表
             isHideName: false,
             urlList:[],
+        }
+    },
+    watch:{
+        movieList(list){
+            this.list = list;
         }
     },
     methods: {
@@ -343,34 +349,20 @@ export default {
             if (list.length > 0){
                 for (let index = 0; index < list.length; index++) {
                     let item = list[index];
+                    let name = "";
 
                     item.list.forEach(data=>{
                         if (data.selected){
-                            textArray.push(`${item.title}-${data.name},${data.url}`);
-                        }
-                    })
-                }
-
-                let str = new Blob([textArray.join("\r\n")],{
-                    type: "text/plain;charset=utf-8"
-                })
-                saveAs(str,`下载列表.txt`);
-            }else{
-                this.$toast.error("暂无下载");
-            }
-        },
-        // 模式2 下载
-        downloadText2(){
-            let list = this.list;
-
-            let textArray = [];
-            if (list.length > 0){
-                for (let index = 0; index < list.length; index++) {
-                    let item = list[index];
-
-                    item.list.forEach(data=>{
-                        if (data.selected){
-                            textArray.push(`${data.url} ${item.title}-${data.name}.mp4`);
+                            let url = data.url.replace("'",""); // 视频地址
+                            switch (type) {
+                                case 2:
+                                   name = Tool.removeSpace(`${item.title}-${data.name}.mp4`)
+                                    textArray.push(`${url} ${name}`);
+                                    break;
+                                default:
+                                    name = Tool.removeSpace(`${item.title}-${data.name}`)
+                                    textArray.push(`${name},${url}`);
+                            }
                         }
                     })
                 }
