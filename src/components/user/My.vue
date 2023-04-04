@@ -89,14 +89,14 @@ export default {
         return {
             Tool,
             grid: {
-                xl: 6,
-                lg: 6,
-                md: 6,
+                xl: 8,
+                lg: 8,
+                md: 8,
                 sm: 12,
                 xs: 12,
-                offsetXl:3,
-                offsetLg:3,
-                offsetMd:3,
+                offsetXl:2,
+                offsetLg:2,
+                offsetMd:2,
             },
             navGrid:{
                 xl: 3,
