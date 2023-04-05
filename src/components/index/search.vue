@@ -107,7 +107,6 @@ export default {
         },
         getData() {
             this.loading = true;
-            this.list = [];
             movieSearch({
                 type: this.tab,
                 page: this.page,
@@ -117,7 +116,7 @@ export default {
                 this.loading = false;
                 let {data, total} = res;
                 this.total = total;
-                this.setting.showPage ? this.list= data : this.list.push(...data);
+                this.setting.showPage === true ? this.list= data : this.list.push(...data);
                 // 简单提示
                 if (this.page === 1 && this.keywords === "" && res.data.length === 0){
                     this.$toast.info("暂无数据，可点击右上角切换一个数据源！");

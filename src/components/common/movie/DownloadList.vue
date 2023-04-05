@@ -341,11 +341,23 @@ export default {
             return (remain / total) * 100;
         },
 
-        // 转化为文本下载 ,1:标题 + 地址，2：地址+标题
+        // 转化为文本下载
         downloadText(type=1){
             let list = this.list;
 
             let textArray = [];
+             textArray.push(`accept: */*`);
+             textArray.push(`accept-encoding: gzip, deflate, br`);
+             textArray.push(`accept-language: zh-CN,zh;q=0.9,en;q=0.8`);
+             textArray.push(`cache-control: no-cache`);
+             textArray.push(`dnt: 1`);
+             textArray.push(`pragma: no-cache`);
+             textArray.push(`sec-fetch-dest: empty`);
+             textArray.push(`sec-fetch-mode: cors`);
+             textArray.push(`sec-fetch-site: same-origin`);
+             textArray.push(`user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36`);
+             textArray.push(`Cookie: _ga=GA1.2.731507251.1543905232; _octo=GH1.1.1349689180.1543905232;`);
+
             if (list.length > 0){
                 for (let index = 0; index < list.length; index++) {
                     let item = list[index];
@@ -366,7 +378,6 @@ export default {
                         }
                     })
                 }
-
                 let str = new Blob([textArray.join("\r\n")],{
                     type: "text/plain;charset=utf-8"
                 })

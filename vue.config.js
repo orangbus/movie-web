@@ -15,22 +15,6 @@ module.exports = {
 					'^/api': ''
 				}
 			},
-			'/info': {
-				target: "http://localhost:8787/info",
-				secure: false,  // 如果是https接口，需要配置这个参数
-				changeOrigin: true, //是否跨域
-				pathRewrite: {
-					'^/info': ''
-				}
-			},
-			'/push': {
-				target: "http://localhost:8787",
-				secure: false,  // 如果是https接口，需要配置这个参数
-				changeOrigin: true, //是否跨域
-				pathRewrite: {
-					'^/push': ''
-				}
-			}
 		},
 	},
 }

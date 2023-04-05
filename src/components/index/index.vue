@@ -219,9 +219,16 @@ export default {
             if (this.authorization){
                 // 是否选择了一个源
                 if (!this.movieApi.id){
-                    this.$toast.success("请点击右上角选择一个数据源");
-                    this.loading = false;
-                    return;
+					// 获取默认的数据源
+                    let movieApi = this.movieApiList.find(item=>item.default === 1);
+
+					if (movieApi){
+						this.setMovieApi(movieApi);
+                    }else{
+						this.$toast.success("请点击右上角选择一个数据源");
+						this.loading = false;
+						return;
+                    }
                 }
                 movieList({
                     page:this.page,
@@ -299,7 +306,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(["movieType","user","authorization","movieApi","setting","movieHistoryCate","isMobile"]),
+        ...mapState(["movieType","user","authorization","movieApi","setting","movieHistoryCate","isMobile","movieApiList"]),
     }
 }
 </script>
