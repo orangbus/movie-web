@@ -1,5 +1,5 @@
 import LocalStorage from "@/util/LocalStorage";
-import {jiexiList, m3u8List, visitCount, website} from "../api/index";
+import {jiexiList, m3u8List, noticeList, visitCount, website} from "../api/index";
 import EnumData from "@/util/EnumData";
 import {userInfo} from "@/api/user";
 import {apiList, movieCate} from "@/api/movie"
@@ -17,6 +17,16 @@ let actions = {
 			if (res.data != null) {
 				LocalStorage.set(EnumData.website, res.data);
 				commit("setWebsite", res.data)
+			}
+		});
+	},
+
+	// 获取最新消息
+	getNotice({commit}) {
+		noticeList().then(res => {
+			if (res.data != null) {
+				LocalStorage.set(EnumData.noticeList, res.data);
+				commit("setNotice", res.data)
 			}
 		});
 	},

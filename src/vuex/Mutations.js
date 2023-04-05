@@ -162,6 +162,14 @@ let mutations = {
     setM3u8List(state, data){
         state.parse = data;
         LocalStorage.set(EnumData.m3u8List,data);
+    },
+
+    /**
+     * 最新消息
+     */
+    setNotice(state, data){
+        state.noticeList = data;
+        LocalStorage.set(EnumData.noticeList,data);
     }
 
 }

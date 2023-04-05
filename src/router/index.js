@@ -150,7 +150,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
 	let from_url = from.fullPath;
-	if (to.meta.required) {
+	if (to.meta.required && to.path != "/login") {
 		let token = LocalStorage.get("access_token");
 		if (!token) {
 			return next("/login?redirect=" + encodeURI(from_url));

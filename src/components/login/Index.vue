@@ -129,11 +129,11 @@ export default {
       }
     },
     mounted() {
-        if (this.authorization){
-            this.$router.push({
-                path:"/user"
-            })
-        }
+        // if (this.authorization){
+        //     this.$router.push({
+        //         path:"/user"
+        //     })
+        // }
     },
     methods:{
         userLogin(){

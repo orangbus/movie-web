@@ -68,6 +68,9 @@ let state = {
     // 检测当前窗口是否是手机端
     isMobile:false,
     movie_img_height:0,
+
+    // 最新消息
+    noticeList:[],
 }
 
 export default state;

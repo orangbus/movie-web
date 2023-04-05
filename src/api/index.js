@@ -51,14 +51,7 @@ export function m3u8List(params = {}) {
 export function movieDetail(id) {
 	return axios.get(baseUrl("detail/"+id));
 }
-//
-// /**
-//  * 电影接口
-//  * @returns {Promise<AxiosResponse<any>>}
-//  */
-// export function movieApiList() {
-// 	return axios.get(baseUrl("apiList"));
-// }
+
 
 /**
  * 网站配置
@@ -83,6 +76,13 @@ export function register(data={}) {
  */
 export function visitCount(data={}) {
 	return axios.get(baseUrl("visit"),data);
+}
+
+/**
+ * 最新消息
+ */
+export function noticeList(data={}) {
+	return axios.get(baseUrl("notice"),data);
 }
 
 

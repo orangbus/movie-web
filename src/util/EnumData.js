@@ -17,6 +17,8 @@ export default {
 	m3u8List:"m3u8List",
 	// 邀请好友
 	inviteCode: "inviteCode",
+	// 最新消息
+	noticeList: "noticeList",
 
 	// 加载中的样式
 	loadingCircle:0,
