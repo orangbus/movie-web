@@ -21,7 +21,7 @@
             <v-app-bar-title><span class="text-pointer" @click="toHome">{{ website.name }}</span></v-app-bar-title>
             <!--搜索-->
             <v-text-field
-                v-if="!isMobile && userSearch"
+                v-if="!isMobile && userSearch && showSearch"
                 class=" mt-10 ml-15"
                 flat
                 clearable
@@ -70,11 +70,12 @@
             <!--导航标签-->
             <template v-slot:extension v-if="tabs.length > 0">
                 <!--centered-->
-                <v-tabs align-with-title >
+                <v-tabs align-with-title>
                     <v-tab
                         v-for="(item,index) in tabs" :key="index"
                         @click="changeTab(item)"
-                    >{{ item.name }}</v-tab>
+                    >{{ item.name }}
+                    </v-tab>
                 </v-tabs>
             </template>
         </v-app-bar>
@@ -103,7 +104,15 @@
                             <v-icon>mdi-video-image</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content>
-                            <v-list-item-title >视频</v-list-item-title>
+                            <v-list-item-title>视频</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item link to="/movie/cate" v-if="user.vip">
+                        <v-list-item-icon>
+                            <v-icon>mdi-video-image</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <v-list-item-title>视频分类</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
 
@@ -112,7 +121,7 @@
                             <v-icon>mdi-list-box-outline</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content>
-                            <v-list-item-title >文章</v-list-item-title>
+                            <v-list-item-title>文章</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
 
@@ -121,28 +130,28 @@
                             <v-icon>mdi-image-outline</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content>
-                            <v-list-item-title >图片</v-list-item-title>
+                            <v-list-item-title>图片</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
 
                     <!--分割线-->
-                    <v-divider class="my-1" />
+                    <v-divider class="my-1"/>
                     <v-list-item link to="/code">
                         <v-list-item-icon>
                             <v-icon>mdi-qrcode-plus</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content>
-                            <v-list-item-title >活码</v-list-item-title>
+                            <v-list-item-title>活码</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
                     <!--通知公告-->
-                    <v-divider class="my-1" />
+                    <v-divider class="my-1"/>
                     <v-list-item link to="/notice">
                         <v-list-item-icon>
                             <v-icon>mdi-message-reply-text-outline</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content>
-                            <v-list-item-title >公告</v-list-item-title>
+                            <v-list-item-title>公告</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
 
@@ -164,7 +173,7 @@
                     <!--</v-list-item>-->
 
                     <!--分割线-->
-                    <v-divider class="my-1" />
+                    <v-divider class="my-1"/>
 
                 </v-list-item-group>
             </v-list>
@@ -187,188 +196,191 @@ import {articleCate} from "@/api/article";
 
 
 export default {
-    name: "Header",
-    props:{
-        tab:{
-            type:Number,
-            default:()=>0
-        },
-        tabs:{
-            type: Array,
-            default:()=> {
-                // {type: 0, name: '我的'},
-                return []
-            }
-        },
-        // 搜索关键词
-        keywords:{
-            type:String,
-            default:()=>""
-        },
-        placeholder:{
-            type:String,
-            default:()=> "请输入你的关键词"
-        },
+	name: "Header",
+	props: {
+		tab: {
+			type: Number,
+			default: () => 0
+		},
+		tabs: {
+			type: Array,
+			default: () => {
+				// {type: 0, name: '我的'},
+				return []
+			}
+		},
+		showSearch: {
+			type: Boolean,
+			default: () => true
+		},
+		// 搜索关键词
+		keywords: {
+			type: String,
+			default: () => ""
+		},
+		placeholder: {
+			type: String,
+			default: () => "请输入你的关键词"
+		},
 
-    },
-    components:{
-        Logout,Coupon,ShareQr,Profile,Setting,MovieApi,ArticleCateList
-    },
-    data() {
-        return {
-            // 左侧菜单
-            drawer: false,
+	},
+	components: {
+		Logout, Coupon, ShareQr, Profile, Setting, MovieApi, ArticleCateList
+	},
+	data() {
+		return {
+			// 左侧菜单
+			drawer: false,
 
-            // 电影设置
-            setting:{},
+			// 电影设置
+			setting: {},
 
-            // 文章 - 分类
-            cateData:[], // 临时分类
-            cateList:[],
-            cate:{},
+			// 文章 - 分类
+			cateData: [], // 临时分类
+			cateList: [],
+			cate: {},
 
-            path: "", // 当前页面内
-            // 电影导航
-            headerMovie: false,
-            // 聚合搜索
-            headerSearch: false,
-            // 用户导航
-            headerUser: false,
-            // 文章
-            headerArticle: false,
-            // 图片
-            headerPhoto: false,
-            // 活码
-            headerLiveCode:false,
-            // 视频
-            headerVideo: false,
-            // 公告
-            headerNotice: false,
+			path: "", // 当前页面内
+			// 电影导航
+			headerMovie: false,
+			// 聚合搜索
+			headerSearch: false,
+			// 用户导航
+			headerUser: false,
+			// 文章
+			headerArticle: false,
+			// 图片
+			headerPhoto: false,
+			// 活码
+			headerLiveCode: false,
+			// 视频
+			headerVideo: false,
+			// 公告
+			headerNotice: false,
 
-            searchList:["/user","/notice","/photo"], // 排除不需要搜索的页面
-        }
-    },
-    created() {
-      let path = this.$route.path;
-      this.path = path;
-      switch (path){
-          case "/user":
-              this.headerUser = true;
-              break;
-          case "/movie":
-          case "/":
-              this.headerMovie = true;
-              break;
-          case "/search":
-              this.headerSearch = true;
-              break;
-          case "/article":
-              this.headerArticle = true;
-              break;
-          case "/photo":
-              this.headerPhoto = true;
-              break;
-          case "/code":
-              this.headerLiveCode = true;
-              break;
-          case "/vide":
-              this.headerVideo = true;
-              break;
-          case "/notice":
-              this.headerNotice = true;
-              break;
-      }
-    },
-    mounted() {
-        if (this.headerArticle){
-            let cate = LocalStorage.get(EnumData.articleHistoryCate);
-            if (cate !== null){
-                this.tabs = cate;
-            }
-            this.getCate();
-        }
+			searchList: ["/user", "/notice", "/photo"], // 排除不需要搜索的页面
+		}
+	},
+	created() {
+		let path = this.$route.path;
+		this.path = path;
+		switch (path) {
+			case "/user":
+				this.headerUser = true;
+				break;
+			case "/movie":
+			case "/":
+				this.headerMovie = true;
+				break;
+			case "/search":
+				this.headerSearch = true;
+				break;
+			case "/article":
+				this.headerArticle = true;
+				break;
+			case "/photo":
+				this.headerPhoto = true;
+				break;
+			case "/code":
+				this.headerLiveCode = true;
+				break;
+			case "/vide":
+				this.headerVideo = true;
+				break;
+			case "/notice":
+				this.headerNotice = true;
+				break;
+		}
+	},
+	mounted() {
+		if (this.headerArticle) {
+			let cate = LocalStorage.get(EnumData.articleHistoryCate);
+			if (cate !== null) {
+				this.tabs = cate;
+			}
+			this.getCate();
+		}
+	},
+	methods: {
+		...mapMutations(["setSetting", "setArticleHistoryCate"]),
+		// 切换分类
+		changeTab(item) {
+			this.$emit("changeTab", item);
+		},
 
-    },
-    methods: {
-        ...mapMutations(["setSetting","setArticleHistoryCate"]),
-        // 切换分类
-        changeTab(item) {
-            this.$emit("changeTab",item);
-        },
+		// 电影-切换api
+		changeApi(movieapi) {
+			this.tab = 0;
+			this.$emit("changeApi", movieapi)
+		},
 
-        // 电影-切换api
-        changeApi(movieapi){
-            this.tab = 0;
-            this.$emit("changeApi",movieapi)
-        },
+		getCate() {
+			articleCate().then(res => {
+				let list = [];
+				res.data.forEach(item => {
+					item.selected = false;
+					list.push(item);
+				})
 
-        getCate(){
-            articleCate().then(res=>{
-                let list = [];
-                res.data.forEach(item=>{
-                    item.selected = false;
-                    list.push(item);
-                })
+				this.cateList = list;
+				if (this.tabs.length === 0) {
+					this.cateData = this.cateList.splice(0, 10);
+				}
+			});
+		},
+		// 选择分类
+		confirm(cate) {
+			// 将当前标签追加到顶部菜单中
+			this.tabs.unshift(cate);
+			this.setArticleHistoryCate(this.tabs);
+			this.$emit("confirmCate", cate);
+		},
 
-                this.cateList =list;
-                if (this.tabs.length === 0){
-                    this.cateData = this.cateList.splice(0,10);
-                }
-            });
-        },
-        // 选择分类
-        confirm(cate){
-            // 将当前标签追加到顶部菜单中
-            this.tabs.unshift(cate);
-            this.setArticleHistoryCate(this.tabs);
-            this.$emit("confirmCate",cate);
-        },
+		// 打开菜单
+		openMenu() {
+			if (this.authorization) {
+				this.drawer = !this.drawer;
+			} else {
+				this.$router.push({
+					path: "login"
+				})
+			}
+		},
 
-        // 打开菜单
-        openMenu(){
-            if (this.authorization){
-                this.drawer = !this.drawer;
-            }else{
-                this.$router.push({
-                    path: "login"
-                })
-            }
-        },
+		// 搜索
+		search() {
+			this.$emit("search", this.keywords);
+		},
+		clear() {
+			this.keywords = "";
+			this.$emit("clear");
+		},
+		// 个人中心
+		toUser() {
+			this.$router.push({
+				path: this.authorization ? "user" : "login"
+			})
+		},
 
-        // 搜索
-        search() {
-            this.$emit("search",this.keywords);
-        },
-        clear(){
-            this.keywords = "";
-            this.$emit("clear");
-        },
-        // 个人中心
-        toUser(){
-            this.$router.push({
-                path: this.authorization ? "user":"login"
-            })
-        },
+		// 返回首页
+		toHome() {
+			this.$router.push({
+				path: "/"
+			})
+		},
 
-        // 返回首页
-        toHome(){
-            this.$router.push({
-                path: "/"
-            })
-        },
-
-        toPage(path){
-            this.$router.push({
-                path
-            })
-        },
-    },
-    computed: {
-        ...mapState(["user","authorization","website","isMobile"]),
-        userSearch(){
-            return !this.searchList.includes(this.path);
-        }
-    }
+		toPage(path) {
+			this.$router.push({
+				path
+			})
+		},
+	},
+	computed: {
+		...mapState(["user", "authorization", "website", "isMobile"]),
+		userSearch() {
+			return !this.searchList.includes(this.path);
+		}
+	}
 }
 </script>
 

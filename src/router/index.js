@@ -31,6 +31,27 @@ const routes = [
 		}
 	},
 	{
+		path: '/movie',
+		name: "Movie",
+		component: require('../components/movie/list.vue').default,
+		meta: {
+			keepAlive: true,
+			required: true,
+			title: '电影列表'
+		}
+	},
+	{
+		path: '/movie/cate',
+		name: "MovieCate",
+		component: require('../components/movie/cate.vue').default,
+		meta: {
+			keepAlive: true,
+			required: true,
+			title: '电影分类合集'
+		}
+	},
+
+	{
 		path: "/user",
 		name: "User",
 		component: require('../components/user/Index.vue').default,

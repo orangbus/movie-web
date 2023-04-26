@@ -62,6 +62,11 @@ export function movieCate(params = {}) {
 	return axios.get(baseUrl("cate"), {params});
 }
 
+export function movieCateAll(params = {}) {
+	return axios.get(baseUrl("cate/all"), {params});
+}
+
+
 /**
  * 历史记录
  * @param params

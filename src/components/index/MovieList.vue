@@ -46,7 +46,7 @@
                                                 <v-icon>mdi-heart-outline</v-icon>
                                             </div>
                                         </template>
-                                        <span>加入收藏</span>
+                                        <!--<span>加入收藏</span>-->
                                     </v-tooltip>
 
                                     <v-tooltip bottom>
@@ -58,7 +58,7 @@
                                                 <v-icon>mdi-playlist-plus</v-icon>
                                             </div>
                                         </template>
-                                        <span>稍后观看</span>
+                                        <!--<span>稍后观看</span>-->
                                     </v-tooltip>
                                 </div>
                             </v-card-text>
@@ -140,7 +140,7 @@ export default {
                 lg: 2, // 桌面端
                 md: 4, // 大型号平板到手提电脑
                 sm: 4, // 小型号到中型号的平板
-                xs: 6 // 小型号到大型号的手机
+                xs: 4 // 小型号到大型号的手机
             }
         }
     },

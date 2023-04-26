@@ -47,7 +47,7 @@ export function userCodeApply(params = {}) {
  * 邀请列表
  */
 export function inviteList(params = {}) {
-	return axios.get(baseUrl("list"), {params});
+	return axios.get(baseUrl("invite"), {params});
 }
 
 
