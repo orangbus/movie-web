@@ -62,7 +62,7 @@ export default {
     },
     created() {
         // 访问统计
-        this.$store.dispatch("userVisit");
+        // this.$store.dispatch("userVisit");
         // 本站须知
         if (LocalStorage.get("know") === null){
             this.dialog = true;
