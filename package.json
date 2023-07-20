@@ -15,6 +15,7 @@
     "file-saver": "^2.0.5",
     "flv.js": "^1.6.2",
     "hls.js": "^1.1.5",
+    "http-proxy-middleware": "^2.0.6",
     "lodash": "^4.17.21",
     "nplayer": "^1.0.15",
     "v-viewer": "^1.6.4",
